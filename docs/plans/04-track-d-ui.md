@@ -419,7 +419,9 @@ footer { color:var(--mut); font-size:11px; padding:8px 20px 20px; word-break:bre
 
 - [ ] **Step 5: Manual check.** Write the test's `BUNDLE` into `cache/bundles/`, run `telltale serve`, and open http://127.0.0.1:8000. The page should load and the slider should respond. Do the real visual pass after Integration I3.
 
-- [ ] **Step 6: Commit.** `git add telltale/web && git commit -m "feat(web): timeline strip, verdict verification banner, replay UI"`
+- [ ] **Step 6: Enable JavaScript code scanning.** In `.github/workflows/security.yml`, change the CodeQL matrix to `language: [python, javascript-typescript]` (it was off until JS existed).
+
+- [ ] **Step 7: Commit.** `git add telltale/web .github/workflows/security.yml && git commit -m "feat(web): timeline strip, verdict verification banner, replay UI"`
 
 ---
 
