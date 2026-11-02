@@ -2,6 +2,7 @@ version: 2
 updates:
   - package-ecosystem: pip
     directory: /
+    versioning-strategy: increase-if-necessary # only when our minimum versions no longer allow a secure release
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
