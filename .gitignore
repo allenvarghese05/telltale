@@ -1,0 +1,25 @@
+# Secrets
+.env
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Large or regenerable data
+data/nexar_raw/
+vendor/
+cache/sam_raw/
+cache/previews/
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/

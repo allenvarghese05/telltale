@@ -1,0 +1,43 @@
+# Continuous deployment of the replay demo to a Hugging Face Space (Docker SDK).
+# Runs after CI passes on main, or manually. Skips cleanly until configured:
+#   repo variable  HF_SPACE  = "<hf-username>/<space-name>"
+#   repo secret    HF_TOKEN  = a Hugging Face token with write access to that Space
+# The Space is replay-only: never add MODEL_API_KEY to it.
+name: Deploy demo
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-space
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: >-
+      vars.HF_SPACE != '' &&
+      (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: demo
+      url: https://huggingface.co/spaces/${{ vars.HF_SPACE }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+      - name: Push to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE: ${{ vars.HF_SPACE }}
+        run: |
+          git config --global credential.helper '!f() { echo "username=hf"; echo "password=${HF_TOKEN}"; }; f'
+          git push --force "https://huggingface.co/spaces/${HF_SPACE}" HEAD:main
