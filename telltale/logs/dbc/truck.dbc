@@ -1,0 +1,19 @@
+VERSION ""
+
+
+NS_ :
+
+BS_:
+
+BU_: ECU
+
+
+BO_ 2566844672 CCVS1: 8 ECU
+ SG_ speed_mps : 0|16@1+ (0.01,0) [0|655.35] "m/s" Vector__XXX
+
+BO_ 2565865739 EBC_SIM: 8 ECU
+ SG_ brake_request : 0|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ brake_pressure_kpa : 8|16@1+ (1,0) [0|65535] "kPa" Vector__XXX
+
+BO_ 2566848512 EDR_EVENT: 8 ECU
+ SG_ impact : 0|1@1+ (1,0) [0|1] "" Vector__XXX
