@@ -1,31 +1,32 @@
 /* Telltale replay.
-   The clip plays, SAM's boxes track the vehicles, and each moment of the incident is revealed as the
-   playhead reaches the timestamp it actually belongs to. The verdict lands when the clip ends.
-   Every number here was computed in Python before this page was built; nothing is recomputed in JS. */
+   The clip plays, SAM's box tracks the struck vehicle, and each moment of the incident is revealed when the
+   playhead reaches the timestamp it belongs to. The verdict lands when the clip ends, and the page closes on a
+   plain-English report that Python wrote from the same facts. Nothing is computed here: every number on the
+   page was produced in Python before the site was built. */
 
 const $ = (id) => document.getElementById(id);
 
-const LABELS = {
-  PERCEPTION_LATE: 'The system detected the hazard late',
-  COMMAND_LATE: 'Detected in time, but braking was commanded late',
-  BRAKE_ACTUATION_LATE: 'The brakes built pressure too slowly',
-  LATE_HANDOFF: 'Control was handed back too late for a human to react',
-  UNAVOIDABLE: 'Physically unavoidable: a normal system would still have collided',
-  NO_FAULT_FOUND: 'Avoidable, but no layer exceeded tolerance',
-  INCONCLUSIVE: 'Inconclusive: the evidence is incomplete',
+const HEADLINE = {
+  PERCEPTION_LATE: 'The system noticed the hazard too late.',
+  COMMAND_LATE: 'The hazard was noticed in time. Braking was commanded too late.',
+  BRAKE_ACTUATION_LATE: 'The brakes built pressure too slowly.',
+  LATE_HANDOFF: 'Control was handed back too late for a person to react.',
+  UNAVOIDABLE: 'Physically unavoidable. A system performing to spec would still have collided.',
+  NO_FAULT_FOUND: 'Avoidable, but no step exceeded its limit.',
+  INCONCLUSIVE: 'Inconclusive. The evidence is incomplete.',
 };
 
 const SHORT = {
-  PERCEPTION_LATE: 'Perception late',
-  COMMAND_LATE: 'Command late',
-  BRAKE_ACTUATION_LATE: 'Brake actuation late',
+  PERCEPTION_LATE: 'Noticed too late',
+  COMMAND_LATE: 'Braking commanded late',
+  BRAKE_ACTUATION_LATE: 'Brakes too slow',
   LATE_HANDOFF: 'Late handoff',
   UNAVOIDABLE: 'Unavoidable',
-  NO_FAULT_FOUND: 'No fault found',
+  NO_FAULT_FOUND: 'No step over its limit',
   INCONCLUSIVE: 'Inconclusive',
 };
 
-/* The link in the chain each verdict blames. Used only to mark the timeline, never to compute anything. */
+/* The link in the chain each verdict points at. Marks the timeline only; it computes nothing. */
 const FAILED_LINK = {
   PERCEPTION_LATE: 'AV:first_seen_t',
   COMMAND_LATE: 'AV:brake_request_t',
@@ -33,11 +34,15 @@ const FAILED_LINK = {
   LATE_HANDOFF: 'AV:handoff_t',
 };
 
-const PLOT_THEME = {
+const INK = '#1d1d1f';
+const MUTE = '#6e6e73';
+const OK = '#1f7a3f';
+const PLOT = {
   paper_bgcolor: 'rgba(0,0,0,0)',
   plot_bgcolor: 'rgba(0,0,0,0)',
-  font: { color: '#a2a7b0', family: 'ui-monospace, SF Mono, Menlo, monospace', size: 10 },
+  font: { color: MUTE, family: '-apple-system, BlinkMacSystemFont, Helvetica Neue, sans-serif', size: 11 },
 };
+const AXIS = { gridcolor: 'rgba(0,0,0,0.06)', zeroline: false, linecolor: 'rgba(0,0,0,0.16)' };
 
 const esc = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -65,11 +70,11 @@ async function init() {
   try {
     cases = await getJSON('cases.json');
   } catch {
-    $('run-note').textContent = 'No cases were exported. Run telltale analyze-all, then telltale export-site.';
-    return;
+    cases = [];
   }
   if (!cases.length) {
-    $('run-note').textContent = 'No cases were exported yet.';
+    $('run').hidden = true;
+    $('run-note').textContent = 'No cases have been exported. Run telltale analyze-all, then telltale export-site.';
     return;
   }
   const clips = [...new Set(cases.map((c) => c.clip_id))];
@@ -78,6 +83,7 @@ async function init() {
   $('run').onclick = start;
   $('replay').onclick = start;
   $('skip').onclick = skipToVerdict;
+  $('sources').onclick = toggleSources;
   $('video').addEventListener('ended', land);
   requestAnimationFrame(frame);
   await selectClip();
@@ -89,11 +95,9 @@ async function selectClip() {
   await renderVariants(list);
 }
 
-/* Every log variant's verdict for this clip, visible at once: the point is that one video supports
-   several different causes depending on what the vehicle recorded. */
+/* Every log variant's verdict for this clip, side by side: one video, several possible causes. */
 async function renderVariants(list) {
-  const panel = $('variants-panel');
-  panel.hidden = list.length < 2;
+  $('variants-panel').hidden = list.length < 2;
   if (list.length < 2) return;
   const loaded = await Promise.all(
     list.map(async (c) => {
@@ -108,21 +112,23 @@ async function renderVariants(list) {
     .map((c, i) => {
       const v = c.verdict;
       const ok = v && v.status === 'VERIFIED';
-      const label = v ? SHORT[v.agent_label] || v.agent_label : 'unavailable';
-      const state = v ? (ok ? 'verified by recompute' : 'withheld, checker disagrees') : '';
+      const label = v ? SHORT[v.agent_label] || v.agent_label : 'Unavailable';
+      const state = v ? (ok ? 'Verified by recomputation' : 'Withheld. The checker disagrees.') : '';
       return `<button class="variant" data-id="${esc(c.case_id)}">
-        <div class="variant-k">Log ${String.fromCharCode(65 + i)} / ${esc(c.profile)}</div>
-        <div class="variant-v">${esc(label)}</div>
-        <div class="variant-s ${ok ? 'ok' : 'no'}">${esc(state)}</div></button>`;
+        <span class="variant-k">Log ${String.fromCharCode(65 + i)}, ${esc(c.profile)}</span>
+        <span class="variant-v">${esc(label)}</span>
+        <span class="variant-s ${ok ? 'ok' : 'no'}">${esc(state)}</span></button>`;
     })
     .join('');
-  $('variants').querySelectorAll('.variant').forEach((b) => {
-    b.onclick = async () => {
-      await load(b.dataset.id);
-      markActive();
-      start();
-    };
-  });
+  $('variants')
+    .querySelectorAll('.variant')
+    .forEach((b) => {
+      b.onclick = async () => {
+        await load(b.dataset.id);
+        markActive();
+        start();
+      };
+    });
   markActive();
 }
 
@@ -143,13 +149,13 @@ async function load(id) {
   }
   events = [...(bundle.events || [])].sort((a, b) => a.t - b.t);
   failedKey = bundle.verdict && bundle.verdict.status === 'VERIFIED' ? FAILED_LINK[bundle.verdict.agent_label] : null;
-
   const video = $('video');
   if (video.getAttribute('src') !== bundle.video_url) video.src = bundle.video_url;
   reset();
   renderChain();
   renderClaims();
   renderTrace();
+  renderNarrative();
   drawTimeline();
   drawAvoidanceMap();
   $('report-link').href = `reports/${encodeURIComponent(id)}.html`;
@@ -162,16 +168,19 @@ function reset() {
   revealed = 0;
   landed = false;
   playing = false;
-  $('verdict').innerHTML = '';
-  $('evidence').innerHTML = '';
+  $('verdict').innerHTML = '<p class="verdict-wait">The verdict appears when the replay ends.</p>';
+  $('evidence').innerHTML = '<li class="caption ledger-empty">Evidence appears here as the replay reaches it.</li>';
   $('ledger-count').textContent = '';
   $('scrim').hidden = false;
   $('replay').hidden = true;
   $('skip').hidden = true;
   $('clock').textContent = '0.00 s';
   $('run-note').textContent = events.length
-    ? `${events.length} recorded moments, ${(bundle.facts || []).length} evidence items`
-    : 'This case has no timeline events.';
+    ? `${events.length} moments, ${(bundle.facts || []).length} pieces of evidence`
+    : 'This case has no timeline.';
+  $('chain')
+    .querySelectorAll('.reached')
+    .forEach((n) => n.classList.remove('reached'));
   const video = $('video');
   if (video.readyState) video.currentTime = 0;
 }
@@ -189,45 +198,44 @@ function start() {
 }
 
 function skipToVerdict() {
-  const video = $('video');
-  video.pause();
+  $('video').pause();
+  $('scrim').hidden = true;
   while (revealed < events.length) revealMoment(revealed);
   land();
 }
 
-/* ---------- the timeline chain ---------- */
+/* ---------- the latency chain ---------- */
 
 function renderChain() {
   const chain = $('chain');
   if (!events.length) {
     chain.innerHTML = '';
-    $('chain-caption').textContent = '';
     return;
   }
   const span = Math.max(events[events.length - 1].t - events[0].t, 0.001);
-  const parts = [];
-  events.forEach((e, i) => {
-    if (i) {
-      const d = e.t - events[i - 1].t;
-      const bad = e.key === failedKey;
-      parts.push(`<div class="gap ${bad ? 'bad' : ''}" data-i="${i}" data-d="${d}"
-        style="flex-grow:${Math.max(d / span, 0.04)}"><span class="gap-v">+${num(d)} s</span></div>`);
-    }
-    const thumb = e.thumb
-      ? `<img src="${esc(e.thumb)}" alt="">`
-      : '<div class="noimg"></div>';
-    parts.push(`<div class="moment ${e.key === failedKey ? 'failed' : ''}" data-i="${i}" data-t="${Number(e.t)}">
-      ${thumb}<div class="moment-t">${num(e.t)} s</div>
-      <div class="moment-l">${esc(e.label)}</div><div class="moment-s">${esc(e.source)}</div></div>`);
-  });
-  chain.innerHTML = parts.join('');
+  chain.classList.toggle(
+    'has-thumbs',
+    events.some((e) => e.thumb),
+  );
+  chain.innerHTML = events
+    .map((e, i) => {
+      const gap = i
+        ? `<div class="gap ${e.key === failedKey ? 'bad' : ''}" data-i="${i}" data-d="${e.t - events[i - 1].t}"
+            style="flex-grow:${Math.max((e.t - events[i - 1].t) / span, 0.04)}">
+            <span class="gap-v">+${num(e.t - events[i - 1].t)} s</span></div>`
+        : '';
+      const thumb = e.thumb ? `<img src="${esc(e.thumb)}" alt="">` : '';
+      return `${gap}<button class="moment ${e.key === failedKey ? 'failed' : ''}" data-i="${i}" data-t="${Number(e.t)}"
+        aria-label="${esc(e.label)} at ${num(e.t)} seconds">${thumb}
+        <span class="moment-t">${num(e.t)} s</span><span class="moment-l">${esc(e.label)}</span>
+        <span class="moment-s">${esc(e.source)}</span></button>`;
+    })
+    .join('');
   chain.querySelectorAll('.moment').forEach((m) => {
     m.onclick = () => {
       $('video').currentTime = Number(m.dataset.t);
     };
   });
-  $('chain-caption').textContent =
-    'Gap widths are proportional to real elapsed time. Click any moment to jump the video there.';
 }
 
 function revealMoment(i) {
@@ -242,13 +250,12 @@ function revealMoment(i) {
   revealed = Math.max(revealed, i + 1);
 }
 
-/* While waiting for the next moment, the elapsed gap counts up, so a late reaction is felt and not
-   merely reported. */
+/* While the next moment has not happened yet, its gap counts up, so a late reaction is felt as well as read. */
 function tickGap(now) {
+  if (revealed === 0) return;
   const gap = $('chain').querySelector(`.gap[data-i="${revealed}"]`);
-  if (!gap || revealed === 0) return;
   const elapsed = now - events[revealed - 1].t;
-  if (elapsed <= 0) return;
+  if (!gap || elapsed <= 0) return;
   gap.classList.add('counting');
   gap.querySelector('.gap-v').textContent = `+${num(elapsed)} s`;
 }
@@ -261,48 +268,42 @@ function addEvidenceFor(event) {
 }
 
 function appendFact(fact) {
-  const unit = fact.unit ? ` ${fact.unit}` : '';
+  const empty = $('evidence').querySelector('.ledger-empty');
+  if (empty) empty.remove();
   const li = document.createElement('li');
   li.innerHTML = `<div class="fact-id">${esc(fact.id)}</div>
-    <div class="fact-v">${esc(fact.value)}${esc(unit)}</div>
+    <div class="fact-v">${esc(fact.value)}${fact.unit ? ` ${esc(fact.unit)}` : ''}</div>
     <div class="fact-d">${esc(fact.derivation || '')}</div>`;
   $('evidence').append(li);
   $('evidence').scrollTop = $('evidence').scrollHeight;
-  $('ledger-count').textContent = `${$('evidence').children.length} items`;
+  $('ledger-count').textContent = `${$('evidence').children.length}`;
 }
 
-/* After the clip ends, the rest of the evidence store is listed: thresholds, profile values and the
-   facts the agent's own tools appended. */
+/* Once the clip ends, the rest of the store follows: thresholds, witness answers, and the facts the
+   investigator's own tools added. */
 function appendRemainingEvidence() {
   const shown = new Set(events.map((e) => e.key));
   (bundle.facts || []).filter((f) => !shown.has(f.id)).forEach(appendFact);
 }
 
 function renderSceneCaption() {
-  const s = bundle.scene;
-  if (!s) {
-    $('scene-caption').textContent = '';
-    return;
-  }
+  const s = bundle.scene || {};
   const bits = [];
-  if (s.tracked_vehicles) bits.push(`${s.tracked_vehicles} vehicles tracked by SAM 3.1`);
-  if (Array.isArray(s.hazards) && s.hazards.length) bits.push(`${s.hazards.length} became a hazard`);
-  if (s.danger_onset_reason) bits.push(`onset by ${s.danger_onset_reason}`);
+  if (s.tracked_vehicles) bits.push(`${s.tracked_vehicles} vehicles tracked`);
+  if (Array.isArray(s.hazards) && s.hazards.length) bits.push(`${s.hazards.length} became hazards`);
   const c = s.conditions || {};
-  const seen = [c.weather, c.lighting, c.road_surface].filter(Boolean);
-  if (seen.length) bits.push(`witness saw ${seen.join(', ')}`);
-  $('scene-caption').textContent = bits.join(' / ');
+  const seen = [c.lighting, c.weather, c.road_surface].filter((x) => x && x !== 'unclear');
+  if (seen.length) bits.push(`Witness saw ${seen.join(', ')}`);
+  $('scene-caption').textContent = bits.length ? `${bits.join('. ')}.` : '';
 }
 
 function renderRunProvenance() {
   const agent = bundle.agent || {};
   const n = (agent.tool_calls || []).length;
-  const stale = bundle.stale_agent_run
-    ? ' This cached run predates the current evidence, so the checker treats it as stale.'
-    : '';
+  const stale = bundle.stale_agent_run ? ' This cached run predates the current evidence.' : '';
   $('run-provenance').textContent =
-    `Replay of a completed investigation: ${agent.model || 'unknown model'} reached this verdict in ` +
-    `${n} tool call${n === 1 ? '' : 's'}. Each moment above appears at the video timestamp it belongs to.${stale}`;
+    `Replay of a completed investigation by ${agent.model || 'an unknown model'} in ${n} tool ` +
+    `call${n === 1 ? '' : 's'}. Each moment appears at the video time it belongs to.${stale}`;
 }
 
 /* ---------- playback ---------- */
@@ -314,7 +315,6 @@ function frame() {
     $('clock').textContent = `${num(now)} s`;
     while (revealed < events.length && now >= events[revealed].t) revealMoment(revealed);
     tickGap(now);
-    if (!landed && revealed >= events.length && video.ended) land();
   }
   drawOverlay();
   requestAnimationFrame(frame);
@@ -330,7 +330,6 @@ function drawOverlay() {
   }
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
   const poly = bundle.lane_polygon || [];
   if (poly.length) {
     ctx.beginPath();
@@ -338,27 +337,27 @@ function drawOverlay() {
       i ? ctx.lineTo(x * canvas.width, y * canvas.height) : ctx.moveTo(x * canvas.width, y * canvas.height),
     );
     ctx.closePath();
-    ctx.fillStyle = 'rgba(233,234,238,0.06)';
+    ctx.fillStyle = 'rgba(255,255,255,0.08)';
     ctx.fill();
-    ctx.strokeStyle = 'rgba(233,234,238,0.5)';
+    ctx.strokeStyle = 'rgba(255,255,255,0.65)';
     ctx.lineWidth = 1.5;
     ctx.stroke();
   }
-
   const boxes = bundle.target_boxes || [];
-  if (!boxes.length || !bundle.fps) return;
+  if (!boxes.length || !bundle.fps || !bundle.width) return;
   const f = Math.round(video.currentTime * bundle.fps);
   const nearest = boxes.reduce((a, b) => (Math.abs(b.frame - f) < Math.abs(a.frame - f) ? b : a));
   if (Math.abs(nearest.frame - f) > 2) return;
   const sx = canvas.width / bundle.width;
   const sy = canvas.height / bundle.height;
   const [l, t, r, b] = nearest.box;
-  ctx.strokeStyle = revealed ? '#e4584f' : 'rgba(233,234,238,0.75)';
+  const hazard = revealed > 0;
+  ctx.strokeStyle = hazard ? '#ff453a' : 'rgba(255,255,255,0.9)';
   ctx.lineWidth = 2;
   ctx.strokeRect(l * sx, t * sy, (r - l) * sx, (b - t) * sy);
   ctx.fillStyle = ctx.strokeStyle;
-  ctx.font = '600 11px ui-monospace, SF Mono, Menlo, monospace';
-  ctx.fillText('struck vehicle', l * sx, Math.max(t * sy - 5, 11));
+  ctx.font = '600 12px -apple-system, BlinkMacSystemFont, Helvetica Neue, sans-serif';
+  ctx.fillText(hazard ? 'Hazard' : 'Tracked vehicle', l * sx, Math.max(t * sy - 7, 13));
 }
 
 /* ---------- verdict ---------- */
@@ -367,57 +366,50 @@ function land() {
   if (landed || !bundle) return;
   landed = true;
   playing = false;
+  $('skip').hidden = true;
   appendRemainingEvidence();
   const v = bundle.verdict || {};
   const ok = v.status === 'VERIFIED';
-  const excess = v.excess_s || {};
-  const worst = Object.entries(excess).sort((a, b) => b[1] - a[1])[0];
-  const lateness = ok && worst ? `<div class="verdict-gap">${num(worst[1])} s beyond tolerance</div>` : '';
-  const noncausal = (v.noncausal_faults || []).length
-    ? `<p class="note">Faults present but not causal: ${esc(v.noncausal_faults.join(', '))}</p>`
+  const worst = Object.entries(v.excess_s || {}).sort((a, b) => b[1] - a[1])[0];
+  const over = ok && worst && worst[1] > 0 ? `<p class="verdict-over">${num(worst[1])} s past its limit</p>` : '';
+  const others = (v.noncausal_faults || []).length
+    ? `<p class="verdict-note">Also outside its limit, but it would not have changed the outcome: ${esc(v.noncausal_faults.join(', '))}.</p>`
     : '';
-  const reason = v.reason ? `<p class="note">${esc(v.reason)}</p>` : '';
-
-  $('verdict').innerHTML = `<div class="verdict-card ${ok ? 'ok' : 'rejected'}">
-    <div class="verdict-k">${ok ? 'Primary contributing factor' : 'Verdict withheld pending human review'}</div>
-    <div class="verdict-v">${esc(LABELS[v.agent_label] || v.agent_label || 'unavailable')}</div>
-    ${lateness}
+  const headline = ok
+    ? HEADLINE[v.agent_label] || v.agent_label
+    : 'The investigator and the independent recomputation disagree.';
+  $('verdict').innerHTML = `<div class="verdict-body">
+    <p class="verdict-state ${ok ? 'ok' : 'no'}">${ok ? 'Independently verified' : 'Withheld for human review'}</p>
+    <h2 class="verdict-headline">${esc(headline || 'No verdict in this case.')}</h2>
+    ${over}
     <div class="readings">
-      <div class="reading"><div class="reading-k">Muse Wonder concluded</div>
-        <div class="reading-v">${esc(v.agent_label || '-')}</div></div>
-      <div class="reading"><div class="reading-k">Python recomputed</div>
-        <div class="reading-v">${esc(v.independent_label || '-')}</div></div>
-      <div class="agreement ${ok ? 'ok' : 'no'}">${ok ? 'Independently verified' : 'The two disagree'}</div>
+      <div><div class="reading-k">Muse Wonder concluded</div><div class="reading-v">${esc(v.agent_label || '-')}</div></div>
+      <div><div class="reading-k">Python recomputed</div><div class="reading-v">${esc(v.independent_label || '-')}</div></div>
     </div>
-    ${noncausal}${reason}</div>`;
+    ${others}</div>`;
 }
 
 /* ---------- charts ---------- */
 
 function drawTimeline() {
-  const series = bundle.series || {};
+  const s = bundle.series || {};
   const traces = [];
-  const speed = series['can.speed_mps'];
-  const brake = series['can.brake_pressure_kpa'];
+  const speed = s['can.speed_mps'];
+  const brake = s['can.brake_pressure_kpa'];
   if (speed && speed.t && speed.t.length) {
-    traces.push({
-      x: speed.t,
-      y: speed.v.map((x) => x * 3.6),
-      name: 'Speed km/h',
-      line: { color: '#e9eaee', width: 1.5 },
-    });
+    traces.push({ x: speed.t, y: speed.v.map((x) => x * 3.6), name: 'Speed (km/h)', line: { color: INK, width: 1.75 } });
   }
   if (brake && brake.t && brake.t.length) {
     traces.push({
       x: brake.t,
       y: brake.v,
-      name: 'Brake pressure kPa',
+      name: 'Brake pressure (kPa)',
       yaxis: 'y2',
-      line: { color: '#58c08a', width: 1.5 },
+      line: { color: MUTE, width: 1.5, dash: 'dot' },
     });
   }
   if (!traces.length) {
-    $('timeline').innerHTML = '<p class="caption">No CAN series in this bundle.</p>';
+    $('timeline').innerHTML = '<p class="caption">This case has no CAN series.</p>';
     return;
   }
   const shapes = events.map((e) => ({
@@ -427,21 +419,20 @@ function drawTimeline() {
     yref: 'paper',
     y0: 0,
     y1: 1,
-    line: { dash: 'dot', width: 1, color: e.key === failedKey ? '#e4584f' : 'rgba(255,255,255,0.25)' },
+    line: { width: 1, color: e.key === failedKey ? '#c9341f' : 'rgba(0,0,0,0.14)' },
   }));
   Plotly.newPlot(
     'timeline',
     traces,
     {
-      ...PLOT_THEME,
-      height: 232,
-      margin: { t: 8, b: 34, l: 44, r: 44 },
-      xaxis: { title: 'video time (s)', gridcolor: 'rgba(255,255,255,0.06)', zeroline: false },
-      yaxis: { title: 'km/h', gridcolor: 'rgba(255,255,255,0.06)', zeroline: false },
-      yaxis2: { overlaying: 'y', side: 'right', title: 'kPa', showgrid: false, zeroline: false },
+      ...PLOT,
+      height: 260,
+      margin: { t: 16, b: 40, l: 48, r: 56 },
+      xaxis: { ...AXIS, title: { text: 'Video time (s)' } },
+      yaxis: { ...AXIS, title: { text: 'km/h' } },
+      yaxis2: { overlaying: 'y', side: 'right', title: { text: 'kPa' }, showgrid: false, zeroline: false },
       shapes,
-      showlegend: true,
-      legend: { orientation: 'h', y: -0.32 },
+      legend: { orientation: 'h', x: 0, y: 1.14 },
     },
     { displayModeBar: false, responsive: true },
   );
@@ -455,7 +446,7 @@ const nearestIndex = (values, x) =>
 
 function drawAvoidanceMap() {
   if (!grid) {
-    $('cf-out').innerHTML = '<span class="caption">No avoidance map for this case.</span>';
+    $('cf-out').textContent = 'This case has no avoidance map.';
     $('cf-map').innerHTML = '';
     return;
   }
@@ -467,11 +458,8 @@ function drawAvoidanceMap() {
   const nt = nearestIndex(grid.tau_s, n.tau_s);
   const at = (p, t) => grid.impact_kmh[p][t];
   const say = (p, t) =>
-    at(p, t) > 0 ? `<b class="bad">collision at ${num(at(p, t), 1)} km/h</b>` : '<b class="good">avoided</b>';
-
-  $('cf-out').innerHTML = `This vehicle, as it actually behaved: ${say(mp, mt)}.
-    A system performing to spec: ${say(np, nt)}.`;
-
+    at(p, t) > 0 ? `<b class="bad">collides at ${num(at(p, t), 1)} km/h</b>` : '<b class="good">avoids it</b>';
+  $('cf-out').innerHTML = `As measured, this vehicle ${say(mp, mt)}. Performing to specification, it ${say(np, nt)}.`;
   Plotly.newPlot(
     'cf-map',
     [
@@ -482,76 +470,103 @@ function drawAvoidanceMap() {
         z: grid.impact_kmh,
         zmin: 0,
         colorscale: [
-          [0, '#0b0c0e'],
-          [0.01, '#2b1d1f'],
-          [0.5, '#8c3b36'],
-          [1, '#e4584f'],
+          [0, '#f2f2f4'],
+          [0.001, '#fbe7e3'],
+          [0.55, '#efa496'],
+          [1, '#c9341f'],
         ],
-        colorbar: { title: 'km/h', thickness: 10, len: 0.9 },
-        hovertemplate: 'detection %{y:.2f} s, brake build-up %{x:.2f} s<br>impact %{z:.1f} km/h<extra></extra>',
+        colorbar: { title: { text: 'km/h' }, thickness: 8, len: 0.85, outlinewidth: 0 },
+        hovertemplate: 'Noticed after %{y:.2f} s, brakes build in %{x:.2f} s<br>Impact %{z:.1f} km/h<extra></extra>',
       },
       {
         type: 'scatter',
         mode: 'markers+text',
         x: [grid.tau_s[mt]],
         y: [grid.perception_s[mp]],
-        text: ['measured'],
-        textposition: 'top right',
-        textfont: { color: '#e9eaee', size: 10 },
-        marker: { size: 11, symbol: 'circle', color: '#e9eaee', line: { width: 1.5, color: '#0b0c0e' } },
+        text: ['Measured'],
+        textposition: 'middle right',
+        textfont: { color: INK, size: 12 },
+        marker: { size: 11, color: INK, line: { width: 2, color: '#fff' } },
       },
       {
         type: 'scatter',
         mode: 'markers+text',
         x: [grid.tau_s[nt]],
         y: [grid.perception_s[np]],
-        text: ['to spec'],
-        textposition: 'bottom right',
-        textfont: { color: '#58c08a', size: 10 },
-        marker: { size: 11, symbol: 'diamond', color: '#58c08a', line: { width: 1.5, color: '#0b0c0e' } },
+        text: ['To spec'],
+        textposition: 'middle right',
+        textfont: { color: OK, size: 12 },
+        marker: { size: 11, symbol: 'diamond', color: OK, line: { width: 2, color: '#fff' } },
       },
     ],
     {
-      ...PLOT_THEME,
-      height: 320,
-      margin: { t: 8, b: 42, l: 54, r: 10 },
-      xaxis: { title: 'brake build-up time constant (s)', zeroline: false },
-      yaxis: { title: 'detection delay (s)', zeroline: false },
+      ...PLOT,
+      height: 380,
+      margin: { t: 12, b: 48, l: 56, r: 12 },
+      xaxis: { ...AXIS, title: { text: 'Brake build-up time constant (s)' } },
+      yaxis: { ...AXIS, title: { text: 'Time to notice the vehicle (s)' } },
       showlegend: false,
     },
     { displayModeBar: false, responsive: true },
   );
 }
 
-/* ---------- claims and trace ---------- */
+/* ---------- claims, trace, report ---------- */
 
 function renderClaims() {
-  const counts = bundle.counts || {};
-  $('counts').textContent =
-    `${counts.VERIFIED || 0} verified / ${counts.UNCORROBORATED || 0} single-source / ${counts.BLOCKED || 0} blocked`;
+  const c = bundle.counts || {};
+  $('counts').textContent = `${c.VERIFIED || 0} verified, ${c.UNCORROBORATED || 0} single-source, ${c.BLOCKED || 0} blocked`;
   const claims = bundle.claims || [];
+  const label = { VERIFIED: 'Verified', UNCORROBORATED: 'Single source', BLOCKED: 'Blocked' };
   $('claim-list').innerHTML = claims.length
     ? claims
-        .map((c) => {
-          const claim = c.claim || {};
-          const ev = (claim.evidence || []).map(esc).join(' / ');
-          const why = (c.reasons || []).length ? `<div class="why">${(c.reasons || []).map(esc).join('<br>')}</div>` : '';
-          return `<li class="${esc(c.status)}"><span class="chip">${esc(c.status)}</span>${esc(claim.text || '')}
-            ${ev ? `<div class="ev">${ev}</div>` : ''}${why}</li>`;
+        .map((r) => {
+          const claim = r.claim || {};
+          const ev = (claim.evidence || []).map(esc).join(', ');
+          const why = (r.reasons || []).map(esc).join('. ');
+          return `<li class="${esc(r.status)}"><span class="status ${esc(r.status)}">${esc(label[r.status] || r.status)}</span>
+            <span class="claim-text">${esc(claim.text || '')}</span>
+            ${ev ? `<span class="ev">${ev}</span>` : ''}${why ? `<span class="why">${why}</span>` : ''}</li>`;
         })
         .join('')
-    : '<li class="caption">No claims in this bundle.</li>';
+    : '<li class="caption">This case has no claims.</li>';
 }
 
 function renderTrace() {
   const agent = bundle.agent || {};
   const calls = agent.tool_calls || [];
-  $('agent-meta').textContent = `${esc(agent.model || 'unknown')} / ${calls.length} tool calls`;
+  $('agent-meta').textContent = `${agent.model || 'unknown model'}, ${calls.length} calls`;
   $('trace-list').innerHTML = calls.length
     ? calls
-        .map((t) => `<li><span class="tool">${esc(t.name)}</span> ${esc(JSON.stringify(t.args || {}))}</li>`)
+        .map((t) => `<li><span><span class="tool">${esc(t.name)}</span><span class="args">${esc(JSON.stringify(t.args || {}))}</span></span></li>`)
         .join('')
-    : '<li class="caption">No tool calls recorded.</li>';
+    : '<li class="caption">No tool calls were recorded.</li>';
+}
+
+/* The report is text Python wrote. Each sentence keeps its sources, shown on request. */
+function renderNarrative() {
+  const sections = bundle.narrative || [];
+  $('narrative').innerHTML = sections.length
+    ? sections
+        .map(
+          (s) => `<h3>${esc(s.title)}</h3><p>${(s.sentences || [])
+            .map((line) => {
+              const src = (line.sources || []).join(', ');
+              return `<span class="sentence"${src ? ` title="${esc(src)}"` : ''}>${esc(line.text)}</span>${
+                src ? `<span class="src">[${esc(src)}]</span>` : ''
+              }`;
+            })
+            .join(' ')}</p>`,
+        )
+        .join('')
+    : '<p class="caption">This case has no incident report. Re-export the site to generate one.</p>';
+}
+
+function toggleSources() {
+  const on = !$('narrative').classList.contains('show-sources');
+  $('narrative').classList.toggle('show-sources', on);
+  $('sources').setAttribute('aria-pressed', String(on));
+  $('sources').textContent = on ? 'Hide sources' : 'Show sources';
 }
 
 init();
