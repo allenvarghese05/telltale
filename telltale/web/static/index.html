@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' https://cdn.plot.ly; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; media-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Telltale - Meta AI investigates, the checker verifies</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wordmark">
+    <span class="mark" aria-hidden="true"></span>
+    <h1>Telltale</h1>
+  </div>
+  <p class="thesis">Meta AI investigates a vehicle crash. Deterministic code recomputes every claim it makes.</p>
+  <label class="picker">
+    <span>Crash clip</span>
+    <select id="clip"></select>
+  </label>
+</header>
+
+<section class="chain-of-custody" aria-label="How a verdict is produced">
+  <ol>
+    <li>
+      <h2>Perceive</h2>
+      <p>SAM 3.1 tracks every vehicle and timestamps the moment one became a hazard. Muse Spark 1.3 watches the
+         same clip as an independent witness.</p>
+      <span class="provenance real">Real dashcam footage</span>
+    </li>
+    <li>
+      <h2>Investigate</h2>
+      <p>A Muse Wonder agent reads the evidence, uses tools for every number, runs but-for simulations and names
+         the primary cause.</p>
+      <span class="provenance generated">Generated vehicle logs</span>
+    </li>
+    <li>
+      <h2>Verify</h2>
+      <p>Plain Python recomputes each claim and, separately, the verdict itself. Unprovable claims are blocked.
+         A disagreement withholds the verdict.</p>
+      <span class="provenance checked">No model involved</span>
+    </li>
+  </ol>
+</section>
+
+<main>
+  <section class="reconstruction">
+    <div class="player-frame">
+      <div id="player">
+        <video id="video" muted playsinline preload="auto"></video>
+        <canvas id="overlay"></canvas>
+        <div id="scrim" class="scrim">
+          <button id="run" class="run">Run investigation</button>
+          <p id="run-note" class="run-note"></p>
+        </div>
+      </div>
+      <div class="player-bar">
+        <button id="replay" class="ghost" hidden>Replay</button>
+        <button id="skip" class="ghost" hidden>Skip to verdict</button>
+        <span id="clock" class="clock">0.00 s</span>
+      </div>
+    </div>
+
+    <div id="chain" class="chain" aria-label="Incident timeline"></div>
+    <p class="caption" id="chain-caption"></p>
+  </section>
+
+  <aside class="ledger" aria-label="Evidence as it is reached">
+    <div class="ledger-head">
+      <h2>Evidence</h2>
+      <span id="ledger-count" class="count"></span>
+    </div>
+    <ol id="evidence"></ol>
+    <p class="caption" id="scene-caption"></p>
+  </aside>
+</main>
+
+<section id="verdict" class="verdict" aria-live="polite"></section>
+
+<section id="variants-panel" class="variants" hidden>
+  <h2>Same footage, different vehicle logs</h2>
+  <p class="caption">The video cannot tell you who caused a crash. These cases share one clip and differ only in
+     the logs the vehicle recorded.</p>
+  <div id="variants"></div>
+</section>
+
+<section class="audit">
+  <article class="card wide">
+    <h2>But-for test</h2>
+    <p class="caption">Every cell is a complete crash-physics replay at a different detection delay and brake
+       build-up time. Dark means the collision was avoided.</p>
+    <div id="cf-out" class="cf-out"></div>
+    <div id="cf-map"></div>
+  </article>
+
+  <article class="card">
+    <div class="card-head">
+      <h2>Claims, each machine-checked</h2>
+      <span id="counts" class="count"></span>
+    </div>
+    <ul id="claim-list" class="claims"></ul>
+  </article>
+
+  <article class="card">
+    <h2>Evidence chart</h2>
+    <div id="timeline"></div>
+  </article>
+
+  <article class="card">
+    <div class="card-head">
+      <h2>Investigator</h2>
+      <span id="agent-meta" class="count"></span>
+    </div>
+    <ol id="trace-list" class="trace"></ol>
+    <a id="report-link" class="report" target="_blank" rel="noopener">Open printable report</a>
+  </article>
+
+  <article class="card wide" id="bench">
+    <h2>What we measured, and what we did not</h2>
+    <div class="bench-grid">
+      <div class="bench">
+        <h3>Danger onset against human labels</h3>
+        <p class="bench-figure">0.905 s <span>median absolute error</span></p>
+        <p class="bench-figure caveat">1.947 s <span>spread of the signed error</span></p>
+        <p class="caption">40 unseen Nexar clips, drawn with a fixed seed, default lane polygon, no per-clip
+           tuning, scored against Nexar's own human annotations. Coverage 30 of 40. Pre-registered thresholds
+           put this in the <strong>partially consistent</strong> bucket: the middle half of clips lands between
+           0.545 s and 1.387 s, and the tail is long. The median does not stand on its own.</p>
+      </div>
+      <div class="bench">
+        <h3>Attribution on blind fault injection</h3>
+        <p class="bench-figure">1.00 <span>accuracy over 136 cases</span></p>
+        <p class="caption">Six failure stories across car and truck profiles, four seeds each, faults injected
+           blind. Measures the deterministic attribution, not the agent. 8 cases skipped for windows too short
+           to generate, counted openly rather than dropped.</p>
+      </div>
+      <div class="bench" id="bench-agent">
+        <h3>Agent alone against agent plus checker</h3>
+        <p class="bench-figure pending">Not yet run</p>
+        <p class="caption">This number is the whole argument, so it will be reported whatever it says.</p>
+      </div>
+    </div>
+  </article>
+
+  <article class="card wide" id="honesty">
+    <h2>Provenance</h2>
+    <dl>
+      <dt>Video</dt>
+      <dd>Real crash footage from the Nexar Collision Prediction Dataset, used under the Nexar Open Data
+          License. Attribution required, no resale, no re-identification of people, vehicles or plates.</dd>
+      <dt>Vehicle logs</dt>
+      <dd>Generated, with randomised faults injected blind and clock skew applied. Real driver-assist logs are
+          proprietary, which is the reason an independent checker is needed at all.</dd>
+      <dt>Scope</dt>
+      <dd>This reconstructs evidence. It does not assign legal fault, and a qualified human reviewer signs off.</dd>
+      <dt>Evidence digest</dt>
+      <dd><code id="digest">-</code></dd>
+    </dl>
+  </article>
+</section>
+
+<footer>
+  <p id="run-provenance"></p>
+  <p>Telltale. Video: Nexar Collision Prediction Dataset. Vehicle logs: generated.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
