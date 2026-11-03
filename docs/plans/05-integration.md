@@ -30,6 +30,12 @@ Expected: all tests pass. Fix integration breaks on `main`, never by weakening t
 
 ### Task I2: Analyze pipeline, demo cases, agent benchmark code
 
+> ✅ **Done on main.** The committed code is authoritative and differs from the snippets below:
+> - `build_case_store` returns a typed `CaseEvidence` (not a tuple) and also adds Track A's curated `scene_facts`.
+> - The bundle carries `scene` (the rich `SceneSummary`) for the UI.
+> - `counterfactual_fn` reads `PHYS:gap_at_onset_m` instead of re-deriving the gap.
+> - `agent_bench` logs instead of printing.
+
 **Files:**
 - Create: `telltale/pipeline/analyze.py`, `telltale/pipeline/demo.py`, `telltale/pipeline/agent_bench.py`
 - Test: `tests/pipeline/test_analyze.py`, `tests/pipeline/test_agent_bench.py`, `tests/pipeline/__init__.py`
