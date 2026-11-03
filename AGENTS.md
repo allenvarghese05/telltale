@@ -95,13 +95,14 @@ Each track works in its own git worktree and only edits its own folders (see `00
 - Validate agent tool arguments: numeric fields are numbers; fact IDs exist and are agent-visible.
 - `subprocess` only with argument lists, never `shell=True`. Input paths come from our own manifests.
 
-**Web app**
-- Path parameters are validated against `^[A-Za-z0-9_-]+$` before touching the filesystem.
-- All dynamic text is HTML-escaped: `html.escape` server-side, `esc()` client-side. Never use `innerHTML` with
+**Web app (static site, no server code)**
+- The demo is a static site built by `telltale export-site` and hosted on a Hugging Face Static Space. There are
+  no API endpoints, and the physics runs only in Python, pre-computed into JSON.
+- Case IDs are validated against `^[A-Za-z0-9_-]+$` before they become file paths.
+- All dynamic text is HTML-escaped: `html.escape` in Python, `esc()` in JS. Never use `innerHTML` with
   unescaped data.
-- Send security headers: `X-Content-Type-Options: nosniff`, `Referrer-Policy: no-referrer`, and a
-  `Content-Security-Policy` that only allows self plus `https://cdn.plot.ly`.
-- No debug mode, no wildcard CORS, read-only replay. The hosted Space never has an API key.
+- `index.html` carries a `Content-Security-Policy` meta tag (self plus `https://cdn.plot.ly`) and `referrer: no-referrer`.
+- The site is replay-only. The Space never has an API key.
 
 **Agent containment**
 - The agent never sees `PHYS:*` or `ATTR:*` facts. It may only append `WIT2:*` and `CF:*` facts, created by our tool code.
@@ -141,5 +142,5 @@ pytest -q                                   # tests
 ruff check . && ruff format --check .       # lint + format
 vulture telltale tests --min-confidence 80  # dead code
 pip-audit --skip-editable                   # dependency vulnerabilities
-telltale serve                              # replay UI at http://127.0.0.1:8000
+telltale export-site && telltale serve     # static replay site at http://127.0.0.1:8000
 ```

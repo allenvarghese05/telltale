@@ -1,22 +1,28 @@
-# Telltale — 04 Track D: Web App, Replay Mode, Deploy (suggested tool: Antigravity)
+# Telltale — 04 Track D: Static Replay Site (suggested tool: Antigravity)
 
-> **For agentic workers:** REQUIRED SUB-SKILL: superpowers:subagent-driven-development or superpowers:executing-plans. Work only in worktree `../telltale-d` (branch `track-d`). Allowed folders: `telltale/web/`, `tests/web/`, `Dockerfile`, `.dockerignore`. You import `telltale.physics.*` (Track B) and `telltale.report.render` (Track C). **Start after B and C are merged into `main`**, then `git merge main` into `track-d`.
+> **For agentic workers:** REQUIRED SUB-SKILL: superpowers:subagent-driven-development or superpowers:executing-plans. Work only in worktree `../telltale-d` (branch `track-d`). Allowed folders: `telltale/web/`, `tests/web/`, plus the one CodeQL line in `.github/workflows/security.yml` (Task D2, Step 4). You import `telltale.physics.*` (Track B) and `telltale.report.render` (Track C). **Start after B and C are merged into `main`**, then `git merge main` into `track-d`.
 
-**Goal:** a single page that replays cached cases with no API key:
-1. **Incident timeline strip**: a thumbnail, exact time and gap for each key moment, with the failed link in red.
+**Why static:** the demo is hosted on a **free Hugging Face Static Space**, which serves files only (no Python).
+- `telltale export-site` turns the cached bundles into a self-contained `site/` folder: HTML, JS, CSS, JSON, clips and thumbnails.
+- `telltale serve` serves that same folder locally, so what you test is exactly what judges see.
+- The physics stays in Python only. The counterfactual is **pre-computed on a grid** and shown as an **avoidance map**.
+- With no server, there's no API surface and no cold start.
+
+**Goal:** one page, no API key needed:
+1. **Incident timeline strip**: thumbnail, exact time and gap for each key moment, with the failed link in red.
 2. **Verdict banner**: "Concluded by Muse Wonder · independently verified ✓", or "Withheld: checker disagrees".
 3. **Vehicle log A/B/C buttons**: same video, different logs, different verdict.
-4. **Video with SAM box + ego-lane overlay**, and an evidence timeline chart.
-5. **Counterfactual slider** (but-for test).
-6. **Machine-checked claims** with BLOCKED and UNCORROBORATED reasons, plus the agent trace.
+4. **Video with SAM box + ego-lane overlay**, plus an evidence timeline chart.
+5. **Avoidance map (but-for test):** impact speed for every combination of detection delay × brake build-up time, with "measured" and "normal" markers.
+6. **Machine-checked claims** with BLOCKED and UNCORROBORATED reasons, plus the agent trace and a link to the printable report.
 
-### Bundle format (`cache/bundles/<case_id>.json`, produced in `05-integration.md`)
+### Bundle format (`cache/bundles/<case_id>.json`, produced in `05-integration.md`). All URLs are **relative**.
 ```json
 {"case_id": "nx01-car-s0101", "clip_id": "nx01", "profile": "car",
- "video_url": "/media/nx01.mp4", "fps": 30.0, "width": 1280, "height": 720,
+ "video_url": "media/nx01.mp4", "fps": 30.0, "width": 1280, "height": 720,
  "lane_polygon": [[0.40,0.62],[0.60,0.62],[0.85,1.0],[0.15,1.0]],
  "target_boxes": [{"frame": 0, "box": [0,0,10,10]}],
- "events": [{"key": "VID:lane_entry_t", "t": 6.0, "label": "Enters our lane", "source": "VID", "thumb": "/thumbs/nx01-car-s0101/lane_entry_t.jpg"}],
+ "events": [{"key": "VID:lane_entry_t", "t": 6.0, "label": "Enters our lane", "source": "VID", "thumb": "thumbs/nx01-car-s0101/lane_entry_t.jpg"}],
  "series": {"can.speed_mps": {"t": [], "v": []}, "can.brake_pressure_kpa": {"t": [], "v": []}},
  "facts": [{"id": "...", "value": 1.35, "unit": "s", "source": "AV", "derivation": "...", "kind": "measurement"}],
  "verdict": {"agent_label": "PERCEPTION_LATE", "independent_label": "PERCEPTION_LATE", "status": "VERIFIED",
@@ -29,29 +35,41 @@
                            "measured": {"perception_s": 1.35, "command_s": 0.05, "tau_s": 0.15}}}
 ```
 
+### Site layout (`site/`, a build output that is gitignored)
+```
+index.html  app.js  style.css   (copied from telltale/web/static/)
+cases.json                      [{"case_id", "clip_id", "profile"}]
+cases/<case_id>.json            bundle
+cf/<case_id>.json               avoidance-map grid
+reports/<case_id>.html          printable report (render_html)
+media/<clip>.mp4                thumbs/<case_id>/<name>.jpg
+README.md                       Hugging Face Space header (sdk: static)
+```
+
 ---
 
-### Task D1: API
+### Task D1: Site exporter
 
 **Files:**
-- Create: `telltale/web/app.py`
-- Test: `tests/web/test_app.py`
+- Create: `telltale/web/export.py`
+- Test: `tests/web/test_export.py`
 
-- [ ] **Step 1: Write the failing test `tests/web/test_app.py`**
+- [ ] **Step 1: Create a placeholder static folder for the test.** Task D2 replaces these files. Create `telltale/web/static/index.html` containing `<!doctype html><title>Telltale</title>`.
+
+- [ ] **Step 2: Write the failing test `tests/web/test_export.py`**
 
 ```python
 import json
 
 import pytest
-from fastapi.testclient import TestClient
 
-import telltale.web.app as webapp
+from telltale.web.export import PERCEPTION_GRID, TAU_GRID, export_site
 
 BUNDLE = {
     "case_id": "nx01-car-s0101",
     "clip_id": "nx01",
     "profile": "car",
-    "video_url": "/media/nx01.mp4",
+    "video_url": "media/nx01.mp4",
     "fps": 30.0,
     "width": 1280,
     "height": 720,
@@ -77,134 +95,179 @@ BUNDLE = {
         "v_other": 15.0,
         "d0": 30.0,
         "t_end": 5.0,
-        "measured": {"perception_s": 2.9, "command_s": 0.05, "tau_s": 0.15},
+        "measured": {"perception_s": 2.4, "command_s": 0.05, "tau_s": 0.15},
     },
 }
 
 
 @pytest.fixture
-def client(tmp_path, monkeypatch):
-    (tmp_path / "nx01-car-s0101.json").write_text(json.dumps(BUNDLE))
-    monkeypatch.setattr(webapp, "BUNDLES", tmp_path)
-    return TestClient(webapp.app)
+def built(tmp_path):
+    bundles, clips, thumbs = tmp_path / "bundles", tmp_path / "clips", tmp_path / "thumbs"
+    bundles.mkdir()
+    clips.mkdir()
+    (thumbs / "nx01-car-s0101").mkdir(parents=True)
+    (bundles / "nx01-car-s0101.json").write_text(json.dumps(BUNDLE))
+    (clips / "nx01.mp4").write_bytes(b"\x00")
+    (thumbs / "nx01-car-s0101" / "lane_entry_t.jpg").write_bytes(b"\x00")
+    return export_site(bundles, tmp_path / "site", clips_dir=clips, thumbs_dir=thumbs)
 
 
-def test_cases_list(client):
-    assert client.get("/api/cases").json() == [{"case_id": "nx01-car-s0101", "clip_id": "nx01", "profile": "car"}]
+def test_site_structure(built):
+    assert (built / "index.html").exists()
+    assert json.loads((built / "cases.json").read_text()) == [
+        {"case_id": "nx01-car-s0101", "clip_id": "nx01", "profile": "car"}
+    ]
+    assert (built / "cases" / "nx01-car-s0101.json").exists()
+    assert (built / "media" / "nx01.mp4").exists()
+    assert (built / "thumbs" / "nx01-car-s0101" / "lane_entry_t.jpg").exists()
+    assert "does not assign legal fault" in (built / "reports" / "nx01-car-s0101.html").read_text()
+    assert "sdk: static" in (built / "README.md").read_text()
 
 
-def test_case_bundle_and_404(client):
-    assert client.get("/api/case/nx01-car-s0101").json()["verdict"]["status"] == "VERIFIED"
-    assert client.get("/api/case/nope").status_code == 404
+def test_avoidance_map_grid(built):
+    grid = json.loads((built / "cf" / "nx01-car-s0101.json").read_text())
+    assert len(grid["impact_kmh"]) == len(PERCEPTION_GRID)
+    assert len(grid["impact_kmh"][0]) == len(TAU_GRID)
+    p_late = grid["perception_s"].index(2.4)
+    p_nominal = grid["perception_s"].index(0.2)
+    tau = grid["tau_s"].index(0.15)
+    assert grid["impact_kmh"][p_late][tau] > 0
+    assert grid["impact_kmh"][p_nominal][tau] == 0.0
 
 
-def test_counterfactual_slider_flips_outcome(client):
-    late = client.get("/api/counterfactual/nx01-car-s0101", params={"perception": 2.9, "tau": 0.15}).json()
-    nominal = client.get("/api/counterfactual/nx01-car-s0101", params={"perception": 0.2, "tau": 0.15}).json()
-    assert late["contact"] and not nominal["contact"]
-    assert len(nominal["t"]) <= 400 and len(nominal["t"]) == len(nominal["gap"])
-
-
-def test_report_and_index(client):
-    assert "does not assign legal fault" in client.get("/report/nx01-car-s0101").text
-    assert "Telltale" in client.get("/").text
+def test_unsafe_case_id_is_rejected(tmp_path):
+    bundles = tmp_path / "bundles"
+    bundles.mkdir()
+    (bundles / "x.json").write_text(json.dumps({**BUNDLE, "case_id": "../evil"}))
+    with pytest.raises(ValueError, match="unsafe case id"):
+        export_site(bundles, tmp_path / "site", clips_dir=tmp_path, thumbs_dir=tmp_path)
 ```
 
-- [ ] **Step 2: Run it and confirm it fails.** `pytest tests/web -v`
+- [ ] **Step 3: Run it and confirm it fails.** `pytest tests/web -v`
 
-- [ ] **Step 3: Write `telltale/web/app.py`**
+- [ ] **Step 4: Write `telltale/web/export.py`**
 
 ```python
+"""Build the static replay site (Hugging Face Static Space and `telltale serve`) from cached bundles."""
+
+from __future__ import annotations
+
 import json
 import re
+import shutil
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse, HTMLResponse
-from fastapi.staticfiles import StaticFiles
+import numpy as np
 
-from telltale.config import CACHE, CLIPS
+from telltale.config import CACHE, CLIPS, ROOT
 from telltale.physics.counterfactual import counterfactual
 from telltale.physics.profiles import PROFILES
 from telltale.report.render import render_html
 
 STATIC = Path(__file__).parent / "static"
-BUNDLES = CACHE / "bundles"
+SITE = ROOT / "site"
 SAFE_ID = re.compile(r"^[A-Za-z0-9_-]+$")
+PERCEPTION_GRID = np.round(np.arange(0.0, 2.5001, 0.05), 2)
+TAU_GRID = np.round(np.arange(0.05, 2.0001, 0.05), 2)
+SPACE_README = """---
+title: Telltale
+emoji: 🚦
+colorFrom: gray
+colorTo: red
+sdk: static
+pinned: false
+---
 
-app = FastAPI(title="Telltale")
-app.mount("/static", StaticFiles(directory=STATIC), name="static")
-app.mount("/media", StaticFiles(directory=CLIPS, check_dir=False), name="media")
-app.mount("/thumbs", StaticFiles(directory=CACHE / "thumbs", check_dir=False), name="thumbs")
-
-
-def _bundle(case_id: str) -> dict:
-    p = BUNDLES / f"{case_id}.json"
-    if not SAFE_ID.match(case_id) or not p.exists():
-        raise HTTPException(404, "unknown case")
-    return json.loads(p.read_text())
-
-
-@app.get("/")
-def index():
-    return FileResponse(STATIC / "index.html")
+Replay demo of Telltale: Meta AI investigates vehicle crashes; a deterministic checker makes it auditable.
+Source: https://github.com/allenvarghese05/telltale
+"""
 
 
-@app.get("/api/cases")
-def cases():
-    out = []
-    for p in sorted(BUNDLES.glob("*.json")):
-        b = json.loads(p.read_text())
-        out.append({"case_id": b["case_id"], "clip_id": b["clip_id"], "profile": b["profile"]})
-    return out
-
-
-@app.get("/api/case/{case_id}")
-def case(case_id: str):
-    return _bundle(case_id)
-
-
-@app.get("/api/counterfactual/{case_id}")
-def cf(case_id: str, perception: float, tau: float, command: float | None = None):
-    b = _bundle(case_id)
-    ci, prof = b["counterfactual_inputs"], PROFILES[b["profile"]]
-    cmd = command if command is not None else (ci["measured"].get("command_s") or prof.nominal["command_s"])
-    r = counterfactual(
-        ci["v_ego0"], ci["v_other"], ci["d0"], prof, perception_s=perception, command_s=cmd, tau=tau, t_end=ci["t_end"]
-    )
-    step = max(1, len(r.t) // 300)
+def counterfactual_grid(bundle: dict) -> dict:
+    """Impact speed (km/h, 0.0 = avoided) for every detection delay x brake time constant."""
+    ci = bundle["counterfactual_inputs"]
+    profile = PROFILES[bundle["profile"]]
+    command = ci["measured"].get("command_s") or profile.nominal["command_s"]
+    impact = []
+    for perception in PERCEPTION_GRID:
+        row = []
+        for tau in TAU_GRID:
+            r = counterfactual(
+                ci["v_ego0"],
+                ci["v_other"],
+                ci["d0"],
+                profile,
+                perception_s=float(perception),
+                command_s=command,
+                tau=float(tau),
+                t_end=ci["t_end"],
+            )
+            row.append(round(r.impact_rel_speed * 3.6, 1) if r.contact else 0.0)
+        impact.append(row)
     return {
-        "contact": bool(r.contact),
-        "impact_speed_kmh": r.impact_rel_speed * 3.6,
-        "min_gap_m": r.min_gap,
-        "t": r.t[::step].round(3).tolist(),
-        "gap": r.gap[::step].round(3).tolist(),
+        "perception_s": PERCEPTION_GRID.tolist(),
+        "tau_s": TAU_GRID.tolist(),
+        "impact_kmh": impact,
+        "measured": ci["measured"],
+        "nominal": {"perception_s": profile.nominal["perception_s"], "tau_s": profile.tau_nominal},
     }
 
 
-@app.get("/report/{case_id}", response_class=HTMLResponse)
-def report(case_id: str):
-    return render_html(_bundle(case_id))
+def export_site(
+    bundles_dir: Path = CACHE / "bundles",
+    out: Path = SITE,
+    clips_dir: Path = CLIPS,
+    thumbs_dir: Path = CACHE / "thumbs",
+) -> Path:
+    if out.exists():
+        shutil.rmtree(out)
+    shutil.copytree(STATIC, out)
+    for sub in ("cases", "cf", "reports", "media", "thumbs"):
+        (out / sub).mkdir()
+    index = []
+    for path in sorted(bundles_dir.glob("*.json")):
+        bundle = json.loads(path.read_text())
+        case_id = bundle["case_id"]
+        if not SAFE_ID.match(case_id):
+            raise ValueError(f"unsafe case id {case_id!r} in {path.name}")
+        (out / "cases" / f"{case_id}.json").write_text(json.dumps(bundle))
+        (out / "cf" / f"{case_id}.json").write_text(json.dumps(counterfactual_grid(bundle)))
+        (out / "reports" / f"{case_id}.html").write_text(render_html(bundle))
+        clip = Path(bundle["video_url"]).name
+        if not (out / "media" / clip).exists():
+            shutil.copy(clips_dir / clip, out / "media" / clip)
+        if (thumbs_dir / case_id).is_dir():
+            shutil.copytree(thumbs_dir / case_id, out / "thumbs" / case_id)
+        index.append({"case_id": case_id, "clip_id": bundle["clip_id"], "profile": bundle["profile"]})
+    (out / "cases.json").write_text(json.dumps(index))
+    (out / "README.md").write_text(SPACE_README)
+    return out
 ```
 
-- [ ] **Step 4: Commit** (the tests pass once Task D2 adds `index.html`). `git add telltale/web tests/web && git commit -m "feat(web): replay API, counterfactual, report, thumbnails"`
+- [ ] **Step 5: Run the tests and confirm they pass.** `pytest tests/web -v` → 3 passed.
+
+- [ ] **Step 6: Commit.** `git add telltale/web tests/web && git commit -m "feat(web): static site exporter with pre-computed avoidance map"`
 
 ---
 
 ### Task D2: Frontend
 
 **Files:**
-- Create: `telltale/web/static/index.html`, `telltale/web/static/app.js`, `telltale/web/static/style.css`
+- Replace: `telltale/web/static/index.html`
+- Create: `telltale/web/static/app.js`, `telltale/web/static/style.css`
 
-- [ ] **Step 1: Write `index.html`**
+- [ ] **Step 1: Write `index.html`.** Static hosting can't send security headers, so the Content Security Policy lives in a `<meta>` tag.
 
 ```html
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Telltale — independent, verifiable crash causation</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' https://cdn.plot.ly; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Telltale — Meta AI investigates · the checker verifies</title>
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 </head>
 <body>
@@ -223,10 +286,9 @@ def report(case_id: str):
   </section>
   <section class="col">
     <div class="card">
-      <h3>But-for test: what if this had been normal?</h3>
-      <label>Detection delay <input id="cf-p" type="range" min="0" max="2.5" step="0.05"> <b id="cf-p-v"></b> s</label>
-      <label>Brake build-up time <input id="cf-tau" type="range" min="0.05" max="2" step="0.05"> <b id="cf-tau-v"></b> s</label>
-      <div id="cf-out"></div><div id="cf-plot"></div>
+      <h3>But-for test: would a normal system have avoided it?</h3>
+      <div id="cf-out"></div><div id="cf-map"></div>
+      <p class="hint">Each cell is a full crash-physics replay. Dark = avoided. ● measured · ◆ normal.</p>
     </div>
     <div class="card"><h3>Investigator claims, each checked <span id="counts"></span></h3><ul id="claim-list"></ul></div>
     <details class="card" id="trace"><summary>Agent trace</summary><ol id="trace-list"></ol></details>
@@ -234,7 +296,7 @@ def report(case_id: str):
   </section>
 </main>
 <footer id="digest"></footer>
-<script src="/static/app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
 ```
@@ -243,7 +305,7 @@ def report(case_id: str):
 
 ```javascript
 const $ = (id) => document.getElementById(id);
-let bundle = null, cases = [], cfTimer = null;
+let bundle = null, cases = [];
 const LABELS = {
   PERCEPTION_LATE: 'The system detected the hazard late',
   COMMAND_LATE: 'Detected in time — but braking was commanded late',
@@ -255,11 +317,11 @@ const LABELS = {
 };
 const FAILED_LINK = { PERCEPTION_LATE: 'AV:first_seen_t', COMMAND_LATE: 'AV:brake_request_t',
   BRAKE_ACTUATION_LATE: 'CAN:pressure_reached_t', LATE_HANDOFF: 'AV:handoff_t' };
-const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 async function getJSON(u) { const r = await fetch(u); if (!r.ok) throw new Error(`${u}: ${r.status}`); return r.json(); }
 
 async function init() {
-  cases = await getJSON('/api/cases');
+  cases = await getJSON('cases.json');
   const clips = [...new Set(cases.map((c) => c.clip_id))];
   $('clip').innerHTML = clips.map((c) => `<option>${esc(c)}</option>`).join('');
   $('clip').onchange = renderVariants;
@@ -276,12 +338,13 @@ function renderVariants() {
 }
 
 async function load(id) {
-  bundle = await getJSON(`/api/case/${id}`);
+  bundle = await getJSON(`cases/${encodeURIComponent(id)}.json`);
   $('variants').querySelectorAll('button').forEach((b) => b.classList.toggle('active', b.dataset.id === id));
   const v = $('video');
-  if (!v.src.endsWith(bundle.video_url)) v.src = bundle.video_url;
-  renderVerdict(); renderStrip(); drawTimeline(); renderClaims(); renderTrace(); initCF();
-  $('report-link').href = `/report/${id}`;
+  if (v.getAttribute('src') !== bundle.video_url) v.src = bundle.video_url;
+  renderVerdict(); renderStrip(); drawTimeline(); renderClaims(); renderTrace();
+  drawAvoidanceMap(await getJSON(`cf/${encodeURIComponent(id)}.json`));
+  $('report-link').href = `reports/${encodeURIComponent(id)}.html`;
   $('digest').textContent = `Evidence digest (SHA-256) ${bundle.digest}`;
 }
 
@@ -304,9 +367,9 @@ function renderStrip() {
   const ev = [...bundle.events].sort((a, b) => a.t - b.t);
   $('strip').innerHTML = ev.map((e, i) => {
     const gap = i ? `<div class="gap ${e.key === failed ? 'bad' : ''}">+${(e.t - ev[i - 1].t).toFixed(2)} s</div>` : '';
-    return `${gap}<div class="moment ${e.key === failed ? 'failed' : ''}" data-t="${e.t}">
+    return `${gap}<div class="moment ${e.key === failed ? 'failed' : ''}" data-t="${Number(e.t)}">
       ${e.thumb ? `<img src="${esc(e.thumb)}" alt="">` : '<div class="noimg"></div>'}
-      <div class="t">${e.t.toFixed(2)} s</div><div class="l">${esc(e.label)}</div><div class="s">${esc(e.source)}</div></div>`;
+      <div class="t">${Number(e.t).toFixed(2)} s</div><div class="l">${esc(e.label)}</div><div class="s">${esc(e.source)}</div></div>`;
   }).join('');
   $('strip').querySelectorAll('.moment').forEach((m) => (m.onclick = () => { $('video').currentTime = +m.dataset.t; }));
 }
@@ -341,9 +404,27 @@ function drawTimeline() {
   $('timeline').on('plotly_click', (ev) => { $('video').currentTime = ev.points[0].x; });
 }
 
+function nearest(values, x) { return values.reduce((bi, v, i) => (Math.abs(v - x) < Math.abs(values[bi] - x) ? i : bi), 0); }
+
+function drawAvoidanceMap(g) {
+  const m = g.measured, n = g.nominal;
+  const mp = nearest(g.perception_s, m.perception_s ?? n.perception_s), mt = nearest(g.tau_s, m.tau_s ?? n.tau_s);
+  const np_ = nearest(g.perception_s, n.perception_s), nt = nearest(g.tau_s, n.tau_s);
+  const at = (p, t) => g.impact_kmh[p][t];
+  $('cf-out').innerHTML = `Measured: ${at(mp, mt) > 0 ? `<b class="bad">collision at ${at(mp, mt).toFixed(1)} km/h</b>` : '<b class="good">avoided</b>'}
+    · Normal system: ${at(np_, nt) > 0 ? `<b class="bad">collision at ${at(np_, nt).toFixed(1)} km/h</b>` : '<b class="good">avoided</b>'}`;
+  Plotly.newPlot('cf-map', [
+    { type: 'heatmap', x: g.tau_s, y: g.perception_s, z: g.impact_kmh, colorscale: 'Reds', zmin: 0, colorbar: { title: 'km/h' },
+      hovertemplate: 'detection %{y:.2f} s · brake build-up %{x:.2f} s<br>impact %{z:.1f} km/h<extra></extra>' },
+    { type: 'scatter', mode: 'markers', x: [g.tau_s[mt]], y: [g.perception_s[mp]], name: 'measured', marker: { size: 12, symbol: 'circle', color: '#58a6ff', line: { width: 2, color: '#fff' } } },
+    { type: 'scatter', mode: 'markers', x: [g.tau_s[nt]], y: [g.perception_s[np_]], name: 'normal', marker: { size: 12, symbol: 'diamond', color: '#3fb950', line: { width: 2, color: '#fff' } } },
+  ], { height: 300, margin: { t: 10, b: 40, l: 50, r: 10 }, xaxis: { title: 'brake build-up time constant (s)' },
+       yaxis: { title: 'detection delay (s)' }, showlegend: false }, { displayModeBar: false, responsive: true });
+}
+
 function renderClaims() {
   $('counts').textContent = `(${bundle.counts.VERIFIED} verified · ${bundle.counts.UNCORROBORATED} single-source · ${bundle.counts.BLOCKED} blocked)`;
-  $('claim-list').innerHTML = bundle.claims.map((c) => `<li class="${c.status}"><span class="chip">${c.status}</span> ${esc(c.claim.text)}
+  $('claim-list').innerHTML = bundle.claims.map((c) => `<li class="${esc(c.status)}"><span class="chip">${esc(c.status)}</span> ${esc(c.claim.text)}
     <div class="ev">${c.claim.evidence.map(esc).join(' · ')}</div>
     ${c.reasons.length ? `<div class="why">${c.reasons.map(esc).join('<br>')}</div>` : ''}</li>`).join('');
 }
@@ -352,29 +433,6 @@ function renderTrace() {
   const calls = bundle.agent.tool_calls || [];
   $('trace').querySelector('summary').textContent = `Agent trace — ${bundle.agent.model}, ${calls.length} tool calls`;
   $('trace-list').innerHTML = calls.map((t) => `<li><code>${esc(t.name)}</code> ${esc(JSON.stringify(t.args))}</li>`).join('');
-}
-
-function initCF() {
-  const m = bundle.counterfactual_inputs.measured;
-  $('cf-p').value = m.perception_s ?? 0.2;
-  $('cf-tau').value = m.tau_s ?? 0.15;
-  $('cf-p').oninput = $('cf-tau').oninput = runCF;
-  runCF();
-}
-
-function runCF() {
-  $('cf-p-v').textContent = (+$('cf-p').value).toFixed(2);
-  $('cf-tau-v').textContent = (+$('cf-tau').value).toFixed(2);
-  clearTimeout(cfTimer);
-  cfTimer = setTimeout(async () => {
-    const r = await getJSON(`/api/counterfactual/${bundle.case_id}?perception=${$('cf-p').value}&tau=${$('cf-tau').value}`);
-    $('cf-out').innerHTML = r.contact ? `<b class="bad">Collision</b> at ${r.impact_speed_kmh.toFixed(1)} km/h closing speed`
-      : `<b class="good">Avoided</b> — closest gap ${r.min_gap_m.toFixed(2)} m`;
-    Plotly.newPlot('cf-plot', [{ x: r.t, y: r.gap, name: 'gap (m)' }], {
-      height: 160, margin: { t: 6, b: 32, l: 40, r: 10 }, xaxis: { title: 's after lane entry' }, yaxis: { title: 'gap m' },
-      shapes: [{ type: 'line', xref: 'paper', x0: 0, x1: 1, y0: 0, y1: 0, line: { color: '#ff4d4f' } }],
-    }, { displayModeBar: false, responsive: true });
-  }, 120);
 }
 
 init();
@@ -405,7 +463,7 @@ main { display:grid; grid-template-columns: 1.25fr 1fr; gap:16px; padding:8px 20
 #player { position:relative; } #player video { width:100%; display:block; border-radius:8px; }
 #overlay { position:absolute; inset:0; pointer-events:none; }
 .card { background:var(--card); border:1px solid #30363d; border-radius:8px; padding:12px; margin-bottom:12px; }
-.card h3 { margin:0 0 8px; font-size:14px; } .card label { display:block; margin:4px 0; color:var(--mut); }
+.card h3 { margin:0 0 8px; font-size:14px; }
 #claim-list { list-style:none; padding:0; margin:0; } #claim-list li { padding:8px 0; border-top:1px solid #222; }
 .chip { font-size:11px; padding:1px 6px; border-radius:4px; margin-right:6px; }
 li.VERIFIED .chip { background:var(--ok); color:#000; } li.UNCORROBORATED .chip { background:var(--warn); color:#000; }
@@ -415,46 +473,16 @@ li.BLOCKED .chip { background:var(--bad); color:#fff; }
 footer { color:var(--mut); font-size:11px; padding:8px 20px 20px; word-break:break-all; } a { color:var(--acc); }
 ```
 
-- [ ] **Step 4: Run the tests and confirm they pass.** `pytest tests/web -v` → 4 passed.
+- [ ] **Step 4: Enable JavaScript code scanning.** In `.github/workflows/security.yml`, change the CodeQL matrix to `language: [python, javascript-typescript]`.
 
-- [ ] **Step 5: Manual check.** Write the test's `BUNDLE` into `cache/bundles/`, run `telltale serve`, and open http://127.0.0.1:8000. The page should load and the slider should respond. Do the real visual pass after Integration I3.
+- [ ] **Step 5: Manual check.** Copy the test's `BUNDLE` into `cache/bundles/` (with any small mp4 at `data/clips/nx01.mp4`), then run `telltale export-site && telltale serve` and open http://127.0.0.1:8000.
+  - Check the browser console for **CSP errors**.
+  - If Plotly is blocked by the CSP, add `'unsafe-eval'` to `script-src` only, and note it in the commit message.
+  - Do the real visual pass after Integration I3.
 
-- [ ] **Step 6: Enable JavaScript code scanning.** In `.github/workflows/security.yml`, change the CodeQL matrix to `language: [python, javascript-typescript]` (it was off until JS existed).
-
-- [ ] **Step 7: Commit.** `git add telltale/web .github/workflows/security.yml && git commit -m "feat(web): timeline strip, verdict verification banner, replay UI"`
+- [ ] **Step 6: Commit.** `git add telltale/web .github/workflows/security.yml && git commit -m "feat(web): static replay UI — timeline strip, verdict banner, avoidance map"`
 
 ---
 
-### Task D3: Docker image for the hosted demo
-
-**Files:**
-- Create: `Dockerfile`, `.dockerignore`
-
-- [ ] **Step 1: Write `Dockerfile`**
-
-```dockerfile
-FROM python:3.11-slim
-WORKDIR /app
-COPY . .
-RUN pip install --no-cache-dir -e .
-ENV PORT=7860
-EXPOSE 7860
-CMD ["sh", "-c", "uvicorn telltale.web.app:app --host 0.0.0.0 --port ${PORT}"]
-```
-
-- [ ] **Step 2: Write `.dockerignore`**
-
-```
-.env
-.git
-vendor
-data/nexar_raw
-data/bench_clips
-cache/sam_raw
-cache/sam_bench
-**/__pycache__
-```
-
-- [ ] **Step 3: Build and run (if Docker is installed).** `docker build -t telltale . && docker run -p 7860:7860 telltale`
-
-- [ ] **Step 4: Commit.** `git add Dockerfile .dockerignore && git commit -m "chore: Docker image for hosted replay demo"`
+### Deploy (already wired in CI; nothing to build in this track)
+`.github/workflows/deploy.yml` runs after CI passes on `main`: it runs `telltale export-site` and uploads `site/` to the Hugging Face Static Space (`vars.HF_SPACE`, `secrets.HF_TOKEN`) with `huggingface_hub.upload_folder`. It skips itself until `telltale/web/export.py` exists. The Space never receives an API key.

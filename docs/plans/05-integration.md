@@ -245,7 +245,7 @@ def _thumbs(case_id: str, clip: dict, events: list[dict]) -> None:
                 continue
             out.parent.mkdir(parents=True, exist_ok=True)
             cv2.imwrite(str(out), cv2.resize(frame, (240, 135)))
-        e["thumb"] = f"/thumbs/{case_id}/{name}.jpg"
+        e["thumb"] = f"thumbs/{case_id}/{name}.jpg"
     cap.release()
 
 
@@ -267,7 +267,7 @@ def analyze(case_id: str, live: bool = False) -> dict:
         "case_id": case_id,
         "clip_id": clip["clip_id"],
         "profile": profile.name,
-        "video_url": f"/media/{clip['file']}",
+        "video_url": f"media/{clip['file']}",
         "fps": clip["fps"],
         "width": clip["width"],
         "height": clip["height"],
@@ -475,7 +475,7 @@ vehicle vendor is a conflicted party.
 
 ## Run it in 2 minutes (no API key)
 ```bash
-pip install -e . && telltale serve    # http://127.0.0.1:8000
+pip install -e . && telltale export-site && telltale serve    # http://127.0.0.1:8000
 ```
 
 ## Run it on your own clip / with your own key
@@ -499,13 +499,13 @@ Telltale reconstructs evidence; it does not assign legal fault. Monocular video 
 
 ```bash
 cd /tmp && rm -rf tt && git clone <public-repo-url> tt && cd tt
-python3 -m venv .venv && . .venv/bin/activate && pip install -e . && telltale serve
+python3.12 -m venv .venv && . .venv/bin/activate && pip install -e . && telltale export-site && telltale serve
 ```
 Expected: everything works with **no API key**.
 
-- [ ] **Step 3: Hosted demo (you do this).**
-  1. Create a free Hugging Face Space with the **Docker** SDK and push the repo.
-  2. Put the URL at the top of the README.
+- [ ] **Step 3: Hosted demo (automatic).**
+  1. The Static Space `Allen05254/telltale` is already wired: CI's `Deploy demo` workflow exports and uploads `site/` after every green push to `main`.
+  2. Push, wait for **Deploy demo** to go green, open https://huggingface.co/spaces/Allen05254/telltale, and put that URL at the top of the README.
   3. **Never add `MODEL_API_KEY` to the Space.**
 
 - [ ] **Step 4: 1:00 PM ET FEATURE FREEZE.** Push. From here on, only bug fixes.

@@ -97,10 +97,24 @@ def _agent_bench(a: argparse.Namespace) -> None:
     _print_json(run_agent_bench(a.n)["summary"])
 
 
-def _serve(a: argparse.Namespace) -> None:
-    import uvicorn
+def _export_site(_: argparse.Namespace) -> None:
+    from telltale.web.export import export_site
 
-    uvicorn.run("telltale.web.app:app", host="127.0.0.1", port=a.port)
+    print(export_site())
+
+
+def _serve(a: argparse.Namespace) -> None:
+    from functools import partial
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+
+    from telltale.config import ROOT
+
+    site = ROOT / "site"
+    if not (site / "index.html").exists():
+        raise SystemExit("No site built yet: run `telltale export-site` first.")
+    handler = partial(SimpleHTTPRequestHandler, directory=str(site))
+    print(f"Serving {site} at http://127.0.0.1:{a.port}")
+    ThreadingHTTPServer(("127.0.0.1", a.port), handler).serve_forever()
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -145,7 +159,8 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--seeds", type=int, default=4)
     p = add("agent-bench", _agent_bench, "agent alone vs agent + checker")
     p.add_argument("--n", type=int, default=18)
-    p = add("serve", _serve, "replay web UI")
+    add("export-site", _export_site, "build the static replay site into site/")
+    p = add("serve", _serve, "serve the built site locally")
     p.add_argument("--port", type=int, default=8000)
     return parser
 

@@ -17,6 +17,7 @@ COMMANDS = [
     ["analyze-all"],
     ["benchmark", "--seeds", "2"],
     ["agent-bench", "--n", "3"],
+    ["export-site"],
     ["serve", "--port", "9000"],
 ]
 

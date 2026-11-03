@@ -1,13 +1,3 @@
----
-title: Telltale
-emoji: 🚦
-colorFrom: gray
-colorTo: red
-sdk: docker
-app_port: 7860
-pinned: false
----
-
 # Telltale
 
 **Meta AI investigates vehicle crashes. A deterministic checker makes the investigation auditable.**

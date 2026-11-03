@@ -11,7 +11,7 @@
   - A deterministic checker recomputes every claim against a read-only, hashed evidence store, and **independently recomputes the verdict**. Anything unproven is blocked before it reaches the report.
   - The agent never sees the checker's own answers: `PHYS:*` and `ATTR:*` facts are hidden from it.
 
-**Tech Stack:** Python 3.10+, numpy, scipy, cantools, mcap, the openai SDK (pointed at `https://api.meta.ai/v1`), fastapi + uvicorn, opencv-python-headless, imageio-ffmpeg, huggingface_hub, pytest. The frontend is vanilla JS with Plotly from a CDN.
+**Tech Stack:** Python 3.10+, numpy, scipy, cantools, mcap, the openai SDK (pointed at `https://api.meta.ai/v1`), opencv-python-headless, imageio-ffmpeg, huggingface_hub, pytest. The frontend is a static site (vanilla JS + Plotly from a CDN) hosted on a Hugging Face Static Space.
 
 **Deadline:** submit by **Nov 4, 7:00 PM ET** (2 h buffer before 9 PM). Feature freeze is **Nov 4, 1:00 PM ET**.
 
@@ -23,7 +23,7 @@
 | `01-track-a-video.md` | Nexar clips, SAM, lane entry/TTC/danger onset, Spark witness, **real-label video benchmark**, **any-clip mode** | **Muse Code** in worktree `track-a` |
 | `02-track-b-vehicle.md` | Profiles, physics, attribution, CAN/MCAP, generator (6 stories), alignment, evidence store, synthetic benchmark | **Claude Code** in worktree `track-b` |
 | `03-track-c-trust.md` | **Agent-decides investigator**, checker (claims + verdict), report | **Claude Code** in worktree `track-c` |
-| `04-track-d-ui.md` | Web app: **incident timeline strip**, verdict-verification banner, toggles, counterfactual, claims | **Antigravity** in worktree `track-d` |
+| `04-track-d-ui.md` | **Static** replay site: **incident timeline strip**, verdict banner, log toggles, **avoidance map**, claims | **Antigravity** in worktree `track-d` |
 | `05-integration.md` | Analyze pipeline, thumbnails, demo cases, **agent benchmark**, README, video, submission | You + Claude Code on `main` |
 
 **Why Muse Code for Track A:** "Use of Meta AI tooling" is a judging criterion, so say in the README that Telltale was partly built with Muse Code. ⚠️ Check whether Muse Code bills to your API credits. If it does, watch the Billing page. The $150 must also cover the product's own SAM, Spark and Wonder calls (about $30–50 expected).
@@ -89,6 +89,7 @@ cache/sam/<clip_id>.json          cache/sam_bench/<nexar_id>.json
 cache/witness/<clip_id>.json      cache/agent/<case_id>.json
 cache/thumbs/<case_id>/<name>.jpg cache/bundles/<case_id>.json
 cache/agent_bench/<case_id>.json  data/agent_bench/{cases,ground_truth}/
+site/   (build output of `telltale export-site`, gitignored; deployed to the HF Static Space by CI)
 bench_results.json  video_bench.json  agent_bench.json
 ```
 `ClipEntry`:
@@ -101,6 +102,10 @@ bench_results.json  video_bench.json  agent_bench.json
 ---
 
 ### Task 0: Scaffold, shared schema, evidence store, CLI (tonight, on `main`, before any worktree)
+
+> ✅ **Done (commit `075a5c8` and follow-ups).** The committed code in the repo is authoritative. It differs slightly from the
+> snippets below: `env.example` instead of `.env.example`, no web-server dependencies, `export-site` and a static `serve`
+> command, and a `ruff`/`vulture` config. Don't re-run Task 0.
 
 **Files:**
 - Create: `pyproject.toml`, `.gitignore`, `env.example`, `telltale/__init__.py`, `telltale/config.py`, `telltale/core/__init__.py`, `telltale/core/schema.py`, `telltale/core/manifest.py`, `telltale/evidence/__init__.py`, `telltale/evidence/store.py`, `telltale/cli.py`
@@ -539,6 +544,8 @@ if __name__ == "__main__":
 
 ### Task S: Smoke tests (tonight; the plan adapts tonight if any fail)
 
+> ✅ Scripts are committed in `scripts/`. Running them needs `MODEL_API_KEY` in `.env` and a payment method on dev.meta.ai.
+
 - [ ] **Step 1: Credits.** ✅ Confirmed: $150 of free credits are active on dev.meta.ai → Billing. Create an API key and put it in `.env` as `MODEL_API_KEY=...`.
 
 - [ ] **Step 2: Write `scripts/smoke_tools.py`**
@@ -618,7 +625,7 @@ Folder ownership:
 - **A:** `telltale/video/`, `telltale/data/`, `tests/video/`, `data/clips/`, `data/bench_clips/`, `cache/sam*/`, `cache/witness/`
 - **B:** `telltale/physics/`, `telltale/logs/`, `telltale/evidence/build.py`, `telltale/evidence/align.py`, `telltale/bench/`, `tests/physics/`, `tests/logs/`, `tests/evidence/`
 - **C:** `telltale/verify/`, `telltale/agent/`, `telltale/report/`, `tests/verify/`, `tests/agent/`, `tests/report/`
-- **D:** `telltale/web/`, `tests/web/`, `Dockerfile`, `.dockerignore`
+- **D:** `telltale/web/`, `tests/web/`
 
 **Merge order:** B → A → C → D, then `05-integration.md` on `main`. **You** are the bottleneck: review each agent's work at its commits, and never run more than three agents at once.
 

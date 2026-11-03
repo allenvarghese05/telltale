@@ -1,8 +1,8 @@
-# Continuous deployment of the replay demo to a Hugging Face Space (Docker SDK).
-# Runs after CI passes on main, or manually. Skips cleanly until configured:
+# Continuous deployment of the replay demo to a Hugging Face Static Space.
+# Runs after CI passes on main, or manually. Requires:
 #   repo variable  HF_SPACE  = "<hf-username>/<space-name>"
-#   repo secret    HF_TOKEN  = a Hugging Face token with write access to that Space
-# The Space is replay-only: never add MODEL_API_KEY to it.
+#   repo secret    HF_TOKEN  = fine-grained token with read/write on that Space only
+# The site is static and replay-only: the Space never receives MODEL_API_KEY.
 name: Deploy demo
 
 on:
@@ -25,19 +25,47 @@ jobs:
       vars.HF_SPACE != '' &&
       (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     environment:
       name: demo
       url: https://huggingface.co/spaces/${{ vars.HF_SPACE }}
     steps:
       - uses: actions/checkout@v7
         with:
-          fetch-depth: 0
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
-      - name: Push to Hugging Face Space
+      - name: Check the site exporter exists yet
+        id: ready
+        run: |
+          if [ -f telltale/web/export.py ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::Site exporter not built yet (Track D); skipping deploy."
+          fi
+      - uses: actions/setup-python@v7
+        if: steps.ready.outputs.ready == 'true'
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Build static site
+        if: steps.ready.outputs.ready == 'true'
+        run: |
+          pip install -e .
+          telltale export-site
+      - name: Upload to Hugging Face Space
+        if: steps.ready.outputs.ready == 'true'
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           HF_SPACE: ${{ vars.HF_SPACE }}
         run: |
-          git config --global credential.helper '!f() { echo "username=hf"; echo "password=${HF_TOKEN}"; }; f'
-          git push --force "https://huggingface.co/spaces/${HF_SPACE}" HEAD:main
+          python - <<'EOF'
+          import os
+          from huggingface_hub import upload_folder
+          upload_folder(
+              repo_id=os.environ["HF_SPACE"],
+              repo_type="space",
+              folder_path="site",
+              token=os.environ["HF_TOKEN"],
+              commit_message=f"Deploy {os.environ['GITHUB_SHA'][:7]}",
+              delete_patterns=["cases/*", "cf/*", "reports/*", "media/*", "thumbs/*"],  # drop stale demo files
+          )
+          EOF
