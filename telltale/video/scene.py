@@ -67,16 +67,13 @@ def summarize_scene(tracks: dict, clip: dict, witness_answers: dict | None = Non
     )
 
 
-REASON_DERIVATION = {
-    "entering": "target crossed laterally into the ego lane (SAM 3.1 box bottom-centre)",
-    "predicted": "vehicle outside the lane closing on its edge within 2 s at the measured rate",
-    "closing": "vehicle already in the ego lane with time-to-collision under 2 s",
-}
-
-
 def scene_facts(scene: SceneSummary) -> list[Fact]:
-    """The curated subset that belongs in the evidence store, for `build_store(extra_facts=...)`."""
-    facts = [
+    """The curated subset that belongs in the evidence store, for `build_store(extra_facts=...)`.
+
+    The struck vehicle's hazard onset is not repeated here: it is core evidence (`VID:hazard_onset_t`), written
+    by the evidence builder from `VideoFacts`.
+    """
+    return [
         Fact(
             "VID:hazard_vehicle_count",
             len(scene.hazards),
@@ -92,24 +89,3 @@ def scene_facts(scene: SceneSummary) -> list[Fact]:
             "sustained lateral manoeuvres by the struck vehicle, in lane widths per second",
         ),
     ]
-    if scene.danger_onset_t is not None and scene.danger_onset_reason is not None:
-        facts.append(
-            Fact(
-                "VID:danger_onset_t",
-                round(scene.danger_onset_t, 4),
-                "s",
-                "VID",
-                f"earliest hazard across all tracked vehicles: {REASON_DERIVATION[scene.danger_onset_reason]}",
-            )
-        )
-        facts.append(
-            Fact(
-                "VID:danger_onset_reason",
-                scene.danger_onset_reason,
-                "",
-                "VID",
-                "which of the three hazard tests fired first",
-                "observation",
-            )
-        )
-    return facts

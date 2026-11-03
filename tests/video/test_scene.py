@@ -34,12 +34,7 @@ def test_summary_carries_witness_conditions_through_untouched():
 
 def test_facts_are_all_recomputable_video_facts():
     facts = scene_facts(summarize_scene(_tracks(), CLIP))
-    assert {f.id for f in facts} == {
-        "VID:danger_onset_t",
-        "VID:danger_onset_reason",
-        "VID:hazard_vehicle_count",
-        "VID:target_lane_changes",
-    }
+    assert {f.id for f in facts} == {"VID:hazard_vehicle_count", "VID:target_lane_changes"}
     assert all(f.source == "VID" for f in facts)
     assert all(f.derivation for f in facts)
 

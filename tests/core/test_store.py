@@ -6,7 +6,7 @@ from telltale.evidence.store import EvidenceStore
 
 def _facts() -> list[Fact]:
     return [
-        Fact("VID:lane_entry_t", 4.0, "s", "VID", "SAM mask entered ego lane"),
+        Fact("VID:hazard_onset_t", 4.0, "s", "VID", "SAM mask entered ego lane"),
         Fact("AV:first_seen_t", 5.35, "s", "AV", "first /adas/tracks message"),
         Fact("ATTR:label", "PERCEPTION_LATE", "", "ATTR", "attribution", "derived"),
     ]
@@ -17,14 +17,14 @@ SERIES = {"can.speed_mps": {"t": [0, 1], "v": [20, 19], "unit": "m/s", "source":
 
 def test_get_has_and_series_window():
     store = EvidenceStore(_facts(), SERIES)
-    assert store.has("VID:lane_entry_t")
+    assert store.has("VID:hazard_onset_t")
     assert store.get("AV:first_seen_t").value == 5.35
     assert store.series("can.speed_mps", 0.5, 2)["v"] == [19.0]
     assert store.series_names() == ["can.speed_mps"]
 
 
 def test_duplicate_ids_rejected():
-    with pytest.raises(ValueError, match="duplicate fact id VID:lane_entry_t"):
+    with pytest.raises(ValueError, match="duplicate fact id VID:hazard_onset_t"):
         EvidenceStore([*_facts(), _facts()[0]])
 
 
@@ -53,4 +53,4 @@ def test_only_tool_generated_facts_can_be_appended():
 
 def test_agent_view_hides_checker_facts():
     ids = {f.id for f in EvidenceStore(_facts()).agent_facts()}
-    assert ids == {"VID:lane_entry_t", "AV:first_seen_t"}
+    assert ids == {"VID:hazard_onset_t", "AV:first_seen_t"}

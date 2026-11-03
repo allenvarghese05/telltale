@@ -17,6 +17,11 @@ LABELS = (
     "INCONCLUSIVE",
 )
 HIDDEN_FROM_AGENT = ("PHYS:", "ATTR:")
+HAZARD_REASONS = {
+    "entering": "struck vehicle crossed laterally into the ego lane (SAM 3.1 box)",
+    "predicted": "struck vehicle outside the ego lane, closing on its edge within 2 s at the measured rate",
+    "closing": "struck vehicle already in the ego lane with time-to-collision under 2 s",
+}
 
 
 @dataclass(frozen=True)
@@ -48,9 +53,16 @@ class CheckResult:
 
 @dataclass(frozen=True)
 class VideoFacts:
+    """What the footage alone establishes. `hazard_onset_t` is the physics time origin for every case.
+
+    The struck vehicle becomes a hazard by `entering` the ego lane, being `predicted` to cross into it within
+    2 s, or `closing` inside it with time-to-collision under 2 s (a rear-end). Lane entry is one kind of onset.
+    """
+
     clip_id: str
     fps: float
-    lane_entry_t: float
+    hazard_onset_t: float
+    hazard_onset_reason: str
     impact_t: float
-    ttc_at_entry: float | None
+    ttc_at_onset: float | None
     target_object_id: str

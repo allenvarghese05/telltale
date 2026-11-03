@@ -41,6 +41,12 @@
 
 ### Evidence IDs: `<SOURCE>:<name>`. All times are **video seconds** after alignment.
 
+> **Contract change (Nov 3):** the physics time origin is `VID:hazard_onset_t` (with `VID:hazard_onset_reason`:
+> `entering` / `predicted` / `closing`), replacing `VID:lane_entry_t`, so rear-end clips become cases. Lane entry is
+> one kind of hazard onset. `VideoFacts.hazard_onset_t`/`hazard_onset_reason`/`ttc_at_onset` and
+> `ClipTiming.hazard_onset_t` replace the `lane_entry`/`ttc_at_entry` fields; `CAN:speed_at_onset_mps` and
+> `PHYS:gap_at_onset_m` replace the `_at_entry` IDs. Track files 01–03 are historical and still show the old names.
+
 | Prefix | Meaning | Visible to agent? |
 |---|---|---|
 | `VID:` | Video facts: SAM-derived, or the Nexar impact label | ✅ |
@@ -55,13 +61,13 @@
 | `ATTR:` | Checker's independent verdict | ❌ hidden |
 
 Main IDs:
-- `VID:lane_entry_t`, `VID:impact_t`, `VID:ttc_at_entry_s`, `VID:target_object_id`
-- `CAN:clock_offset_s`, `CAN:brake_request_t`, `CAN:pressure_reached_t`, `CAN:speed_at_entry_mps`
+- `VID:hazard_onset_t`, `VID:impact_t`, `VID:ttc_at_onset_s`, `VID:target_object_id`
+- `CAN:clock_offset_s`, `CAN:brake_request_t`, `CAN:pressure_reached_t`, `CAN:speed_at_onset_mps`
 - `AV:clock_offset_s`, `AV:first_seen_t`, `AV:brake_request_t`, `AV:handoff_t`, `AV:range_at_first_seen_m`, `AV:rel_speed_mps`
 - Thresholds: `PROFILE:perception_threshold_s`, `PROFILE:command_threshold_s`, `PROFILE:actuation_threshold_s`, `PROFILE:human_prt_s`
 - Nominal values: `PROFILE:nominal_perception_s`, `PROFILE:nominal_command_s`, `PROFILE:nominal_tau_s`
 - Data quality: `DATA:brake_log_complete`, `DATA:max_brake_gap_s`
-- Checker-only physics: `PHYS:perception_latency_s`, `PHYS:command_latency_s`, `PHYS:actuation_latency_s`, `PHYS:handoff_margin_s`, `PHYS:brake_tau_est_s`, `PHYS:gap_at_entry_m`, `PHYS:actual_impact_speed_mps`, `PHYS:cf_nominal_contact`, `PHYS:cf_nominal_min_gap_m`, `PHYS:cf_nominal_impact_speed_mps`
+- Checker-only physics: `PHYS:perception_latency_s`, `PHYS:command_latency_s`, `PHYS:actuation_latency_s`, `PHYS:handoff_margin_s`, `PHYS:brake_tau_est_s`, `PHYS:gap_at_onset_m`, `PHYS:actual_impact_speed_mps`, `PHYS:cf_nominal_contact`, `PHYS:cf_nominal_min_gap_m`, `PHYS:cf_nominal_impact_speed_mps`
 - Checker-only verdict: `ATTR:label`, `ATTR:excess_<layer>_s`, `ATTR:noncausal_faults`
 - Witness: `WIT:other_vehicle_lane_change_t`, `WIT:other_vehicle_turn_signal`, `WIT:other_vehicle_brake_lights`, `WIT:weather`, `WIT:lighting`, `WIT:road_surface`
 - Agent tool outputs: `WIT2:<slug>`, `CF:run<k>_contact`, `CF:run<k>_impact_speed_mps`, `CF:run<k>_min_gap_m`
@@ -249,7 +255,7 @@ class VideoFacts:
     fps: float
     lane_entry_t: float
     impact_t: float
-    ttc_at_entry: float | None
+    ttc_at_onset: float | None
     target_object_id: str
 ```
 
@@ -290,7 +296,7 @@ from telltale.evidence.store import EvidenceStore
 
 def _facts():
     return [
-        Fact("VID:lane_entry_t", 4.0, "s", "VID", "SAM mask entered ego lane"),
+        Fact("VID:hazard_onset_t", 4.0, "s", "VID", "SAM mask entered ego lane"),
         Fact("AV:first_seen_t", 5.35, "s", "AV", "first /adas/tracks message"),
         Fact("ATTR:label", "PERCEPTION_LATE", "", "ATTR", "attribution", "derived"),
     ]
@@ -298,7 +304,7 @@ def _facts():
 
 def test_get_has_series():
     s = EvidenceStore(_facts(), {"can.speed_mps": {"t": [0, 1], "v": [20, 19], "unit": "m/s", "source": "CAN"}})
-    assert s.has("VID:lane_entry_t") and s.get("AV:first_seen_t").value == 5.35
+    assert s.has("VID:hazard_onset_t") and s.get("AV:first_seen_t").value == 5.35
     assert s.series("can.speed_mps", 0.5, 2)["v"] == [19.0]
 
 
@@ -329,7 +335,7 @@ def test_only_tool_generated_facts_can_be_appended():
 
 def test_agent_view_hides_checker_facts():
     ids = {f.id for f in EvidenceStore(_facts()).agent_facts()}
-    assert "ATTR:label" not in ids and "VID:lane_entry_t" in ids
+    assert "ATTR:label" not in ids and "VID:hazard_onset_t" in ids
 ```
 
 - [ ] **Step 8: Run it and confirm it fails.** `pip install -e ".[dev]" && pytest tests/core -v` → FAIL (`ModuleNotFoundError`).
@@ -568,7 +574,7 @@ tools = [
     }
 ]
 r = client().chat.completions.create(
-    model=model, tools=tools, messages=[{"role": "user", "content": "Call get_fact with id VID:lane_entry_t."}]
+    model=model, tools=tools, messages=[{"role": "user", "content": "Call get_fact with id VID:hazard_onset_t."}]
 )
 m = r.choices[0].message
 print(model, "tool_calls:", json.dumps([c.model_dump() for c in (m.tool_calls or [])], indent=2))

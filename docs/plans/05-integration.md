@@ -30,6 +30,12 @@ Expected: all tests pass. Fix integration breaks on `main`, never by weakening t
 
 ### Task I2: Analyze pipeline, demo cases, agent benchmark code
 
+> ✅ **Done on main.** The committed code is authoritative and differs from the snippets below:
+> - `build_case_store` returns a typed `CaseEvidence` (not a tuple) and also adds Track A's curated `scene_facts`.
+> - The bundle carries `scene` (the rich `SceneSummary`) for the UI.
+> - `counterfactual_fn` reads `PHYS:gap_at_onset_m` instead of re-deriving the gap.
+> - `agent_bench` logs instead of printing.
+
 **Files:**
 - Create: `telltale/pipeline/analyze.py`, `telltale/pipeline/demo.py`, `telltale/pipeline/agent_bench.py`
 - Test: `tests/pipeline/test_analyze.py`, `tests/pipeline/test_agent_bench.py`, `tests/pipeline/__init__.py`
@@ -63,7 +69,7 @@ def _setup(tmp_path, monkeypatch, agent_verdict):
     (cache / "sam").mkdir(parents=True)
     (cache / "sam" / "syn.json").write_text(json.dumps(synthetic_tracks()))
     vf = compute_video_facts(synthetic_tracks(), CLIP)
-    cid = generate_case(ClipTiming("syn", vf.lane_entry_t, vf.impact_t), CAR, "brake_slow", 7, cases, tmp_path / "gt")
+    cid = generate_case(ClipTiming("syn", vf.hazard_onset_t, vf.impact_t), CAR, "brake_slow", 7, cases, tmp_path / "gt")
     (cache / "agent").mkdir()
     (cache / "agent" / f"{cid}.json").write_text(
         json.dumps(
@@ -79,7 +85,7 @@ def _setup(tmp_path, monkeypatch, agent_verdict):
                         "type": "timing",
                         "evidence": ["CAN:brake_request_t"],
                     },
-                    {"text": "The driver was distracted.", "type": "other", "evidence": ["VID:lane_entry_t"]},
+                    {"text": "The driver was distracted.", "type": "other", "evidence": ["VID:hazard_onset_t"]},
                 ],
             }
         )
@@ -158,7 +164,7 @@ from telltale.video.facts import compute_video_facts
 from telltale.video.witness import witness_facts
 
 EVENT_LABELS = [
-    ("VID:lane_entry_t", "Enters our lane"),
+    ("VID:hazard_onset_t", "Becomes a hazard"),
     ("AV:first_seen_t", "System detects it"),
     ("AV:brake_request_t", "System commands braking"),
     ("AV:handoff_t", "Control handed to driver"),
@@ -184,9 +190,9 @@ def build_case_store(case_dir: Path):
 
 def counterfactual_fn(store, profile):
     g = lambda k: float(store.get(k).value)  # noqa: E731
-    v0, dv = g("CAN:speed_at_entry_mps"), g("AV:rel_speed_mps")
-    d0 = g("AV:range_at_first_seen_m") + dv * (g("AV:first_seen_t") - g("VID:lane_entry_t"))
-    t_end = g("VID:impact_t") - g("VID:lane_entry_t") + 2.0
+    v0, dv = g("CAN:speed_at_onset_mps"), g("AV:rel_speed_mps")
+    d0 = g("AV:range_at_first_seen_m") + dv * (g("AV:first_seen_t") - g("VID:hazard_onset_t"))
+    t_end = g("VID:impact_t") - g("VID:hazard_onset_t") + 2.0
 
     def fn(perception_s: float, command_s: float, tau_s: float) -> dict:
         r = counterfactual(
@@ -283,10 +289,10 @@ def analyze(case_id: str, live: bool = False) -> dict:
         "stale_agent_run": run.get("digest") != store.digest,
         "agent": {"model": run["model"], "tool_calls": run["tool_calls"]},
         "counterfactual_inputs": {
-            "v_ego0": f["CAN:speed_at_entry_mps"],
-            "v_other": f["CAN:speed_at_entry_mps"] - f["AV:rel_speed_mps"],
-            "d0": f["PHYS:gap_at_entry_m"],
-            "t_end": round(video.impact_t - video.lane_entry_t + 2.0, 3),
+            "v_ego0": f["CAN:speed_at_onset_mps"],
+            "v_other": f["CAN:speed_at_onset_mps"] - f["AV:rel_speed_mps"],
+            "d0": f["PHYS:gap_at_onset_m"],
+            "t_end": round(video.impact_t - video.hazard_onset_t + 2.0, 3),
             "measured": {
                 "perception_s": f.get("PHYS:perception_latency_s"),
                 "command_s": f.get("PHYS:command_latency_s"),
@@ -332,7 +338,7 @@ DEMO = [
 
 def clip_timing(clip_id: str) -> ClipTiming:
     vf = compute_video_facts(json.loads((CACHE / "sam" / f"{clip_id}.json").read_text()), get_clip(clip_id))
-    return ClipTiming(clip_id, vf.lane_entry_t, vf.impact_t)
+    return ClipTiming(clip_id, vf.hazard_onset_t, vf.impact_t)
 
 
 def generate_for_clip(clip_id: str, profile: str, story: str, seed: int) -> str:

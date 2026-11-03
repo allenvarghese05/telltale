@@ -1,6 +1,6 @@
 """Blind fault-injecting case generator.
 
-Time zero is the video's lane-entry moment. The gap at lane entry is solved so simulated contact lands on the
+Time zero is the video's hazard-onset moment. The gap at hazard onset is solved so simulated contact lands on the
 video's impact time, so every generated log agrees with the footage. Injected faults only change what video
 cannot see: when the system perceived, when it commanded, and how fast brake pressure built.
 """
@@ -42,7 +42,7 @@ class GenerationError(RuntimeError):
 @dataclass(frozen=True)
 class ClipTiming:
     clip_id: str
-    lane_entry_t: float
+    hazard_onset_t: float
     impact_t: float
 
 
@@ -53,9 +53,9 @@ class Truth:
     v_ego0: float
     v_other: float
     d0: float
-    first_seen: float  # s after lane entry
-    brake_request: float  # s after lane entry (ADAS, or driver for handoff)
-    handoff: float | None  # s after lane entry
+    first_seen: float  # s after hazard onset
+    brake_request: float  # s after hazard onset (ADAS, or driver for handoff)
+    handoff: float | None  # s after hazard onset
     tau: float
     contact_t: float
     can_skew: float
@@ -64,7 +64,7 @@ class Truth:
 
 
 def solve_d0(v_ego0: float, v_other: float, t_req: float, brake: BrakeModel, t_imp: float) -> float:
-    """Bisect the lane-entry gap so that simulated contact happens at t_imp seconds after lane entry."""
+    """Bisect the hazard-onset gap so that simulated contact happens at t_imp seconds after hazard onset."""
 
     def ct(d0: float) -> float:
         r = simulate(v_ego0, v_other, d0, t_req, brake, t_end=t_imp + 2.0)
@@ -102,9 +102,9 @@ def sample_truth(timing: ClipTiming, profile, story: str, rng: np.random.Generat
     """Draw randomized hidden parameters until the story's expected label is the one attribution would reach."""
     if story not in EXPECTED:
         raise ValueError(story)
-    T = timing.impact_t - timing.lane_entry_t
+    T = timing.impact_t - timing.hazard_onset_t
     if T <= 0.3:
-        raise GenerationError("impact too soon after lane entry")
+        raise GenerationError("impact too soon after hazard onset")
     for _ in range(max_attempts):
         v_ego0 = float(rng.uniform(18.0, 30.0))
         dv = float(rng.uniform(3.0, min(16.0, v_ego0 - 2.0)))
@@ -150,7 +150,7 @@ def sample_truth(timing: ClipTiming, profile, story: str, rng: np.random.Generat
 
 
 def _speed(rel: np.ndarray, sim, v0: float) -> np.ndarray:
-    """Ego speed at times `rel` (seconds after lane entry): cruise, then the simulated brake, then crash decel."""
+    """Ego speed at times `rel` (seconds after hazard onset): cruise, then the simulated brake, then crash decel."""
     tc, vc = sim.contact_t, float(sim.v_ego[-1])
     out = np.empty_like(rel)
     for i, r in enumerate(rel):
@@ -170,19 +170,19 @@ def _ns(tv: float, skew: float) -> int:
 def write_case(case_dir: Path, timing: ClipTiming, truth: Truth, profile) -> None:
     """Write the CAN and ADAS logs for one case, each on its own skewed clock."""
     case_dir.mkdir(parents=True, exist_ok=True)
-    entry = timing.lane_entry_t
+    onset = timing.hazard_onset_t
     sim = simulate(
         truth.v_ego0,
         truth.v_other,
         truth.d0,
         truth.brake_request,
         BrakeModel(profile.a_max, truth.tau),
-        t_end=timing.impact_t - entry + LOG_TAIL_S,
+        t_end=timing.impact_t - onset + LOG_TAIL_S,
     )
     t_end = timing.impact_t + LOG_TAIL_S
 
     tv = np.arange(0.0, t_end, 1.0 / CAN_HZ)
-    rel = tv - entry
+    rel = tv - onset
     speed = _speed(rel, sim, truth.v_ego0)
     since = np.clip(rel - truth.brake_request, 0.0, None)
     pressure = np.where(rel >= truth.brake_request, profile.p_max_kpa * (1.0 - np.exp(-since / truth.tau)), 0.0)
@@ -206,19 +206,19 @@ def write_case(case_dir: Path, timing: ClipTiming, truth: Truth, profile) -> Non
             )
         )
     frames.append(
-        (EPOCH0 + entry + truth.contact_t + truth.can_skew, me.frame_id, me.encode({"impact": 1}), me.is_extended_frame)
+        (EPOCH0 + onset + truth.contact_t + truth.can_skew, me.frame_id, me.encode({"impact": 1}), me.is_extended_frame)
     )
     write_candump(case_dir / "vehicle.can.log", frames)
 
     msgs = []
     av_tv = np.arange(0.0, t_end, 1.0 / AV_HZ)
-    for t_v, v in zip(av_tv, _speed(av_tv - entry, sim, truth.v_ego0), strict=True):
+    for t_v, v in zip(av_tv, _speed(av_tv - onset, sim, truth.v_ego0), strict=True):
         msgs.append(("/ego/speed", _ns(float(t_v), truth.av_skew), {"speed_mps": round(float(v), 3)}))
     dv = truth.v_ego0 - truth.v_other
     msgs.append(
         (
             "/adas/tracks",
-            _ns(entry + truth.first_seen, truth.av_skew),
+            _ns(onset + truth.first_seen, truth.av_skew),
             {
                 "track_id": 7,
                 "event": "first_seen",
@@ -228,9 +228,9 @@ def write_case(case_dir: Path, timing: ClipTiming, truth: Truth, profile) -> Non
         )
     )
     if truth.handoff is None:
-        msgs.append(("/adas/events", _ns(entry + truth.brake_request, truth.av_skew), {"event": "brake_request"}))
+        msgs.append(("/adas/events", _ns(onset + truth.brake_request, truth.av_skew), {"event": "brake_request"}))
     else:
-        msgs.append(("/adas/events", _ns(entry + truth.handoff, truth.av_skew), {"event": "handoff"}))
+        msgs.append(("/adas/events", _ns(onset + truth.handoff, truth.av_skew), {"event": "handoff"}))
     write_adas_mcap(case_dir / "adas.mcap", msgs)
 
 

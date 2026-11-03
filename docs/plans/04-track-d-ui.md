@@ -22,7 +22,7 @@
  "video_url": "media/nx01.mp4", "fps": 30.0, "width": 1280, "height": 720,
  "lane_polygon": [[0.40,0.62],[0.60,0.62],[0.85,1.0],[0.15,1.0]],
  "target_boxes": [{"frame": 0, "box": [0,0,10,10]}],
- "events": [{"key": "VID:lane_entry_t", "t": 6.0, "label": "Enters our lane", "source": "VID", "thumb": "thumbs/nx01-car-s0101/lane_entry_t.jpg"}],
+ "events": [{"key": "VID:hazard_onset_t", "t": 6.0, "label": "Becomes a hazard", "source": "VID", "thumb": "thumbs/nx01-car-s0101/hazard_onset_t.jpg"}],
  "series": {"can.speed_mps": {"t": [], "v": []}, "can.brake_pressure_kpa": {"t": [], "v": []}},
  "facts": [{"id": "...", "value": 1.35, "unit": "s", "source": "AV", "derivation": "...", "kind": "measurement"}],
  "verdict": {"agent_label": "PERCEPTION_LATE", "independent_label": "PERCEPTION_LATE", "status": "VERIFIED",
@@ -30,7 +30,7 @@
  "claims": [{"claim": {"text": "...", "type": "timing", "evidence": ["..."], "assertion": {}}, "status": "VERIFIED", "reasons": []}],
  "counts": {"VERIFIED": 6, "UNCORROBORATED": 1, "BLOCKED": 0},
  "digest": "sha256...",
- "agent": {"model": "muse-wonder-1.0", "tool_calls": [{"name": "measure", "args": {"a": "AV:first_seen_t", "b": "VID:lane_entry_t"}}]},
+ "agent": {"model": "muse-wonder-1.0", "tool_calls": [{"name": "measure", "args": {"a": "AV:first_seen_t", "b": "VID:hazard_onset_t"}}]},
  "counterfactual_inputs": {"v_ego0": 25.0, "v_other": 15.0, "d0": 18.2, "t_end": 4.2,
                            "measured": {"perception_s": 1.35, "command_s": 0.05, "tau_s": 0.15}}}
 ```
@@ -108,7 +108,7 @@ def built(tmp_path):
     (thumbs / "nx01-car-s0101").mkdir(parents=True)
     (bundles / "nx01-car-s0101.json").write_text(json.dumps(BUNDLE))
     (clips / "nx01.mp4").write_bytes(b"\x00")
-    (thumbs / "nx01-car-s0101" / "lane_entry_t.jpg").write_bytes(b"\x00")
+    (thumbs / "nx01-car-s0101" / "hazard_onset_t.jpg").write_bytes(b"\x00")
     return export_site(bundles, tmp_path / "site", clips_dir=clips, thumbs_dir=thumbs)
 
 
@@ -119,7 +119,7 @@ def test_site_structure(built):
     ]
     assert (built / "cases" / "nx01-car-s0101.json").exists()
     assert (built / "media" / "nx01.mp4").exists()
-    assert (built / "thumbs" / "nx01-car-s0101" / "lane_entry_t.jpg").exists()
+    assert (built / "thumbs" / "nx01-car-s0101" / "hazard_onset_t.jpg").exists()
     assert "does not assign legal fault" in (built / "reports" / "nx01-car-s0101.html").read_text()
     assert "sdk: static" in (built / "README.md").read_text()
 
