@@ -20,7 +20,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from telltale.video.lane import lane_entry_frame
+from telltale.video.lane import lane_entry_frame, lane_overlap_fraction
 from telltale.video.motion import lateral_offsets, lateral_rate, time_to_lane_crossing
 from telltale.video.ttc import first_sustained_below, ttc_series
 
@@ -28,7 +28,9 @@ DANGER_TTC_S = 2.0
 DANGER_TLC_S = 2.0
 MAX_LANES_AWAY = 2.5
 MIN_DETECTIONS = 20
-HOLD_FRAMES = 3
+HOLD_FRAMES = 9
+MIN_IN_LANE_FRACTION = 0.5
+MIN_BOX_FRACTION = 0.02
 
 
 @dataclass(frozen=True)
@@ -42,6 +44,15 @@ class HazardOnset:
 
 def _lane_polygon_px(tracks: dict, clip: dict) -> list[tuple[float, float]]:
     return [(x * tracks["width"], y * tracks["height"]) for x, y in clip["ego_lane_polygon"]]
+
+
+def _resolvable(box: list[float], frame_width: int) -> bool:
+    """Below ~2% of the frame a box is a handful of pixels, and its growth is jitter rather than approach.
+
+    Measured on cand38: a 10-17 px wide vehicle produced time-to-collision values of 1.5-2.1 s while it was
+    in fact shrinking into the distance.
+    """
+    return (box[2] - box[0]) >= MIN_BOX_FRACTION * frame_width
 
 
 def _first_predicted_crossing(
@@ -82,7 +93,14 @@ def hazard_onsets(tracks: dict, clip: dict) -> list[HazardOnset]:
         predicted = _first_predicted_crossing(frames, fitted, rate, fps, closing)
         if predicted is not None:
             candidates.append((predicted, "predicted"))
-        in_lane = np.array([0.0 <= u <= 1.0 for u in fitted])
+        by_frame_box = {int(d["frame"]): d["box"] for d in dets}
+        in_lane = np.array(
+            [
+                lane_overlap_fraction(by_frame_box[int(f)], poly) >= MIN_IN_LANE_FRACTION
+                and _resolvable(by_frame_box[int(f)], tracks["width"])
+                for f in frames
+            ]
+        )
         masked = np.where(in_lane, [by_frame.get(int(f), np.inf) for f in frames], np.inf)
         closing_frame = first_sustained_below(frames, masked, DANGER_TTC_S, HOLD_FRAMES)
         if closing_frame is not None:

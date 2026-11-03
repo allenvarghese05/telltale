@@ -30,6 +30,22 @@ def in_lane_laterally(x: float, y: float, poly: list[tuple[float, float]]) -> bo
     return x_left <= x <= x_right if x_left < x_right else False
 
 
+def lane_overlap_fraction(box: list[float], poly: list[tuple[float, float]]) -> float:
+    """How much of the vehicle's width sits inside the ego lane, at its own depth.
+
+    A single bottom-centre point cannot tell a vehicle in our path from one passing alongside whose point
+    grazes the lane edge — which on cand38 made an overtaking car the earliest "hazard" at t=0.
+    """
+    left, right = _lane_edges(poly)
+    bottom = box[3]
+    x_left, x_right = _x_at(left, bottom), _x_at(right, bottom)
+    width = box[2] - box[0]
+    if width <= 0 or x_right <= x_left:
+        return 0.0
+    inside = min(box[2], x_right) - max(box[0], x_left)
+    return max(0.0, min(inside / width, 1.0))
+
+
 def select_target(objects: dict[str, list[dict]], impact_frame: int, window: int = 5) -> str:
     """The struck vehicle is the one filling the most of the frame at impact."""
     best = None
