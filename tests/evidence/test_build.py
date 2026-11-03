@@ -5,8 +5,16 @@ from telltale.evidence.build import build_store
 from telltale.logs.generate import EXPECTED, ClipTiming, generate_case
 from telltale.physics.profiles import PROFILES
 
-TIMING = ClipTiming(clip_id="syn", lane_entry_t=4.0, impact_t=6.2)
-VIDEO = VideoFacts("syn", 30.0, 4.0, 6.2, 1.9, "1")
+TIMING = ClipTiming(clip_id="syn", hazard_onset_t=4.0, impact_t=6.2)
+VIDEO = VideoFacts(
+    clip_id="syn",
+    fps=30.0,
+    hazard_onset_t=4.0,
+    hazard_onset_reason="entering",
+    impact_t=6.2,
+    ttc_at_onset=1.9,
+    target_object_id="1",
+)
 
 
 @pytest.mark.parametrize("profile", ["car", "truck"])
@@ -25,7 +33,8 @@ def test_store_contains_core_facts_and_extra_witness_facts(tmp_path):
     wit = [Fact("WIT:other_vehicle_turn_signal", "no", "", "WIT", "spark", "observation")]
     s = build_store(tmp_path / "c" / cid, VIDEO, PROFILES["car"], extra_facts=wit)
     for fid in [
-        "VID:lane_entry_t",
+        "VID:hazard_onset_t",
+        "VID:hazard_onset_reason",
         "AV:first_seen_t",
         "CAN:brake_request_t",
         "PHYS:perception_latency_s",
@@ -33,8 +42,8 @@ def test_store_contains_core_facts_and_extra_witness_facts(tmp_path):
         "PROFILE:perception_threshold_s",
         "DATA:brake_log_complete",
         "WIT:other_vehicle_turn_signal",
-        "PHYS:gap_at_entry_m",
-        "CAN:speed_at_entry_mps",
+        "PHYS:gap_at_onset_m",
+        "CAN:speed_at_onset_mps",
     ]:
         assert s.has(fid), fid
     assert s.get("PHYS:perception_latency_s").value > 0.9

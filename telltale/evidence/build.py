@@ -9,7 +9,7 @@ from pathlib import Path
 
 import numpy as np
 
-from telltale.core.schema import Fact, VideoFacts
+from telltale.core.schema import HAZARD_REASONS, Fact, VideoFacts
 from telltale.evidence.align import align_by_speed, can_offset_from_impact
 from telltale.evidence.store import EvidenceStore
 from telltale.logs.can_io import decode_signals, load_dbc, read_candump
@@ -65,23 +65,23 @@ def build_store(case_dir, video: VideoFacts, profile, extra_facts: list[Fact] | 
     max_gap = float(np.max(np.diff(np.concatenate(([w0], inside, [w1])))))
     complete = max_gap <= MAX_BRAKE_GAP_S
 
-    entry = video.lane_entry_t
+    onset = video.hazard_onset_t
     handoff = events.get("handoff")
-    perception = first_seen - entry
+    perception = first_seen - onset
     command = None if handoff is not None or "brake_request" not in events else events["brake_request"] - first_seen
     actuation = None if can_req is None or reached is None else reached - can_req
     margin = None if handoff is None else video.impact_t - handoff
 
-    v0 = float(np.interp(entry, spd_t, spd_v))
+    v0 = float(np.interp(onset, spd_t, spd_v))
     dv = float(track["rel_speed_mps"])
-    d0 = float(track["range_m"]) + dv * (first_seen - entry)
-    t_end = video.impact_t - entry + 2.0
+    d0 = float(track["range_m"]) + dv * (first_seen - onset)
+    t_end = video.impact_t - onset + 2.0
     cf = counterfactual(v0, v0 - dv, d0, profile, t_end=t_end)
     tau_est = None if actuation is None else max(actuation / math.log(1 / (1 - PRESSURE_FRAC)), 0.01)
     actual_speed = None
     if can_req is not None and tau_est is not None:
         actual_speed = simulate(
-            v0, v0 - dv, d0, can_req - entry, BrakeModel(profile.a_max, tau_est), t_end=t_end
+            v0, v0 - dv, d0, can_req - onset, BrakeModel(profile.a_max, tau_est), t_end=t_end
         ).impact_rel_speed
     verdict = attribute(Measured(perception, command, actuation, margin, cf.contact, complete), profile)
 
@@ -95,14 +95,22 @@ def build_store(case_dir, video: VideoFacts, profile, extra_facts: list[Fact] | 
         facts.append(Fact(fid, value, unit, src, how, kind))
 
     add(
-        "VID:lane_entry_t",
-        entry,
+        "VID:hazard_onset_t",
+        onset,
         "s",
         "VID",
-        f"SAM 3.1 object {video.target_object_id} box bottom-centre entered ego-lane polygon",
+        f"SAM 3.1 object {video.target_object_id}: {HAZARD_REASONS[video.hazard_onset_reason]}",
+    )
+    add(
+        "VID:hazard_onset_reason",
+        video.hazard_onset_reason,
+        "",
+        "VID",
+        "which hazard test fired for the struck vehicle: entering, predicted or closing",
+        "observation",
     )
     add("VID:impact_t", video.impact_t, "s", "VID", "Nexar dataset time_of_event label")
-    add("VID:ttc_at_entry_s", video.ttc_at_entry, "s", "VID", "box width / d(width)/dt at lane entry")
+    add("VID:ttc_at_onset_s", video.ttc_at_onset, "s", "VID", "box width / d(width)/dt at hazard onset")
     add("VID:target_object_id", video.target_object_id, "", "VID", "largest tracked vehicle at impact frame")
     add("CAN:clock_offset_s", can_off, "s", "CAN", "EDR impact trigger aligned to video impact")
     add("AV:clock_offset_s", av_off, "s", "AV", "ADAS ego-speed trace aligned to CAN speed (MSE grid search)")
@@ -119,13 +127,13 @@ def build_store(case_dir, video: VideoFacts, profile, extra_facts: list[Fact] | 
         "CAN",
         f"brake pressure first >= {int(PRESSURE_FRAC * 100)}% of full application",
     )
-    add("CAN:speed_at_entry_mps", v0, "m/s", "CAN", "CAN wheel speed interpolated at lane entry")
-    add("PHYS:perception_latency_s", perception, "s", "PHYS", "AV:first_seen_t - VID:lane_entry_t", "derived")
+    add("CAN:speed_at_onset_mps", v0, "m/s", "CAN", "CAN wheel speed interpolated at hazard onset")
+    add("PHYS:perception_latency_s", perception, "s", "PHYS", "AV:first_seen_t - VID:hazard_onset_t", "derived")
     add("PHYS:command_latency_s", command, "s", "PHYS", "AV:brake_request_t - AV:first_seen_t", "derived")
     add("PHYS:actuation_latency_s", actuation, "s", "PHYS", "CAN:pressure_reached_t - CAN:brake_request_t", "derived")
     add("PHYS:handoff_margin_s", margin, "s", "PHYS", "VID:impact_t - AV:handoff_t", "derived")
     add("PHYS:brake_tau_est_s", tau_est, "s", "PHYS", "first-order time constant from actuation latency", "derived")
-    add("PHYS:gap_at_entry_m", d0, "m", "PHYS", "radar range back-propagated to lane entry", "derived")
+    add("PHYS:gap_at_onset_m", d0, "m", "PHYS", "radar range back-propagated to hazard onset", "derived")
     add("PHYS:actual_impact_speed_mps", actual_speed, "m/s", "PHYS", "replay with measured timings", "derived")
     add(
         "PHYS:cf_nominal_contact",

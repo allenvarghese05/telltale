@@ -1,11 +1,14 @@
+import json
 import math
 
 import numpy as np
 import pytest
 
+from telltale.config import CACHE
 from telltale.core.manifest import DEFAULT_POLYGON
-from telltale.video.facts import compute_video_facts, danger_onset_t
+from telltale.video.facts import compute_video_facts
 from telltale.video.lane import in_lane_laterally, lane_entry_frame
+from telltale.video.scene import summarize_scene
 from telltale.video.ttc import first_sustained_below, ttc_series
 
 
@@ -45,19 +48,32 @@ def test_approaching_lead_vehicle_is_not_a_lane_entry():
     assert lane_entry_frame(dets, POLY_PX) is None
 
 
-def test_target_lane_entry_and_ttc():
+def test_cut_in_hazard_onset_is_no_later_than_lane_entry():
     vf = compute_video_facts(synthetic_tracks(), CLIP)
     assert vf.target_object_id == "1"
-    assert 32 / 30 <= vf.lane_entry_t <= 37 / 30
+    assert vf.hazard_onset_reason in {"entering", "predicted"}
+    assert vf.hazard_onset_t <= 37 / 30
     assert vf.impact_t == 2.9
-    assert 1.5 < vf.ttc_at_entry < 2.5
+    assert vf.ttc_at_onset is not None
+    assert vf.ttc_at_onset > 0
 
 
-def test_danger_onset_is_no_later_than_lane_entry():
-    vf = compute_video_facts(synthetic_tracks(), CLIP)
-    onset = danger_onset_t(synthetic_tracks(), CLIP)
-    assert onset is not None
-    assert onset <= vf.lane_entry_t + 1e-9
+def test_rear_end_without_a_lane_entry_still_yields_a_hazard_onset():
+    """cand38, real SAM track: the struck vehicle closes inside our lane rather than crossing into it."""
+    clip = {"clip_id": "cand38", "time_of_event": 8.0, "ego_lane_polygon": DEFAULT_POLYGON}
+    tracks = json.loads((CACHE / "sam" / "cand38.json").read_text())
+    vf = compute_video_facts(tracks, clip)
+    scene = summarize_scene(tracks, clip)
+    assert vf.hazard_onset_reason == "closing"
+    assert vf.hazard_onset_t == scene.danger_onset_t
+    assert vf.target_object_id == scene.target_object_id
+
+
+def test_raises_when_the_struck_vehicle_never_becomes_a_hazard():
+    still = [{"frame": f, "box": [600.0, 500.0, 700.0, 575.0]} for f in range(90)]
+    tracks = {"fps": 30.0, "width": 1280, "height": 720, "objects": {"1": still}}
+    with pytest.raises(ValueError, match="never became a measurable hazard"):
+        compute_video_facts(tracks, CLIP)
 
 
 def test_a_target_already_in_lane_has_no_entry():

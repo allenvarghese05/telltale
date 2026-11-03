@@ -29,7 +29,7 @@ class FakeLLM:
 
 STORE = EvidenceStore(
     [
-        Fact("VID:lane_entry_t", 2.0, "s", "VID", "sam"),
+        Fact("VID:hazard_onset_t", 2.0, "s", "VID", "sam"),
         Fact("AV:first_seen_t", 3.35, "s", "AV", "mcap"),
         Fact("ATTR:label", "PERCEPTION_LATE", "", "ATTR", "attr", "derived"),
         Fact("PHYS:perception_latency_s", 1.35, "s", "PHYS", "diff", "derived"),
@@ -40,8 +40,8 @@ CLAIMS = [
     {
         "text": "Detection came 1.35 s after lane entry.",
         "type": "timing",
-        "evidence": ["AV:first_seen_t", "VID:lane_entry_t"],
-        "assertion": {"op": "diff", "a": "AV:first_seen_t", "b": "VID:lane_entry_t", "equals": 1.35},
+        "evidence": ["AV:first_seen_t", "VID:hazard_onset_t"],
+        "assertion": {"op": "diff", "a": "AV:first_seen_t", "b": "VID:hazard_onset_t", "equals": 1.35},
     }
 ]
 
@@ -60,7 +60,7 @@ def test_full_investigation_flow():
             resp(calls=[call("1", "list_evidence", {})]),
             resp(
                 calls=[
-                    call("2", "measure", {"a": "AV:first_seen_t", "b": "VID:lane_entry_t"}),
+                    call("2", "measure", {"a": "AV:first_seen_t", "b": "VID:hazard_onset_t"}),
                     call("3", "get_series", {"name": "can.speed_mps"}),
                 ]
             ),
@@ -89,7 +89,7 @@ def test_full_investigation_flow():
     ids = {f["id"] for f in run["agent_facts"]}
     assert {"CF:run1_contact", "CF:run1_impact_speed_mps", "CF:run1_min_gap_m", "WIT2:turn_signal"} <= ids
     listed = json.loads(next(m for m in llm.seen[1]["messages"] if m["role"] == "tool")["content"])
-    assert {f["id"] for f in listed} == {"VID:lane_entry_t", "AV:first_seen_t"}  # checker facts hidden
+    assert {f["id"] for f in listed} == {"VID:hazard_onset_t", "AV:first_seen_t"}  # checker facts hidden
     measured = json.loads([m for m in llm.seen[2]["messages"] if m["role"] == "tool"][1]["content"])
     assert measured["a_minus_b"] == pytest.approx(1.35)
 
@@ -97,7 +97,7 @@ def test_full_investigation_flow():
 def test_measure_refuses_hidden_facts():
     llm = FakeLLM(
         [
-            resp(calls=[call("1", "measure", {"a": "PHYS:perception_latency_s", "b": "VID:lane_entry_t"})]),
+            resp(calls=[call("1", "measure", {"a": "PHYS:perception_latency_s", "b": "VID:hazard_onset_t"})]),
             resp(calls=[call("2", "submit_findings", {"verdict": "PERCEPTION_LATE", "claims": CLAIMS})]),
         ]
     )

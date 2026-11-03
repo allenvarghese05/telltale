@@ -22,7 +22,7 @@ def _clip_timings():
         p = CACHE / "sam" / f"{cid}.json"
         if p.exists():
             vf = compute_video_facts(json.loads(p.read_text()), clip)
-            out.append((ClipTiming(cid, vf.lane_entry_t, vf.impact_t), vf))
+            out.append((ClipTiming(cid, vf.hazard_onset_t, vf.impact_t), vf))
     return out
 
 

@@ -6,7 +6,7 @@ import pytest
 from telltale.logs.generate import EXPECTED, ClipTiming, generate_case, sample_truth
 from telltale.physics.profiles import CAR, TRUCK
 
-TIMING = ClipTiming(clip_id="syn", lane_entry_t=4.0, impact_t=6.2)
+TIMING = ClipTiming(clip_id="syn", hazard_onset_t=4.0, impact_t=6.2)
 
 
 @pytest.mark.parametrize("profile", [CAR, TRUCK])
@@ -14,7 +14,7 @@ TIMING = ClipTiming(clip_id="syn", lane_entry_t=4.0, impact_t=6.2)
 def test_truth_matches_requested_story_and_hits_video_impact(profile, story):
     t = sample_truth(TIMING, profile, story, np.random.default_rng(7))
     assert t.label == EXPECTED[story]
-    assert abs(t.contact_t - (TIMING.impact_t - TIMING.lane_entry_t)) < 0.03
+    assert abs(t.contact_t - (TIMING.impact_t - TIMING.hazard_onset_t)) < 0.03
 
 
 def test_case_files_hide_the_story(tmp_path):
