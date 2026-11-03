@@ -91,6 +91,27 @@ def test_grid_reports_the_measured_and_nominal_operating_points(built):
     assert grid["nominal"] == {"perception_s": 0.2, "tau_s": 0.15}
 
 
+def test_exported_case_carries_the_incident_report(built):
+    case = json.loads((built / "cases" / "nx01-car-s0101.json").read_text())
+    assert case["narrative"][0] == {
+        "title": "What the camera saw",
+        "sentences": [
+            {
+                "text": "Automatic tracking followed 16 vehicles in the dashcam footage.",
+                "sources": ["scene.tracked_vehicles"],
+            }
+        ],
+    }
+    assert case["narrative"][-1]["title"] == "What this report does not say"
+
+
+def test_printable_report_includes_the_incident_report(built):
+    report = (built / "reports" / "nx01-car-s0101.html").read_text()
+    assert "<h2>Incident report</h2>" in report
+    assert "Automatic tracking followed 16 vehicles in the dashcam footage." in report
+    assert report.index("Incident report") < report.index("does not assign legal fault")
+
+
 def test_unsafe_case_id_is_rejected(tmp_path):
     bundles = tmp_path / "bundles"
     bundles.mkdir()
