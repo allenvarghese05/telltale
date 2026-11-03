@@ -1,0 +1,213 @@
+{
+  "model": "muse-wonder-1.0",
+  "digest": "0d8a3119b2d83dbf894b3b06b5804ec8dddcc0b0fa5f9c6d9d7e73cc19379d80",
+  "verdict": "INCONCLUSIVE",
+  "claims": [
+    {
+      "text": "The struck vehicle became a hazard by closing within the ego lane.",
+      "type": "observation",
+      "evidence": [
+        "VID:hazard_onset_reason"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "VID:hazard_onset_reason",
+        "equals": "closing"
+      }
+    },
+    {
+      "text": "The system detected the vehicle 0.2005 s after it became a hazard.",
+      "type": "timing",
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 0.2005
+      }
+    },
+    {
+      "text": "The brake request followed first detection by 0.039 s.",
+      "type": "timing",
+      "evidence": [
+        "AV:brake_request_t",
+        "AV:first_seen_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t",
+        "equals": 0.039
+      }
+    },
+    {
+      "text": "Brake pressure was recorded at the same time as the CAN brake request, an interval of 0.0 s.",
+      "type": "timing",
+      "evidence": [
+        "CAN:pressure_reached_t",
+        "CAN:brake_request_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t",
+        "equals": 0.0
+      }
+    },
+    {
+      "text": "The CAN brake request was recorded 1.0089 s after the AV brake request.",
+      "type": "timing",
+      "evidence": [
+        "CAN:brake_request_t",
+        "AV:brake_request_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:brake_request_t",
+        "b": "AV:brake_request_t",
+        "equals": 1.0089
+      }
+    },
+    {
+      "text": "The brake log is not complete.",
+      "type": "other",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": false
+      }
+    },
+    {
+      "text": "The largest brake-frame gap in the decision window was 1.0478 s.",
+      "type": "timing",
+      "evidence": [
+        "DATA:max_brake_gap_s"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "DATA:max_brake_gap_s",
+        "equals": 1.0478
+      }
+    },
+    {
+      "text": "A counterfactual with nominal perception 0.2 s, command 0.05 s and brake tau 0.15 s avoided contact.",
+      "type": "physics",
+      "evidence": [
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s",
+        "CF:run1_contact"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": false
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:brake_request_t",
+        "b": "AV:brake_request_t"
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.2,
+        "command_s": 0.05,
+        "tau_s": 0.15
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Is the scene in daylight with a dry road surface?",
+        "slug": "daylight_dry",
+        "t0": 6.1,
+        "t1": 8.0
+      }
+    },
+    {
+      "name": "submit_findings",
+      "args": {
+        "verdict": "INCONCLUSIVE",
+        "n_claims": 8
+      }
+    }
+  ],
+  "agent_facts": [
+    {
+      "id": "CF:run1_contact",
+      "value": false,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_impact_speed_mps",
+      "value": 0.0,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_min_gap_m",
+      "value": 0.01,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "WIT2:daylight_dry",
+      "value": "yes",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 recheck on sub-clip 6.10-8.00s: Is the scene in daylight with a dry road surface?",
+      "kind": "observation"
+    }
+  ]
+}

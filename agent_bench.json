@@ -1,0 +1,243 @@
+{
+  "summary": {
+    "n": 19,
+    "agent_accuracy": 1.0,
+    "independent_accuracy": 1.0,
+    "agent_wrong": 0,
+    "agent_wrong_flagged": 0,
+    "verified_but_wrong": 0,
+    "claims_total": 165,
+    "claims_blocked": 12,
+    "claims_uncorroborated": 0
+  },
+  "rows": [
+    {
+      "case": "cand37-car-s5000",
+      "expected": "UNAVOIDABLE",
+      "agent": "UNAVOIDABLE",
+      "independent": "UNAVOIDABLE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "case": "cand38-car-s5001",
+      "expected": "LATE_HANDOFF",
+      "agent": "LATE_HANDOFF",
+      "independent": "LATE_HANDOFF",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "case": "cand38-car-s5003",
+      "expected": "COMMAND_LATE",
+      "agent": "COMMAND_LATE",
+      "independent": "COMMAND_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "case": "cand36-car-s5004",
+      "expected": "PERCEPTION_LATE",
+      "agent": "PERCEPTION_LATE",
+      "independent": "PERCEPTION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "case": "cand36-car-s5005",
+      "expected": "INCONCLUSIVE",
+      "agent": "INCONCLUSIVE",
+      "independent": "INCONCLUSIVE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "case": "cand37-car-s5007",
+      "expected": "LATE_HANDOFF",
+      "agent": "LATE_HANDOFF",
+      "independent": "LATE_HANDOFF",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "case": "cand37-car-s5008",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "agent": "BRAKE_ACTUATION_LATE",
+      "independent": "BRAKE_ACTUATION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "case": "cand38-car-s5009",
+      "expected": "PERCEPTION_LATE",
+      "agent": "PERCEPTION_LATE",
+      "independent": "PERCEPTION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      }
+    },
+    {
+      "case": "cand38-car-s5011",
+      "expected": "UNAVOIDABLE",
+      "agent": "UNAVOIDABLE",
+      "independent": "UNAVOIDABLE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 5,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 3
+      }
+    },
+    {
+      "case": "cand36-car-s5012",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "agent": "BRAKE_ACTUATION_LATE",
+      "independent": "BRAKE_ACTUATION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 3
+      }
+    },
+    {
+      "case": "cand37-car-s5013",
+      "expected": "COMMAND_LATE",
+      "agent": "COMMAND_LATE",
+      "independent": "COMMAND_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "case": "cand63-car-s5015",
+      "expected": "LATE_HANDOFF",
+      "agent": "LATE_HANDOFF",
+      "independent": "LATE_HANDOFF",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "case": "cand36-car-s5016",
+      "expected": "UNAVOIDABLE",
+      "agent": "UNAVOIDABLE",
+      "independent": "UNAVOIDABLE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "case": "cand36-car-s5017",
+      "expected": "COMMAND_LATE",
+      "agent": "COMMAND_LATE",
+      "independent": "COMMAND_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 6,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 4
+      }
+    },
+    {
+      "case": "cand38-car-s5018",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "agent": "BRAKE_ACTUATION_LATE",
+      "independent": "BRAKE_ACTUATION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "case": "cand37-car-s5019",
+      "expected": "INCONCLUSIVE",
+      "agent": "INCONCLUSIVE",
+      "independent": "INCONCLUSIVE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "case": "cand36-car-s5020",
+      "expected": "LATE_HANDOFF",
+      "agent": "LATE_HANDOFF",
+      "independent": "LATE_HANDOFF",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      }
+    },
+    {
+      "case": "cand38-car-s5021",
+      "expected": "INCONCLUSIVE",
+      "agent": "INCONCLUSIVE",
+      "independent": "INCONCLUSIVE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      }
+    },
+    {
+      "case": "cand37-car-s5023",
+      "expected": "PERCEPTION_LATE",
+      "agent": "PERCEPTION_LATE",
+      "independent": "PERCEPTION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      }
+    }
+  ]
+}

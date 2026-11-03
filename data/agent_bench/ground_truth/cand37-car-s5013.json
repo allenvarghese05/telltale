@@ -1,0 +1,16 @@
+{
+  "story": "command_late",
+  "profile": "car",
+  "v_ego0": 29.301087599506698,
+  "v_other": 25.581662665187835,
+  "d0": 4.348007748217528,
+  "first_seen": 0.2473935593359336,
+  "brake_request": 1.3138802395857154,
+  "handoff": null,
+  "tau": 0.14315494772480458,
+  "contact_t": 1.169,
+  "can_skew": -0.30227581002893045,
+  "av_skew": 0.5421372763983551,
+  "label": "COMMAND_LATE",
+  "expected_label": "COMMAND_LATE"
+}

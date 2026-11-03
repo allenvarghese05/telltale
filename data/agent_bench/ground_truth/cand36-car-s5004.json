@@ -1,0 +1,16 @@
+{
+  "story": "perception_late",
+  "profile": "car",
+  "v_ego0": 19.004031389954903,
+  "v_other": 9.819110119780406,
+  "d0": 16.683910670175393,
+  "first_seen": 1.3824286543402744,
+  "brake_request": 1.4157238029420882,
+  "handoff": null,
+  "tau": 0.13969894985019354,
+  "contact_t": 1.866,
+  "can_skew": -0.11337791405405728,
+  "av_skew": -0.19895915952340923,
+  "label": "PERCEPTION_LATE",
+  "expected_label": "PERCEPTION_LATE"
+}

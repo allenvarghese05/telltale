@@ -1,0 +1,16 @@
+{
+  "story": "unavoidable",
+  "profile": "car",
+  "v_ego0": 19.063834965125313,
+  "v_other": 3.8506947291787608,
+  "d0": 18.915312616660962,
+  "first_seen": 0.11790496485895366,
+  "brake_request": 0.1492178833219924,
+  "handoff": null,
+  "tau": 0.1511682602350188,
+  "contact_t": 2.099,
+  "can_skew": 0.3353824703610464,
+  "av_skew": -0.757463311879353,
+  "label": "UNAVOIDABLE",
+  "expected_label": "UNAVOIDABLE"
+}
