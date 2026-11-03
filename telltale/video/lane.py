@@ -1,6 +1,24 @@
-"""Ego-lane geometry: point-in-polygon, target selection, and lane entry."""
+"""Ego-lane geometry: the lane in pixels, lane overlap, target selection and lane entry."""
 
 from __future__ import annotations
+
+MIN_BOX_FRACTION = 0.02
+TARGET_WINDOW_S = 1.0
+TARGET_MIN_LANE_OVERLAP = 0.5
+
+
+def lane_polygon_px(tracks: dict, clip: dict) -> list[tuple[float, float]]:
+    """The clip's ego-lane polygon, from fractions of the frame to pixels."""
+    return [(x * tracks["width"], y * tracks["height"]) for x, y in clip["ego_lane_polygon"]]
+
+
+def resolvable(box: list[float], frame_width: int) -> bool:
+    """Below ~2% of the frame a box is a handful of pixels, and its growth is jitter rather than approach.
+
+    Measured on cand38: a 10-17 px wide vehicle produced time-to-collision values of 1.5-2.1 s while it was
+    in fact shrinking into the distance.
+    """
+    return (box[2] - box[0]) >= MIN_BOX_FRACTION * frame_width
 
 
 def _lane_edges(poly: list[tuple[float, float]]) -> tuple[tuple, tuple]:
@@ -46,20 +64,36 @@ def lane_overlap_fraction(box: list[float], poly: list[tuple[float, float]]) -> 
     return max(0.0, min(inside / width, 1.0))
 
 
-def select_target(objects: dict[str, list[dict]], impact_frame: int, window: int = 5) -> str:
-    """The struck vehicle is the one filling the most of the frame at impact."""
-    best = None
-    for oid, dets in objects.items():
+def select_target(tracks: dict, clip: dict, window: int = 5) -> str:
+    """The struck vehicle: the largest one near impact that spent the last second mostly in our lane.
+
+    Largest-box-at-impact alone picks whatever is closest to the camera. On cand56 that was a pickup
+    overtaking in the next lane (0.17 mean lane overlap over the last second) instead of the car ahead (1.00).
+    Requiring the vehicle to have been in our path before impact excludes passers. Boxes too small to
+    measure are ignored. If no vehicle qualifies (one crossing our path, or a mis-drawn lane), the largest
+    box near impact is used, as before.
+    """
+    fps, frame_width = tracks["fps"], tracks["width"]
+    impact_frame = round(clip["time_of_event"] * fps)
+    first_frame = impact_frame - round(TARGET_WINDOW_S * fps)
+    poly = lane_polygon_px(tracks, clip)
+    largest, in_path = None, None
+    for oid, dets in tracks["objects"].items():
         near = [d for d in dets if abs(d["frame"] - impact_frame) <= window]
         if not near:
             continue
-        left, top, right, bottom = min(near, key=lambda d: abs(d["frame"] - impact_frame))["box"]
-        area = (right - left) * (bottom - top)
-        if best is None or area > best[0]:
-            best = (area, oid)
-    if best is None:
+        box = min(near, key=lambda d: abs(d["frame"] - impact_frame))["box"]
+        area = (box[2] - box[0]) * (box[3] - box[1])
+        if largest is None or area > largest[0]:
+            largest = (area, oid)
+        last_second = [d["box"] for d in dets if first_frame <= d["frame"] <= impact_frame]
+        overlap = sum(lane_overlap_fraction(b, poly) for b in last_second) / len(last_second) if last_second else 0.0
+        qualifies = overlap >= TARGET_MIN_LANE_OVERLAP and resolvable(box, frame_width)
+        if qualifies and (in_path is None or area > in_path[0]):
+            in_path = (area, oid)
+    if largest is None:
         raise ValueError("no tracked object visible near the impact frame")
-    return best[1]
+    return (in_path or largest)[1]
 
 
 def lane_entry_frame(dets: list[dict], poly_px: list[tuple[float, float]], hold: int = 3) -> int | None:

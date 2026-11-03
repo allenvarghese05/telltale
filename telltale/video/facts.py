@@ -14,7 +14,7 @@ def compute_video_facts(tracks: dict, clip: dict) -> VideoFacts:
     use, so a cut-in (`entering`/`predicted`) and a rear-end (`closing`) are handled alike.
     """
     fps = tracks["fps"]
-    target = select_target(tracks["objects"], round(clip["time_of_event"] * fps))
+    target = select_target(tracks, clip)
     onset = next((h for h in hazard_onsets(tracks, clip) if h.object_id == target), None)
     if onset is None:
         raise ValueError(

@@ -21,7 +21,7 @@ from dataclasses import dataclass, field
 
 from telltale.core.schema import Fact
 from telltale.video.hazard import HazardOnset, hazard_onsets
-from telltale.video.lane import select_target
+from telltale.video.lane import lane_polygon_px, select_target
 from telltale.video.motion import LaneChange, lane_change_events
 
 
@@ -40,9 +40,9 @@ class SceneSummary:
 
 def summarize_scene(tracks: dict, clip: dict, witness_answers: dict | None = None) -> SceneSummary:
     hazards = hazard_onsets(tracks, clip)
-    poly = [(x * tracks["width"], y * tracks["height"]) for x, y in clip["ego_lane_polygon"]]
+    poly = lane_polygon_px(tracks, clip)
     try:
-        target = select_target(tracks["objects"], round(clip["time_of_event"] * tracks["fps"]))
+        target = select_target(tracks, clip)
     except ValueError:
         target = None
     changes: list[LaneChange] = []
