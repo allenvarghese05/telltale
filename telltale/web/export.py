@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 import re
 import shutil
+from dataclasses import asdict
+from html import escape
 from pathlib import Path
 
 import numpy as np
@@ -13,6 +15,7 @@ from telltale.config import CACHE, CLIPS, ROOT
 from telltale.physics.counterfactual import counterfactual
 from telltale.physics.profiles import PROFILES
 from telltale.report.render import render_html
+from telltale.web.narrative import Section, incident_report
 
 STATIC = Path(__file__).parent / "static"
 SITE = ROOT / "site"
@@ -63,6 +66,20 @@ def counterfactual_grid(bundle: dict) -> dict:
     }
 
 
+REPORT_EVIDENCE_HEADING = "<h2>Evidence</h2>"
+
+
+def report_with_narrative(bundle: dict, sections: list[Section]) -> str:
+    """The printable report, with the plain-English account placed just before its raw evidence table."""
+    html = render_html(bundle)
+    if REPORT_EVIDENCE_HEADING not in html:
+        raise ValueError(f"printable report has no {REPORT_EVIDENCE_HEADING} heading to place the narrative before")
+    body = "".join(
+        f"<h3>{escape(s.title)}</h3><p>{' '.join(escape(line.text) for line in s.sentences)}</p>" for s in sections
+    )
+    return html.replace(REPORT_EVIDENCE_HEADING, f"<h2>Incident report</h2>{body}{REPORT_EVIDENCE_HEADING}", 1)
+
+
 def export_site(
     bundles_dir: Path = CACHE / "bundles",
     out: Path = SITE,
@@ -81,9 +98,11 @@ def export_site(
         case_id = bundle["case_id"]
         if not SAFE_ID.match(case_id):
             raise ValueError(f"unsafe case id {case_id!r} in {path.name}")
-        (out / "cases" / f"{case_id}.json").write_text(json.dumps(bundle))
+        sections = incident_report(bundle)
+        case = {**bundle, "narrative": [asdict(s) for s in sections]}
+        (out / "cases" / f"{case_id}.json").write_text(json.dumps(case))
         (out / "cf" / f"{case_id}.json").write_text(json.dumps(counterfactual_grid(bundle)))
-        (out / "reports" / f"{case_id}.html").write_text(render_html(bundle))
+        (out / "reports" / f"{case_id}.html").write_text(report_with_narrative(bundle, sections))
         clip = Path(bundle["video_url"]).name
         if not (out / "media" / clip).exists():
             shutil.copy(clips_dir / clip, out / "media" / clip)
