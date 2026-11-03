@@ -1,0 +1,135 @@
+"""Muse Spark as an independent video witness, plus the recheck tool the agent can call.
+
+The witness is asked only what a bystander could see — lane change, turn signal, brake lights, conditions.
+It is never asked whether contact occurred: measured against clips with confirmed impacts, Spark reports
+proximity rather than contact, so `VID:impact_t` stays with the Nexar human label.
+"""
+
+from __future__ import annotations
+
+import json
+import logging
+import re
+import subprocess
+import tempfile
+from pathlib import Path
+
+import imageio_ffmpeg
+
+from telltale.config import CACHE, CLIPS, WITNESS_MODEL, client
+from telltale.core.manifest import get_clip
+from telltale.core.schema import Fact
+
+logger = logging.getLogger(__name__)
+
+PROMPT = """You are an impartial traffic-incident witness reviewing a forward dashcam clip.
+Report only what is visible. Use "unclear" when you cannot see it. Times are seconds from the clip start.
+Return ONLY a JSON object with exactly these keys:
+{"other_vehicle_lane_change_t": number or null,
+ "other_vehicle_turn_signal": "yes" | "no" | "unclear",
+ "other_vehicle_brake_lights": "yes" | "no" | "unclear",
+ "weather": short string, "lighting": short string,
+ "road_surface": "dry" | "wet" | "snow" | "unclear"}"""
+
+NUMERIC = {"other_vehicle_lane_change_t"}
+ENUMS = {
+    "other_vehicle_turn_signal": {"yes", "no", "unclear"},
+    "other_vehicle_brake_lights": {"yes", "no", "unclear"},
+    "road_surface": {"dry", "wet", "snow", "unclear"},
+}
+FREE_TEXT = {"weather", "lighting"}
+WIT_KEYS = NUMERIC | set(ENUMS) | FREE_TEXT
+MAX_TEXT = 40
+
+
+def parse_witness_json(text: str) -> dict:
+    match = re.search(r"\{.*\}", text, re.S)
+    if not match:
+        raise ValueError(f"witness returned no JSON: {text[:200]}")
+    return json.loads(match.group(0))
+
+
+def witness_facts(answers: dict, model: str) -> list[Fact]:
+    """Turn the witness's answers into facts, keeping only keys we asked for with values we expect."""
+    facts = []
+    for key in sorted(WIT_KEYS):
+        value = answers.get(key)
+        if value is None:
+            continue
+        if key in NUMERIC:
+            try:
+                value = float(value)
+            except (TypeError, ValueError):
+                logger.warning("witness gave a non-numeric %s: %r", key, value)
+                continue
+            unit = "s"
+        else:
+            value = str(value).strip().lower()[:MAX_TEXT]
+            if key in ENUMS and value not in ENUMS[key]:
+                logger.warning("witness gave an out-of-range %s: %r", key, value)
+                value = "unclear"
+            unit = ""
+        facts.append(Fact(f"WIT:{key}", value, unit, "WIT", f"{model} video witness, full clip", "observation"))
+    return facts
+
+
+def _ask_video(path: Path, prompt: str) -> str:
+    api = client()
+    with open(path, "rb") as fh:
+        uploaded = api.files.create(file=fh, purpose="user_data")
+    response = api.responses.create(
+        model=WITNESS_MODEL,
+        input=[
+            {
+                "type": "message",
+                "role": "user",
+                "content": [{"type": "input_text", "text": prompt}, {"type": "input_file", "file_id": uploaded.id}],
+            }
+        ],
+    )
+    return response.output_text
+
+
+def run_witness_for_clip(clip_id: str) -> dict:
+    clip = get_clip(clip_id)
+    answers = parse_witness_json(_ask_video(CLIPS / clip["file"], PROMPT))
+    out = CACHE / "witness" / f"{clip_id}.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps({"model": WITNESS_MODEL, "answers": answers}, indent=2))
+    return answers
+
+
+def recheck(clip_id: str, question: str, t0: float, t1: float, slug: str) -> Fact:
+    """Independent second look: trimmed sub-clip, no prior context, one-word answer."""
+    clip = get_clip(clip_id)
+    with tempfile.TemporaryDirectory() as td:
+        sub = Path(td) / "sub.mp4"
+        subprocess.run(
+            [
+                imageio_ffmpeg.get_ffmpeg_exe(),
+                "-y",
+                "-ss",
+                f"{t0:.2f}",
+                "-i",
+                str(CLIPS / clip["file"]),
+                "-t",
+                f"{max(0.5, t1 - t0):.2f}",
+                "-c:v",
+                "libx264",
+                "-an",
+                str(sub),
+            ],
+            check=True,
+            capture_output=True,
+        )
+        text = _ask_video(sub, f"{question}\nAnswer with ONLY one word: yes, no, or unclear.")
+    word = re.search(r"\b(yes|no|unclear)\b", text.lower())
+    safe = re.sub(r"[^a-z0-9_]", "_", slug.lower())[:40]
+    return Fact(
+        f"WIT2:{safe}",
+        word.group(1) if word else "unclear",
+        "",
+        "WIT2",
+        f"{WITNESS_MODEL} recheck on sub-clip {t0:.2f}-{t1:.2f}s: {question}",
+        "observation",
+    )

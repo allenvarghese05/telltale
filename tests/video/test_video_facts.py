@@ -5,7 +5,7 @@ import pytest
 
 from telltale.core.manifest import DEFAULT_POLYGON
 from telltale.video.facts import compute_video_facts, danger_onset_t
-from telltale.video.lane import lane_entry_frame, point_in_polygon
+from telltale.video.lane import in_lane_laterally, lane_entry_frame
 from telltale.video.ttc import first_sustained_below, ttc_series
 
 
@@ -23,10 +23,26 @@ def synthetic_tracks():
 CLIP = {"clip_id": "syn", "time_of_event": 2.9, "ego_lane_polygon": DEFAULT_POLYGON}
 
 
-def test_point_in_polygon():
-    sq = [(0, 0), (10, 0), (10, 10), (0, 10)]
-    assert point_in_polygon(5, 5, sq)
-    assert not point_in_polygon(15, 5, sq)
+POLY_PX = [(x * 1280, y * 720) for x, y in DEFAULT_POLYGON]
+
+
+def test_in_lane_laterally_uses_the_lane_edges():
+    assert in_lane_laterally(640, 700, POLY_PX)
+    assert not in_lane_laterally(100, 700, POLY_PX)
+
+
+def test_in_lane_laterally_extrapolates_above_the_polygon():
+    """The polygon's top edge is a viewing-distance cutoff, not a lane boundary."""
+    above = 400.0
+    assert above < min(p[1] for p in POLY_PX)
+    assert in_lane_laterally(640, above, POLY_PX)
+    assert not in_lane_laterally(1100, above, POLY_PX)
+
+
+def test_approaching_lead_vehicle_is_not_a_lane_entry():
+    """Measured on cand36: a lead car's box bottom descends past the polygon top purely by closing."""
+    dets = [{"frame": f, "box": [628.0 - 20, 300.0, 628.0 + 20, 397.0 + f]} for f in range(60)]
+    assert lane_entry_frame(dets, POLY_PX) is None
 
 
 def test_target_lane_entry_and_ttc():
