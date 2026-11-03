@@ -73,6 +73,50 @@ def witness_facts(answers: dict, model: str) -> list[Fact]:
     return facts
 
 
+CUT_IN_PROMPT = """Watch this forward dashcam clip. Does another vehicle move from an adjacent lane into
+the camera car's lane, ahead of it, before the collision or near-miss?
+A vehicle that was already ahead in the same lane the whole time does not count.
+Return ONLY a JSON object with exactly these keys:
+{"cut_in": "yes" | "no" | "unclear",
+ "time_s": number or null,
+ "confidence": "high" | "medium" | "low"}"""
+CUT_IN_ANSWERS = {"yes", "no", "unclear"}
+CONFIDENCE_LEVELS = {"high", "medium", "low"}
+
+
+def parse_cut_in(text: str) -> dict:
+    """Read the screening answer, keeping nothing the model was not asked for."""
+    raw = parse_witness_json(text)
+    answer = str(raw.get("cut_in", "")).strip().lower()
+    confidence = str(raw.get("confidence", "")).strip().lower()
+    try:
+        when = None if raw.get("time_s") is None else float(raw["time_s"])
+    except (TypeError, ValueError):
+        logger.warning("cut-in screening gave a non-numeric time_s: %r", raw.get("time_s"))
+        when = None
+    return {
+        "cut_in": answer if answer in CUT_IN_ANSWERS else "unclear",
+        "time_s": when,
+        "confidence": confidence if confidence in CONFIDENCE_LEVELS else "low",
+    }
+
+
+def screen_cut_in(clip_id: str, cache_dir: Path | None = None) -> dict:
+    """Ask the witness whether a clip shows a cut-in, caching so a rerun costs nothing.
+
+    This picks candidate *demo* clips for a human to confirm by eye. It never touches the A5 benchmark
+    pool, and its answers are never evidence.
+    """
+    out = (cache_dir or CACHE / "cut_in") / f"{clip_id}.json"
+    if out.exists():
+        return json.loads(out.read_text())
+    clip = get_clip(clip_id)
+    answer = parse_cut_in(_ask_video(CLIPS / clip["file"], CUT_IN_PROMPT))
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(answer, indent=2))
+    return answer
+
+
 def _ask_video(path: Path, prompt: str) -> str:
     api = client()
     with open(path, "rb") as fh:
