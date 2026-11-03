@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from telltale.web.export import PERCEPTION_GRID, TAU_GRID, export_site
+from telltale.web.export import PERCEPTION_GRID, TAU_GRID, counterfactual_grid, export_site
 
 BUNDLE = {
     "case_id": "nx01-car-s0101",
@@ -89,6 +89,23 @@ def test_grid_reports_the_measured_and_nominal_operating_points(built):
     grid = json.loads((built / "cf" / "nx01-car-s0101.json").read_text())
     assert grid["measured"] == {"perception_s": 2.4, "command_s": 0.05, "tau_s": 0.15}
     assert grid["nominal"] == {"perception_s": 0.2, "tau_s": 0.15}
+
+
+def test_grid_states_the_checkers_exact_outcomes_not_the_nearest_cell():
+    facts = [
+        {"id": "PHYS:actual_impact_speed_mps", "value": 5.2},
+        {"id": "PHYS:cf_nominal_contact", "value": False},
+    ]
+    grid = counterfactual_grid({**BUNDLE, "facts": facts})
+    assert grid["outcome_kmh"] == {"measured": 18.7, "nominal": 0.0}
+
+
+def test_grid_outcome_reports_the_nominal_collision_speed():
+    facts = [
+        {"id": "PHYS:cf_nominal_contact", "value": True},
+        {"id": "PHYS:cf_nominal_impact_speed_mps", "value": 2.5},
+    ]
+    assert counterfactual_grid({**BUNDLE, "facts": facts})["outcome_kmh"] == {"measured": None, "nominal": 9.0}
 
 
 def test_exported_case_carries_the_incident_report(built):

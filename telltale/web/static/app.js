@@ -456,10 +456,13 @@ function drawAvoidanceMap() {
   const mt = nearestIndex(grid.tau_s, m.tau_s ?? n.tau_s);
   const np = nearestIndex(grid.perception_s, n.perception_s);
   const nt = nearestIndex(grid.tau_s, n.tau_s);
-  const at = (p, t) => grid.impact_kmh[p][t];
-  const say = (p, t) =>
-    at(p, t) > 0 ? `<b class="bad">collides at ${num(at(p, t), 1)} km/h</b>` : '<b class="good">avoids it</b>';
-  $('cf-out').innerHTML = `As measured, this vehicle ${say(mp, mt)}. Performing to specification, it ${say(np, nt)}.`;
+  /* The sentence states the checker's exact replays, which the incident report also uses. The map's markers sit
+     on the nearest sampled cell, which can differ slightly; a missing exact value falls back to that cell. */
+  const exact = grid.outcome_kmh || {};
+  const kmh = (value, p, t) => (value ?? grid.impact_kmh[p][t]);
+  const say = (v) => (v > 0 ? `<b class="bad">collides at ${num(v, 1)} km/h</b>` : '<b class="good">avoids it</b>');
+  $('cf-out').innerHTML = `As measured, this vehicle ${say(kmh(exact.measured, mp, mt))}. ` +
+    `Performing to specification, it ${say(kmh(exact.nominal, np, nt))}.`;
   Plotly.newPlot(
     'cf-map',
     [
