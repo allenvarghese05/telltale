@@ -1,0 +1,16 @@
+{
+  "story": "dropout",
+  "profile": "car",
+  "v_ego0": 23.490860720400235,
+  "v_other": 15.052538595019973,
+  "d0": 7.620911971626736,
+  "first_seen": 0.21240018456320825,
+  "brake_request": 0.2746653278246729,
+  "handoff": null,
+  "tau": 0.16200997911063622,
+  "contact_t": 1.169,
+  "can_skew": -0.24883368201026146,
+  "av_skew": 0.5556296821554053,
+  "label": "INCONCLUSIVE",
+  "expected_label": "INCONCLUSIVE"
+}

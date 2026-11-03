@@ -1,0 +1,16 @@
+{
+  "story": "brake_slow",
+  "profile": "car",
+  "v_ego0": 28.7178386024619,
+  "v_other": 14.964439936240304,
+  "d0": 21.060002660294195,
+  "first_seen": 0.1866538035845763,
+  "brake_request": 0.24413188379437314,
+  "handoff": null,
+  "tau": 0.5675858073150983,
+  "contact_t": 2.099,
+  "can_skew": -0.23401389273375128,
+  "av_skew": -0.12735562937735043,
+  "label": "BRAKE_ACTUATION_LATE",
+  "expected_label": "BRAKE_ACTUATION_LATE"
+}

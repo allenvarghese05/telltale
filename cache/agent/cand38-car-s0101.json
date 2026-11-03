@@ -1,0 +1,239 @@
+{
+  "model": "muse-wonder-1.0",
+  "digest": "e5a857a63158f66a7b1562f1f2c32af62b79f0ef20f14ec6db8477d71f23dc66",
+  "verdict": "PERCEPTION_LATE",
+  "claims": [
+    {
+      "text": "The struck vehicle became a hazard at 5.90 s by closing within the ego lane.",
+      "type": "timing",
+      "evidence": [
+        "VID:hazard_onset_t",
+        "VID:hazard_onset_reason"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "VID:hazard_onset_reason",
+        "equals": "closing"
+      }
+    },
+    {
+      "text": "The system detected the vehicle 1.36 s after it became a hazard (first seen 7.26 s vs hazard onset 5.90 s).",
+      "type": "timing",
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 1.356
+      }
+    },
+    {
+      "text": "Perception delay 1.36 s exceeded the 0.30 s perception threshold.",
+      "type": "timing",
+      "evidence": [
+        "PROFILE:perception_threshold_s",
+        "VID:hazard_onset_t"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "PROFILE:perception_threshold_s",
+        "equals": 0.3
+      }
+    },
+    {
+      "text": "Command delay was 0.04 s from first seen 7.26 s to brake request 7.30 s, within the 0.10 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "AV:brake_request_t",
+        "AV:first_seen_t",
+        "PROFILE:command_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t",
+        "equals": 0.0448
+      }
+    },
+    {
+      "text": "Brake actuation took 0.16 s from CAN brake request 7.30 s to pressure reached 7.46 s, within the 0.25 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "CAN:pressure_reached_t",
+        "CAN:brake_request_t",
+        "PROFILE:actuation_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t",
+        "equals": 0.16
+      }
+    },
+    {
+      "text": "Impact occurred at 8.00 s, 2.10 s after hazard onset at 5.90 s.",
+      "type": "timing",
+      "evidence": [
+        "VID:impact_t",
+        "VID:hazard_onset_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 2.1
+      }
+    },
+    {
+      "text": "With nominal timing (perception 0.20 s, command 0.05 s, actuation tau 0.15 s) the counterfactual avoided contact, with minimum gap 8.18 m and impact speed 0.00 m/s.",
+      "type": "physics",
+      "evidence": [
+        "CF:run1_contact",
+        "CF:run1_min_gap_m",
+        "CF:run1_impact_speed_mps"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": false
+      }
+    },
+    {
+      "text": "The brake log was complete, so the timing evidence is conclusive.",
+      "type": "other",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": true
+      }
+    },
+    {
+      "text": "Witness reported daylight and the independent recheck agreed the scene was in daylight.",
+      "type": "observation",
+      "evidence": [
+        "WIT:lighting",
+        "WIT2:lighting_daylight"
+      ],
+      "assertion": {
+        "op": "same",
+        "a": "WIT:lighting",
+        "b": "WIT2:lighting_daylight"
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.2,
+        "command_s": 0.05,
+        "tau_s": 0.15
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Is the scene in daylight?",
+        "slug": "lighting_daylight",
+        "t0": 5.0,
+        "t1": 7.0
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Are the other vehicle's brake lights illuminated?",
+        "slug": "other_vehicle_brake_lights",
+        "t0": 6.0,
+        "t1": 8.0
+      }
+    },
+    {
+      "name": "submit_findings",
+      "args": {
+        "verdict": "PERCEPTION_LATE",
+        "n_claims": 9
+      }
+    }
+  ],
+  "agent_facts": [
+    {
+      "id": "CF:run1_contact",
+      "value": false,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_impact_speed_mps",
+      "value": 0.0,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_min_gap_m",
+      "value": 8.1842,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "WIT2:lighting_daylight",
+      "value": "yes",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 recheck on sub-clip 5.00-7.00s: Is the scene in daylight?",
+      "kind": "observation"
+    },
+    {
+      "id": "WIT2:other_vehicle_brake_lights",
+      "value": "no",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 recheck on sub-clip 6.00-8.00s: Are the other vehicle's brake lights illuminated?",
+      "kind": "observation"
+    }
+  ]
+}

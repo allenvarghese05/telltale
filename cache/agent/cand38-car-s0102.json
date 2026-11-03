@@ -1,0 +1,235 @@
+{
+  "model": "muse-wonder-1.0",
+  "digest": "feb9fb59eb37d8bb86c757a1ca01ce7a14cae66a1fb6c8f8a1c4f44bf28b5b60",
+  "verdict": "COMMAND_LATE",
+  "claims": [
+    {
+      "assertion": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 0.1459,
+        "op": "diff"
+      },
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t"
+      ],
+      "text": "Perception delay was 0.15 s (rounded from 0.1459 s) from hazard onset at 5.9 s to first detection.",
+      "type": "timing"
+    },
+    {
+      "assertion": {
+        "equals": 0.3,
+        "op": "value",
+        "fact": "PROFILE:perception_threshold_s"
+      },
+      "evidence": [
+        "PROFILE:perception_threshold_s"
+      ],
+      "text": "Perception threshold is 0.3 s, so the 0.15 s perception delay did not exceed it.",
+      "type": "timing"
+    },
+    {
+      "assertion": {
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t",
+        "equals": 1.011,
+        "op": "diff"
+      },
+      "evidence": [
+        "AV:brake_request_t",
+        "AV:first_seen_t"
+      ],
+      "text": "Command delay was 1.01 s from first detection to brake request.",
+      "type": "timing"
+    },
+    {
+      "assertion": {
+        "equals": 0.1,
+        "op": "value",
+        "fact": "PROFILE:command_threshold_s"
+      },
+      "evidence": [
+        "PROFILE:command_threshold_s"
+      ],
+      "text": "Command threshold is 0.1 s, so the 1.01 s command delay exceeded it by the largest margin.",
+      "type": "timing"
+    },
+    {
+      "assertion": {
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t",
+        "equals": 0.16,
+        "op": "diff"
+      },
+      "evidence": [
+        "CAN:pressure_reached_t",
+        "CAN:brake_request_t"
+      ],
+      "text": "Brake actuation delay was 0.16 s from CAN brake request to pressure reached.",
+      "type": "timing"
+    },
+    {
+      "assertion": {
+        "equals": 0.25,
+        "op": "value",
+        "fact": "PROFILE:actuation_threshold_s"
+      },
+      "evidence": [
+        "PROFILE:actuation_threshold_s"
+      ],
+      "text": "Actuation threshold is 0.25 s, so the 0.16 s actuation delay did not exceed it.",
+      "type": "timing"
+    },
+    {
+      "assertion": {
+        "equals": false,
+        "op": "is",
+        "fact": "CF:run1_contact"
+      },
+      "evidence": [
+        "CF:run1_contact"
+      ],
+      "text": "Counterfactual with nominal perception 0.2 s, command 0.05 s and tau 0.15 s shows no contact, so the crash was avoidable.",
+      "type": "physics"
+    },
+    {
+      "assertion": {
+        "equals": "closing",
+        "op": "is",
+        "fact": "VID:hazard_onset_reason"
+      },
+      "evidence": [
+        "VID:hazard_onset_reason",
+        "VID:ttc_at_onset_s"
+      ],
+      "text": "Hazard onset reason was closing, with time-to-collision at onset 2.00 s (rounded from 1.9971 s).",
+      "type": "observation"
+    },
+    {
+      "assertion": {
+        "equals": true,
+        "op": "is",
+        "fact": "DATA:brake_log_complete"
+      },
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "text": "Brake log is complete, so the verdict is not INCONCLUSIVE.",
+      "type": "other"
+    },
+    {
+      "assertion": {
+        "a": "WIT:road_surface",
+        "b": "WIT2:road_surface",
+        "op": "agree",
+        "within": 0
+      },
+      "evidence": [
+        "WIT:road_surface",
+        "WIT2:road_surface"
+      ],
+      "text": "Witness reported road surface dry and independent recheck answered yes to dry road surface, corroborating the observation.",
+      "type": "observation"
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:brake_request_t",
+        "b": "AV:brake_request_t"
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.2,
+        "command_s": 0.05,
+        "tau_s": 0.15
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Is the road surface dry?",
+        "slug": "road_surface",
+        "t0": 5.9,
+        "t1": 8.0
+      }
+    },
+    {
+      "name": "submit_findings",
+      "args": {
+        "verdict": "COMMAND_LATE",
+        "n_claims": 10
+      }
+    }
+  ],
+  "agent_facts": [
+    {
+      "id": "CF:run1_contact",
+      "value": false,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_impact_speed_mps",
+      "value": 0.0,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_min_gap_m",
+      "value": 8.5347,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "WIT2:road_surface",
+      "value": "yes",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 recheck on sub-clip 5.90-8.00s: Is the road surface dry?",
+      "kind": "observation"
+    }
+  ]
+}
