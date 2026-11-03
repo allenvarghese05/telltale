@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 
 from telltale.config import CACHE
-from telltale.core.manifest import DEFAULT_POLYGON, get_clip
+from telltale.core.manifest import DEFAULT_POLYGON
 from telltale.video.motion import lane_change_events, lateral_offsets, time_to_lane_crossing
 
 POLY_PX = [(x * 1280, y * 720) for x, y in DEFAULT_POLYGON]
@@ -65,10 +65,13 @@ def test_time_to_lane_crossing_is_infinite_when_not_approaching():
 
 
 def test_cand38_shows_two_lane_change_attempts():
-    """Regression against a real track: the human watching this clip saw two attempts, ~5.5s and ~6.5s."""
-    clip = get_clip("cand38")
+    """Regression against a real track: the human watching this clip saw two attempts, ~5.5s and ~6.5s.
+
+    The track is committed under `cache/sam/`; the clip's own entry is not, because `data/clips/` holds
+    unreviewed candidates. Everything this needs is the track plus the default polygon.
+    """
     tracks = json.loads((CACHE / "sam" / "cand38.json").read_text())
-    poly = [(x * tracks["width"], y * tracks["height"]) for x, y in clip["ego_lane_polygon"]]
+    poly = [(x * tracks["width"], y * tracks["height"]) for x, y in DEFAULT_POLYGON]
     dets = sorted(tracks["objects"]["3"], key=lambda d: d["frame"])
     events = lane_change_events(dets, tracks["fps"], poly)
     leftward = [e for e in events if e.direction == "left"]
