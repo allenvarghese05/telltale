@@ -41,15 +41,39 @@ about the model: the agent genuinely decides, and code proves or blocks every st
 | Benchmark | Result |
 |---|---|
 | Danger onset against Nexar's human labels, 40 unseen clips, no per-clip tuning | Median absolute error 0.905 s, with the middle half of clips between 0.545 s and 1.387 s. Spread of the signed error 1.947 s. 80% within 2 s, 53% within 1 s. Onset found on 30 of 40 clips (75%). |
-| Synthetic blind attribution, six failure stories, car and truck profiles | **Pending.** The run is in progress; this row will be filled from its committed results file. |
-| Agent alone against agent plus checker | **Pending.** The run is in progress; this row will be filled from its committed results file. |
+| Agent alone against agent plus checker, 19 blind cases | Muse Wonder's verdict was correct on 19 of 19. The independent recomputation agreed on all 19, and no wrong verdict was verified. Of 165 claims, 153 were verified, 12 blocked and 0 single-source. |
+| Synthetic attribution consistency, six failure stories, car and truck profiles | Accuracy 1.000 on 162 cases, every story 1.000. Every dropout case correctly returned "inconclusive", and no other case did. 30 cases were not generated (below). |
 
-The danger-onset median is not quotable on its own. Against thresholds fixed in
-[`docs/benchmarks/a5-preregistration.md`](docs/benchmarks/a5-preregistration.md) before the numbers existed,
-the 1.947 s spread puts the result in the **partially consistent** bucket, not the strong one. On average
-Telltale fires 0.861 s earlier than the human annotator, and the tail is long. The full analysis, including the
-five worst clips and why, is in [`docs/benchmarks/a5-results.md`](docs/benchmarks/a5-results.md). The raw rows
-are in [`video_bench.json`](video_bench.json). No threshold was tuned in response to them.
+**Danger onset is the only row with an outside answer key, and its median is not quotable on its own.** Against
+thresholds fixed in [`docs/benchmarks/a5-preregistration.md`](docs/benchmarks/a5-preregistration.md) before
+the numbers existed, the 1.947 s spread puts the result in the **partially consistent** bucket, not the strong
+one. On average Telltale fires 0.861 s earlier than the human annotator, and the tail is long. The full
+analysis, including the five worst clips and why, is in [`docs/benchmarks/a5-results.md`](docs/benchmarks/a5-results.md).
+The raw rows are in [`video_bench.json`](video_bench.json). No threshold was tuned in response to them.
+
+**What the 12 blocked claims were.** Every claim in [`agent_bench.json`](agent_bench.json) can be re-checked
+offline from the committed runs, and none of the 12 blocked claims stated anything false. Each number in them
+matches the checker's own value. They were blocked because they could not be proven from what they cited:
+
+- 7 stated a correct interval or threshold in prose, but cited only the timestamps it came from, or used a fact
+  the claim did not cite. This is the checker enforcing citation, not catching an invention.
+- 4 tried to confirm the witness's description with a second look. The recheck tool answers yes, no or unclear,
+  so "daylight" can never equal "yes". This is a limit of our tool, and it is also why no claim is single-source:
+  the corroboration path cannot currently succeed.
+- 1 wrote its check wrongly, comparing a raw timestamp to the threshold instead of the interval.
+
+The 16 demo cases on the hosted page show the same pattern: 13 of 142 claims blocked, all of them true.
+
+**This run did not test catching a wrong verdict.** The agent was right on all 19 cases, so the checker never
+had a wrong verdict to withhold. That path is covered by the test suite (`test_analyze_rejects_a_wrong_agent_verdict`
+and `test_verdict_verified_and_rejected`), not by this benchmark.
+
+**The synthetic row checks consistency, not real-world accuracy.** It injects a fault and then measures that
+same fault against its threshold, so near-perfect accuracy is close to built in. It shows the deterministic
+engine agrees with itself across two vehicle profiles and six failure modes. The 30 missing cases are all on
+clip `cand63`, whose 5.28 s gap between hazard and impact leaves a braking vehicle time to stop. For those
+stories the generator found no timings that would still produce a collision, so it refused to make one up. The
+raw rows are in [`bench_results.json`](bench_results.json).
 
 ## Run it
 
