@@ -1,6 +1,6 @@
 import pytest
 
-from telltale.video.witness import parse_witness_json, witness_facts
+from telltale.video.witness import parse_recheck_answer, parse_witness_json, witness_facts
 
 
 def test_parse_strips_code_fences():
@@ -32,3 +32,22 @@ def test_witness_ignores_keys_it_was_not_asked_for():
     """Model output is untrusted: a key we never asked about must not become evidence."""
     facts = witness_facts({"weather": "clear", "collision": "yes", "verdict": "PERCEPTION_LATE"}, model="m")
     assert {f.id for f in facts} == {"WIT:weather"}
+
+
+def test_recheck_answer_keeps_the_observed_value_not_just_yes():
+    """The agent corroborates by comparing a recheck against WIT:*, so 'daylight' must come back as 'daylight'."""
+    assert parse_recheck_answer("The scene is in daylight.", "lighting") == "daylight"
+    assert parse_recheck_answer("daylight", "lighting") == "daylight"
+    assert parse_recheck_answer("dry", "road_surface") == "dry"
+    assert parse_recheck_answer("Yes, the brake lights are lit.", "other_vehicle_brake_lights") == "yes"
+
+
+def test_recheck_answer_falls_back_to_unclear():
+    assert parse_recheck_answer("I cannot tell from this footage.", "lighting") == "unclear"
+    assert parse_recheck_answer("", "road_surface") == "unclear"
+
+
+def test_recheck_answer_is_capped_and_lowercased():
+    answer = parse_recheck_answer("NIGHT", "lighting")
+    assert answer == "night"
+    assert len(parse_recheck_answer("x" * 200, "weather")) <= 40
