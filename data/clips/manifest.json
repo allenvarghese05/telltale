@@ -1,0 +1,116 @@
+{
+  "clips": {
+    "cand36": {
+      "clip_id": "cand36",
+      "ego_lane_polygon": [
+        [
+          0.4,
+          0.62
+        ],
+        [
+          0.6,
+          0.62
+        ],
+        [
+          0.85,
+          1.0
+        ],
+        [
+          0.15,
+          1.0
+        ]
+      ],
+      "file": "cand36.mp4",
+      "fps": 30.0,
+      "height": 720,
+      "nexar_id": "00171",
+      "time_of_alert": 4.766,
+      "time_of_event": 8.0,
+      "width": 1280
+    },
+    "cand37": {
+      "clip_id": "cand37",
+      "ego_lane_polygon": [
+        [
+          0.4,
+          0.62
+        ],
+        [
+          0.6,
+          0.62
+        ],
+        [
+          0.85,
+          1.0
+        ],
+        [
+          0.15,
+          1.0
+        ]
+      ],
+      "file": "cand37.mp4",
+      "fps": 30.6,
+      "height": 720,
+      "nexar_id": "00308",
+      "time_of_alert": 4.77,
+      "time_of_event": 8.0,
+      "width": 1280
+    },
+    "cand38": {
+      "clip_id": "cand38",
+      "ego_lane_polygon": [
+        [
+          0.4,
+          0.62
+        ],
+        [
+          0.6,
+          0.62
+        ],
+        [
+          0.85,
+          1.0
+        ],
+        [
+          0.15,
+          1.0
+        ]
+      ],
+      "file": "cand38.mp4",
+      "fps": 30.0,
+      "height": 720,
+      "nexar_id": "00596",
+      "time_of_alert": 4.8,
+      "time_of_event": 8.0,
+      "width": 1280
+    },
+    "cand63": {
+      "clip_id": "cand63",
+      "ego_lane_polygon": [
+        [
+          0.4,
+          0.62
+        ],
+        [
+          0.6,
+          0.62
+        ],
+        [
+          0.85,
+          1.0
+        ],
+        [
+          0.15,
+          1.0
+        ]
+      ],
+      "file": "cand63.mp4",
+      "fps": 30.5,
+      "height": 720,
+      "nexar_id": "00205",
+      "time_of_alert": 5.05,
+      "time_of_event": 8.0,
+      "width": 1280
+    }
+  }
+}
