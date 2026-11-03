@@ -88,6 +88,8 @@ def test_full_report_reads_in_order():
             "This report identifies which step in the vehicle's response fell outside its specification.",
             "It does not decide who is legally responsible for the collision.",
             "A qualified human reviewer signs off before it is relied on.",
+            "The vehicle logs in this demo are generated, because real fleet driver-assist logs are proprietary.",
+            "Given a real fleet's logs, the same pipeline runs unchanged.",
         ],
     }
 

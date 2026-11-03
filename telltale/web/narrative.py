@@ -277,6 +277,8 @@ LIMITS = (
     Sentence("This report identifies which step in the vehicle's response fell outside its specification.", ()),
     Sentence("It does not decide who is legally responsible for the collision.", ()),
     Sentence("A qualified human reviewer signs off before it is relied on.", ()),
+    Sentence("The vehicle logs in this demo are generated, because real fleet driver-assist logs are proprietary.", ()),
+    Sentence("Given a real fleet's logs, the same pipeline runs unchanged.", ()),
 )
 
 
