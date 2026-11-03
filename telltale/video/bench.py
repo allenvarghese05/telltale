@@ -25,6 +25,8 @@ import random
 import statistics
 from concurrent.futures import ThreadPoolExecutor
 
+import numpy as np
+
 from telltale.config import BENCH_CLIPS, CACHE, ROOT
 from telltale.core.manifest import BENCH_MANIFEST, load_manifest, save_manifest
 from telltale.video.sam import run_sam
@@ -34,6 +36,13 @@ logger = logging.getLogger(__name__)
 
 
 def summarize(rows: list[dict]) -> dict:
+    """Describe the error distribution, not just how often it lands inside a tight band.
+
+    The label is a human perceptual onset biased late, so a calibrated detector is expected to sit a
+    consistent distance behind it. `within_0_5s` and `within_1_0s` would read near zero for such a
+    detector and look like failure. The spread of the *signed* error is the honest measure: a tight
+    spread means we are tracking the same moment as the annotator, whatever the constant offset.
+    """
     ok = [r for r in rows if r.get("ok")]
     found = [r for r in ok if r.get("onset_t") is not None and r.get("alert_t") is not None]
     errs = [abs(r["onset_t"] - r["alert_t"]) for r in found]
@@ -42,10 +51,16 @@ def summarize(rows: list[dict]) -> dict:
         "n_attempted": len(rows),
         "n_target_found": len(ok),
         "n_onset_found": len(found),
+        "onset_coverage": round(len(found) / len(rows), 3) if rows else None,
         "median_abs_err_s": round(statistics.median(errs), 3) if errs else None,
+        "p25_abs_err_s": round(float(np.percentile(errs, 25)), 3) if errs else None,
+        "p75_abs_err_s": round(float(np.percentile(errs, 75)), 3) if errs else None,
         "mean_signed_err_s": round(statistics.mean(signed), 3) if signed else None,
+        "median_signed_err_s": round(statistics.median(signed), 3) if signed else None,
+        "stdev_signed_err_s": round(statistics.stdev(signed), 3) if len(signed) >= 2 else None,
         "within_0_5s": round(sum(e <= 0.5 for e in errs) / len(errs), 3) if errs else None,
         "within_1_0s": round(sum(e <= 1.0 for e in errs) / len(errs), 3) if errs else None,
+        "within_2_0s": round(sum(e <= 2.0 for e in errs) / len(errs), 3) if errs else None,
     }
 
 
