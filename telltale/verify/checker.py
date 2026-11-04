@@ -28,10 +28,11 @@ WITNESS_SOURCES = {"WIT", "WIT2"}
 # A claim comparing a different interval with it can be arithmetically true and still misleading, e.g. the human's
 # brake request after a handoff measured against the system's command threshold.
 THRESHOLD_INTERVALS = {
-    "PROFILE:perception_threshold_s": ("AV:first_seen_t", "VID:hazard_onset_t"),
-    "PROFILE:command_threshold_s": ("AV:brake_request_t", "AV:first_seen_t"),
-    "PROFILE:actuation_threshold_s": ("CAN:pressure_reached_t", "CAN:brake_request_t"),
-    "PROFILE:human_prt_s": ("VID:impact_t", "AV:handoff_t"),
+    "PROFILE:perception_threshold_s": (("AV:first_seen_t", "VID:hazard_onset_t"),),
+    "PROFILE:command_threshold_s": (("AV:brake_request_t", "AV:first_seen_t"),),
+    "PROFILE:actuation_threshold_s": (("CAN:pressure_reached_t", "CAN:brake_request_t"),),
+    # The handoff margin is judged against human reaction time, and so is the human's actual reaction after it.
+    "PROFILE:human_prt_s": (("VID:impact_t", "AV:handoff_t"), ("CAN:brake_request_t", "AV:handoff_t")),
 }
 
 
@@ -102,24 +103,22 @@ def _eval(assertion: dict, store: EvidenceStore) -> tuple[bool, set[float], list
 
 
 def _interval_meaning_problem(claim: Claim, store: EvidenceStore) -> str | None:
-    """Why a diff assertion cannot be judged against a cited threshold, or None when it measures what it should."""
+    """Why a diff assertion cannot be judged against the thresholds it cites, or None when it measures one of them."""
     assertion = claim.assertion or {}
-    if assertion.get("op") != "diff":
+    cited = sorted(set(claim.evidence) & set(THRESHOLD_INTERVALS))
+    if assertion.get("op") != "diff" or not cited:
         return None
     measured = (assertion.get("a"), assertion.get("b"))
-    for threshold in sorted(set(claim.evidence) & set(THRESHOLD_INTERVALS)):
-        expected = THRESHOLD_INTERVALS[threshold]
-        if threshold == "PROFILE:command_threshold_s" and store.has("AV:handoff_t"):
-            return (
-                f"interval meaning: {threshold} judges the system's own brake command, and this case has a handoff "
-                f"(AV:handoff_t), so there is no system command interval; {measured[0]} - {measured[1]} is not it"
-            )
-        if measured != expected:
-            return (
-                f"interval meaning: {threshold} judges {expected[0]} - {expected[1]}, "
-                f"but the assertion measures {measured[0]} - {measured[1]}"
-            )
-    return None
+    if any(measured in THRESHOLD_INTERVALS[threshold] for threshold in cited):
+        return None
+    if "PROFILE:command_threshold_s" in cited and store.has("AV:handoff_t"):
+        return (
+            "interval meaning: PROFILE:command_threshold_s judges the system's own brake command, and this case has "
+            f"a handoff (AV:handoff_t), so there is no system command interval; {measured[0]} - {measured[1]} is not it"
+        )
+    judged = " or ".join(f"{a} - {b}" for threshold in cited for a, b in THRESHOLD_INTERVALS[threshold])
+    measures = f"{measured[0]} - {measured[1]}"
+    return f"interval meaning: {', '.join(cited)} judges {judged}, but the assertion measures {measures}"
 
 
 def check_claim(claim: Claim, store: EvidenceStore) -> CheckResult:

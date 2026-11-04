@@ -265,3 +265,24 @@ def test_an_interval_without_a_threshold_is_not_judged_for_meaning(handoff_store
         {"op": "diff", "a": "CAN:brake_request_t", "b": "VID:impact_t", "equals": 0.482},
     )
     assert check_claim(claim, handoff_store).status == "VERIFIED"
+
+
+def test_a_summary_citing_several_thresholds_verifies_when_one_matches_its_interval(adas_store):
+    """Found by the offline re-check: summaries cite every threshold but recompute just the primary interval."""
+    claim = Claim(
+        "Perception is the primary contributing factor: its interval exceeded its threshold.",
+        "attribution",
+        ["AV:first_seen_t", "VID:hazard_onset_t", "PROFILE:perception_threshold_s", "PROFILE:command_threshold_s"],
+        {"op": "diff", "a": "AV:first_seen_t", "b": "VID:hazard_onset_t", "equals": 0.2},
+    )
+    assert check_claim(claim, adas_store).status == "VERIFIED"
+
+
+def test_the_humans_reaction_after_a_handoff_can_be_compared_with_human_reaction_time(handoff_store):
+    claim = Claim(
+        "The driver braked 1.44 s after the handoff, close to the 1.5 s human reaction time.",
+        "timing",
+        ["CAN:brake_request_t", "AV:handoff_t", "PROFILE:human_prt_s"],
+        {"op": "diff", "a": "CAN:brake_request_t", "b": "AV:handoff_t", "equals": 1.4413},
+    )
+    assert check_claim(claim, handoff_store).status == "VERIFIED"
