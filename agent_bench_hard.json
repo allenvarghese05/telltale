@@ -1,0 +1,682 @@
+{
+  "summary": {
+    "n": 30,
+    "agent_accuracy": 1.0,
+    "independent_accuracy": 1.0,
+    "agent_wrong": 0,
+    "agent_wrong_flagged": 0,
+    "verified_but_wrong": 0,
+    "claims_total": 261,
+    "claims_blocked": 0,
+    "claims_uncorroborated": 0,
+    "no_verdict": 0,
+    "by_profile": {
+      "car": {
+        "n": 12,
+        "agent_correct": 12
+      },
+      "truck": {
+        "n": 18,
+        "agent_correct": 18
+      }
+    },
+    "by_family": {
+      "marginal": {
+        "n": 9,
+        "agent_correct": 9
+      },
+      "tight": {
+        "n": 16,
+        "agent_correct": 16
+      },
+      "unavoidable": {
+        "n": 5,
+        "agent_correct": 5
+      }
+    }
+  },
+  "rows": [
+    {
+      "case": "cand37-car-s7002",
+      "profile": "car",
+      "story": "tight_perception_command",
+      "family": "tight",
+      "expected": "PERCEPTION_LATE",
+      "excess": {
+        "actuation": -0.13,
+        "command": 0.1231,
+        "perception": 0.1952
+      },
+      "agent": "PERCEPTION_LATE",
+      "independent": "PERCEPTION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand37-truck-s7003",
+      "profile": "truck",
+      "story": "marginal_perception",
+      "family": "marginal",
+      "expected": "PERCEPTION_LATE",
+      "excess": {
+        "actuation": -0.15,
+        "command": -0.0112,
+        "perception": 0.0839
+      },
+      "agent": "PERCEPTION_LATE",
+      "independent": "PERCEPTION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand63-car-s7004",
+      "profile": "car",
+      "story": "tight_handoff_perception",
+      "family": "tight",
+      "expected": "LATE_HANDOFF",
+      "excess": {
+        "actuation": -0.11,
+        "handoff": 0.4265,
+        "perception": 0.3842
+      },
+      "agent": "LATE_HANDOFF",
+      "independent": "LATE_HANDOFF",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand36-truck-s7005",
+      "profile": "truck",
+      "story": "marginal_actuation",
+      "family": "marginal",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "excess": {
+        "actuation": 0.09,
+        "command": -0.0333,
+        "perception": -0.0198
+      },
+      "agent": "BRAKE_ACTUATION_LATE",
+      "independent": "BRAKE_ACTUATION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand63-truck-s7006",
+      "profile": "truck",
+      "story": "tight_handoff_perception",
+      "family": "tight",
+      "expected": "LATE_HANDOFF",
+      "excess": {
+        "actuation": -0.17,
+        "handoff": 0.1288,
+        "perception": 0.0487
+      },
+      "agent": "LATE_HANDOFF",
+      "independent": "LATE_HANDOFF",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand38-truck-s7008",
+      "profile": "truck",
+      "story": "tight_command_perception",
+      "family": "tight",
+      "expected": "COMMAND_LATE",
+      "excess": {
+        "actuation": -0.11,
+        "command": 0.388,
+        "perception": 0.3165
+      },
+      "agent": "COMMAND_LATE",
+      "independent": "COMMAND_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand36-truck-s7009",
+      "profile": "truck",
+      "story": "tight_actuation_perception",
+      "family": "tight",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "excess": {
+        "actuation": 0.23,
+        "command": -0.0682,
+        "perception": 0.1709
+      },
+      "agent": "BRAKE_ACTUATION_LATE",
+      "independent": "BRAKE_ACTUATION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand37-car-s7011",
+      "profile": "car",
+      "story": "unavoidable_with_fault",
+      "family": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "excess": {
+        "actuation": 0.33,
+        "command": -0.0646,
+        "perception": -0.1746
+      },
+      "agent": "UNAVOIDABLE",
+      "independent": "UNAVOIDABLE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand38-car-s7012",
+      "profile": "car",
+      "story": "marginal_command",
+      "family": "marginal",
+      "expected": "COMMAND_LATE",
+      "excess": {
+        "actuation": -0.11,
+        "command": 0.0565,
+        "perception": -0.0327
+      },
+      "agent": "COMMAND_LATE",
+      "independent": "COMMAND_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand38-car-s7013",
+      "profile": "car",
+      "story": "tight_perception_command",
+      "family": "tight",
+      "expected": "PERCEPTION_LATE",
+      "excess": {
+        "actuation": -0.11,
+        "command": 0.0786,
+        "perception": 0.1243
+      },
+      "agent": "PERCEPTION_LATE",
+      "independent": "PERCEPTION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand37-truck-s7014",
+      "profile": "truck",
+      "story": "tight_perception_command",
+      "family": "tight",
+      "expected": "PERCEPTION_LATE",
+      "excess": {
+        "actuation": -0.13,
+        "command": 0.3256,
+        "perception": 0.4044
+      },
+      "agent": "PERCEPTION_LATE",
+      "independent": "PERCEPTION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand37-truck-s7015",
+      "profile": "truck",
+      "story": "unavoidable_with_fault",
+      "family": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "excess": {
+        "actuation": -0.15,
+        "command": -0.0312,
+        "perception": 0.0907
+      },
+      "agent": "UNAVOIDABLE",
+      "independent": "UNAVOIDABLE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand36-car-s7016",
+      "profile": "car",
+      "story": "marginal_actuation",
+      "family": "marginal",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "excess": {
+        "actuation": 0.09,
+        "command": -0.0319,
+        "perception": -0.0346
+      },
+      "agent": "BRAKE_ACTUATION_LATE",
+      "independent": "BRAKE_ACTUATION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand38-truck-s7017",
+      "profile": "truck",
+      "story": "tight_perception_command",
+      "family": "tight",
+      "expected": "PERCEPTION_LATE",
+      "excess": {
+        "actuation": -0.15,
+        "command": 0.1374,
+        "perception": 0.2292
+      },
+      "agent": "PERCEPTION_LATE",
+      "independent": "PERCEPTION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand36-truck-s7020",
+      "profile": "truck",
+      "story": "unavoidable_with_fault",
+      "family": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "excess": {
+        "actuation": 0.07,
+        "command": -0.0429,
+        "perception": -0.1761
+      },
+      "agent": "UNAVOIDABLE",
+      "independent": "UNAVOIDABLE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand36-truck-s7021",
+      "profile": "truck",
+      "story": "tight_handoff_perception",
+      "family": "tight",
+      "expected": "LATE_HANDOFF",
+      "excess": {
+        "actuation": -0.13,
+        "handoff": 0.4125,
+        "perception": 0.3645
+      },
+      "agent": "LATE_HANDOFF",
+      "independent": "LATE_HANDOFF",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand36-car-s7022",
+      "profile": "car",
+      "story": "unavoidable_with_fault",
+      "family": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "excess": {
+        "actuation": 0.07,
+        "command": -0.048,
+        "perception": -0.188
+      },
+      "agent": "UNAVOIDABLE",
+      "independent": "UNAVOIDABLE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand37-truck-s7023",
+      "profile": "truck",
+      "story": "tight_perception_actuation",
+      "family": "tight",
+      "expected": "PERCEPTION_LATE",
+      "excess": {
+        "actuation": 0.25,
+        "command": -0.0691,
+        "perception": 0.3173
+      },
+      "agent": "PERCEPTION_LATE",
+      "independent": "PERCEPTION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand37-car-s7026",
+      "profile": "car",
+      "story": "tight_perception_actuation",
+      "family": "tight",
+      "expected": "PERCEPTION_LATE",
+      "excess": {
+        "actuation": 0.03,
+        "command": -0.0644,
+        "perception": 0.1189
+      },
+      "agent": "PERCEPTION_LATE",
+      "independent": "PERCEPTION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand38-car-s7027",
+      "profile": "car",
+      "story": "marginal_actuation",
+      "family": "marginal",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "excess": {
+        "actuation": 0.07,
+        "command": -0.0265,
+        "perception": -0.0124
+      },
+      "agent": "BRAKE_ACTUATION_LATE",
+      "independent": "BRAKE_ACTUATION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand38-car-s7028",
+      "profile": "car",
+      "story": "tight_command_perception",
+      "family": "tight",
+      "expected": "COMMAND_LATE",
+      "excess": {
+        "actuation": -0.11,
+        "command": 0.4422,
+        "perception": 0.3947
+      },
+      "agent": "COMMAND_LATE",
+      "independent": "COMMAND_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand36-truck-s7031",
+      "profile": "truck",
+      "story": "marginal_perception",
+      "family": "marginal",
+      "expected": "PERCEPTION_LATE",
+      "excess": {
+        "actuation": -0.15,
+        "command": -0.029,
+        "perception": 0.1
+      },
+      "agent": "PERCEPTION_LATE",
+      "independent": "PERCEPTION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand38-truck-s7032",
+      "profile": "truck",
+      "story": "marginal_actuation",
+      "family": "marginal",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "excess": {
+        "actuation": 0.07,
+        "command": -0.0511,
+        "perception": -0.0059
+      },
+      "agent": "BRAKE_ACTUATION_LATE",
+      "independent": "BRAKE_ACTUATION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand38-truck-s7033",
+      "profile": "truck",
+      "story": "marginal_perception",
+      "family": "marginal",
+      "expected": "PERCEPTION_LATE",
+      "excess": {
+        "actuation": -0.13,
+        "command": -0.0222,
+        "perception": 0.0867
+      },
+      "agent": "PERCEPTION_LATE",
+      "independent": "PERCEPTION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand37-car-s7034",
+      "profile": "car",
+      "story": "tight_actuation_perception",
+      "family": "tight",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "excess": {
+        "actuation": 0.33,
+        "command": -0.0393,
+        "perception": 0.2385
+      },
+      "agent": "BRAKE_ACTUATION_LATE",
+      "independent": "BRAKE_ACTUATION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand37-truck-s7035",
+      "profile": "truck",
+      "story": "tight_actuation_perception",
+      "family": "tight",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "excess": {
+        "actuation": 0.23,
+        "command": -0.0438,
+        "perception": 0.1928
+      },
+      "agent": "BRAKE_ACTUATION_LATE",
+      "independent": "BRAKE_ACTUATION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand36-car-s7036",
+      "profile": "car",
+      "story": "tight_command_perception",
+      "family": "tight",
+      "expected": "COMMAND_LATE",
+      "excess": {
+        "actuation": -0.11,
+        "command": 0.2436,
+        "perception": 0.1768
+      },
+      "agent": "COMMAND_LATE",
+      "independent": "COMMAND_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand36-truck-s7037",
+      "profile": "truck",
+      "story": "marginal_command",
+      "family": "marginal",
+      "expected": "COMMAND_LATE",
+      "excess": {
+        "actuation": -0.17,
+        "command": 0.0523,
+        "perception": -0.0386
+      },
+      "agent": "COMMAND_LATE",
+      "independent": "COMMAND_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand36-truck-s7038",
+      "profile": "truck",
+      "story": "tight_perception_actuation",
+      "family": "tight",
+      "expected": "PERCEPTION_LATE",
+      "excess": {
+        "actuation": 0.25,
+        "command": -0.0428,
+        "perception": 0.3354
+      },
+      "agent": "PERCEPTION_LATE",
+      "independent": "PERCEPTION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    },
+    {
+      "case": "cand38-truck-s7039",
+      "profile": "truck",
+      "story": "unavoidable_with_fault",
+      "family": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "excess": {
+        "actuation": -0.11,
+        "command": -0.0464,
+        "perception": 0.2554
+      },
+      "agent": "UNAVOIDABLE",
+      "independent": "UNAVOIDABLE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": []
+    }
+  ],
+  "skipped": [
+    "cand37-car-s7018: tight_handoff_perception: no tight_handoff_perception parameters found for ClipTiming(clip_id='cand37', hazard_onset_t=6.830065359477124, impact_t=8.0)",
+    "cand37-truck-s7024: tight_handoff_perception: no tight_handoff_perception parameters found for ClipTiming(clip_id='cand37', hazard_onset_t=6.830065359477124, impact_t=8.0)",
+    "cand63-car-s7000: tight_perception_command: no tight_perception_command parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)",
+    "cand63-car-s7010: unavoidable_with_fault: no unavoidable_with_fault parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)",
+    "cand63-car-s7019: tight_actuation_perception: no tight_actuation_perception parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)",
+    "cand63-car-s7025: tight_command_perception: no tight_command_perception parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)",
+    "cand63-truck-s7001: tight_command_perception: no tight_command_perception parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)",
+    "cand63-truck-s7007: tight_perception_command: no tight_perception_command parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)",
+    "cand63-truck-s7029: marginal_actuation: no marginal_actuation parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)",
+    "cand63-truck-s7030: marginal_command: no marginal_command parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)"
+  ]
+}

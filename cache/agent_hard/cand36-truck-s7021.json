@@ -1,0 +1,320 @@
+{
+  "model": "muse-wonder-1.0",
+  "digest": "f6f89174127250e1a006ca2611c6c145c453fc702bf97a09dee4bced47b5a8a3",
+  "verdict": "LATE_HANDOFF",
+  "claims": [
+    {
+      "text": "The hazard onset occurred at 6.1333 s.",
+      "type": "timing",
+      "evidence": [
+        "VID:hazard_onset_t"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "VID:hazard_onset_t",
+        "equals": 6.1333
+      }
+    },
+    {
+      "text": "The hazard was classified as closing.",
+      "type": "observation",
+      "evidence": [
+        "VID:hazard_onset_reason"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "VID:hazard_onset_reason",
+        "equals": "closing"
+      }
+    },
+    {
+      "text": "The perception interval was 0.6645 s, above the perception threshold of 0.3 s.",
+      "type": "timing",
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 0.6645
+      }
+    },
+    {
+      "text": "The handoff left 1.0875 s before impact, below the human perception-response threshold of 1.5 s.",
+      "type": "timing",
+      "evidence": [
+        "VID:impact_t",
+        "AV:handoff_t",
+        "PROFILE:human_prt_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "VID:impact_t",
+        "b": "AV:handoff_t",
+        "equals": 1.0875
+      }
+    },
+    {
+      "text": "The CAN brake request was recorded at 8.3617 s, after the impact at 8.0 s.",
+      "type": "timing",
+      "evidence": [
+        "CAN:brake_request_t",
+        "VID:impact_t"
+      ],
+      "assertion": {
+        "op": "gt",
+        "fact": "CAN:brake_request_t",
+        "than_fact": "VID:impact_t"
+      }
+    },
+    {
+      "text": "Brake actuation took 0.32 s from the CAN brake request to pressure, within the actuation threshold of 0.45 s.",
+      "type": "timing",
+      "evidence": [
+        "CAN:pressure_reached_t",
+        "CAN:brake_request_t",
+        "PROFILE:actuation_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t",
+        "equals": 0.32
+      }
+    },
+    {
+      "text": "The brake log was complete.",
+      "type": "other",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": true
+      }
+    },
+    {
+      "text": "With nominal perception of 0.2 s, nominal command of 0.05 s, and nominal tau of 0.35 s, the counterfactual had no contact and a minimum gap of 3.3761 m.",
+      "type": "physics",
+      "evidence": [
+        "CF:run1_contact",
+        "CF:run1_min_gap_m",
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": false
+      }
+    },
+    {
+      "text": "The primary timing failure was the late handoff: the remaining 1.0875 s was below the 1.5 s human perception-response threshold.",
+      "type": "attribution",
+      "evidence": [
+        "VID:impact_t",
+        "AV:handoff_t",
+        "PROFILE:human_prt_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "VID:impact_t",
+        "b": "AV:handoff_t",
+        "equals": 1.0875
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:handoff_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "AV:handoff_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:brake_request_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.2,
+        "command_s": 0.05,
+        "tau_s": 0.35
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:handoff_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:brake_request_t",
+        "b": "AV:handoff_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:brake_request_t",
+        "b": "VID:impact_t"
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.6645,
+        "command_s": 0.05,
+        "tau_s": 0.35
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.2,
+        "command_s": 1.5639,
+        "tau_s": 0.35
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:pressure_reached_t",
+        "b": "VID:impact_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "submit_findings",
+      "args": {
+        "verdict": "LATE_HANDOFF",
+        "n_claims": 9
+      }
+    }
+  ],
+  "agent_facts": [
+    {
+      "id": "CF:run1_contact",
+      "value": false,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_impact_speed_mps",
+      "value": 0.0,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_min_gap_m",
+      "value": 3.3761,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run2_contact",
+      "value": false,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.6645, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run2_impact_speed_mps",
+      "value": 0.0,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.6645, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run2_min_gap_m",
+      "value": 1.6988,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.6645, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run3_contact",
+      "value": true,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=1.5639, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run3_impact_speed_mps",
+      "value": 3.5483,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=1.5639, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run3_min_gap_m",
+      "value": -0.0028,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=1.5639, tau=0.35)",
+      "kind": "derived"
+    }
+  ]
+}
