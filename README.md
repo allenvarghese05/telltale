@@ -395,7 +395,7 @@ d_0 = \Delta v_0 \cdot \mathrm{TTC}_0, \qquad g(T) = 0
 
 With the truck's trajectory fixed by the injected latencies and $\Delta v_0$ drawn at random as in v1, the target's
 deceleration $a_{\text{target}} \ge 0$ is solved by bisection so that contact lands on the filmed impact. When the
-footage allows it, with $T \ge \mathrm{TTC}_0$, the solution is $a_{\text{target}} = 0$ and v2 reduces to v1. Ignoring
+footage allows it, with $`T \ge \mathrm{TTC}_0`$, the solution is $`a_{\text{target}} = 0`$ and v2 reduces to v1. Ignoring
 ego braking, the required deceleration is roughly
 
 ```math
