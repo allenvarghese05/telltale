@@ -159,6 +159,7 @@ def investigate(
     tool_calls: list[dict] = []
     agent_facts: list[Fact] = []
     cf_runs = 0
+    rechecked: dict[str, str] = {}  # recheck slug -> the WIT2 fact id it produced
 
     def visible_num(fact_id: str) -> float:
         if fact_id.startswith(HIDDEN_FROM_AGENT) or not store.has(fact_id):
@@ -240,10 +241,20 @@ def investigate(
                 agent_facts.extend(new)
                 out = [asdict(f) for f in new]
             elif name == "witness_recheck" and recheck_fn is not None:
-                fact = recheck_fn(args["question"], float(args["t0"]), float(args["t1"]), args["slug"])
-                store = store.extended([fact])
-                agent_facts.append(fact)
-                out = asdict(fact)
+                # Facts are immutable, so a second recheck under the same slug is refused rather than appended
+                # (it once crashed a live run), and before the video upload when the slug itself repeats.
+                if args["slug"] in rechecked:
+                    existing = rechecked[args["slug"]]
+                    out = {"error": f"slug already rechecked as {existing}; cite that fact or use a new slug"}
+                else:
+                    fact = recheck_fn(args["question"], float(args["t0"]), float(args["t1"]), args["slug"])
+                    if store.has(fact.id):
+                        out = {"error": f"{fact.id} already exists; cite that fact or use a different slug"}
+                    else:
+                        rechecked[args["slug"]] = fact.id
+                        store = store.extended([fact])
+                        agent_facts.append(fact)
+                        out = asdict(fact)
             else:
                 out = {"error": f"tool {name} unavailable in this run"}
             messages.append({"role": "tool", "tool_call_id": c.id, "content": json.dumps(out)})

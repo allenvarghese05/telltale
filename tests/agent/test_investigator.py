@@ -125,3 +125,45 @@ def test_nudged_when_answering_in_prose_and_fails_if_never_submits():
     assert investigate(STORE, llm, model="m")["verdict"] == "UNAVOIDABLE"
     with pytest.raises(RuntimeError):
         investigate(STORE, FakeLLM([resp(content="x")] * 3), model="m", max_turns=3)
+
+
+def test_a_repeated_recheck_slug_gets_an_error_instead_of_crashing_the_run():
+    """A live run crashed when the agent rechecked the same slug twice (duplicate WIT2 fact id)."""
+    calls = []
+
+    def counting_recheck(question, t0, t1, slug):
+        calls.append(slug)
+        return recheck(question, t0, t1, slug)
+
+    ask = {"question": "Brake lights?", "t0": 1, "t1": 3, "slug": "brake_lights"}
+    llm = FakeLLM(
+        [
+            resp(calls=[call("1", "witness_recheck", ask)]),
+            resp(calls=[call("2", "witness_recheck", ask)]),
+            resp(calls=[call("3", "submit_findings", {"verdict": "PERCEPTION_LATE", "claims": CLAIMS})]),
+        ]
+    )
+    run = investigate(STORE, llm, recheck_fn=counting_recheck, model="m")
+    assert run["verdict"] == "PERCEPTION_LATE"
+    assert calls == ["brake_lights"]  # the repeat is refused before a second (paid) video upload
+    second = json.loads([m for m in llm.seen[2]["messages"] if m["role"] == "tool"][1]["content"])
+    assert "already" in second["error"]
+    assert "WIT2:brake_lights" in second["error"]
+    assert [f["id"] for f in run["agent_facts"]] == ["WIT2:brake_lights"]
+
+
+def test_two_slugs_that_map_to_one_fact_id_do_not_crash_the_run():
+    def same_id_recheck(question, t0, t1, slug):
+        return Fact("WIT2:lights", "no", "", "WIT2", f"recheck {t0}-{t1}: {question}", "observation")
+
+    llm = FakeLLM(
+        [
+            resp(calls=[call("1", "witness_recheck", {"question": "a", "t0": 1, "t1": 2, "slug": "Lights"})]),
+            resp(calls=[call("2", "witness_recheck", {"question": "b", "t0": 1, "t1": 2, "slug": "lights!"})]),
+            resp(calls=[call("3", "submit_findings", {"verdict": "PERCEPTION_LATE", "claims": CLAIMS})]),
+        ]
+    )
+    run = investigate(STORE, llm, recheck_fn=same_id_recheck, model="m")
+    second = json.loads([m for m in llm.seen[2]["messages"] if m["role"] == "tool"][1]["content"])
+    assert "already" in second["error"]
+    assert [f["id"] for f in run["agent_facts"]] == ["WIT2:lights"]
