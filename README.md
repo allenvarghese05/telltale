@@ -26,32 +26,89 @@
 
 ---
 
-Telltale takes a real dashcam crash clip and the vehicle's own logs and works out which step of the car's
-driver-assist response failed: noticing the hazard, commanding the brakes, or the brakes themselves. Meta AI does
-the investigating. Plain Python recomputes every statement it makes, and the verdict, before a person reads any of
-it.
+<div align="center">
 
-## Contents
+### Telltale lets Meta AI investigate a car crash, then checks every word it says with plain code.
 
-- [The problem](#the-problem)
-- [What Telltale does](#what-telltale-does)
-- [How one case runs](#how-one-case-runs)
-- [Architecture](#architecture)
-- [The physics and the math](#the-physics-and-the-math)
-- [The checker](#the-checker)
-- [Results](#results)
-- [Findings from the build](#findings-from-the-build)
-- [Data honesty](#data-honesty)
-- [Run it](#run-it)
-- [Tech stack](#tech-stack)
-- [Project structure](#project-structure)
-- [Security](#security)
-- [Scope, limits and next steps](#scope-limits-and-next-steps)
-- [How it was built](#how-it-was-built)
+**[▶ Open the live demo](https://huggingface.co/spaces/Allen05254/telltale)** · no sign-in, nothing to install
+
+</div>
+
+When a car with driver-assist crashes, someone has to work out what the car did: did it notice the danger too
+late, brake too late, or have no chance at all? Telltale gives that job to Meta AI, and then refuses to publish any
+statement the evidence cannot prove.
+
+## How it works
+
+| | Step | What happens |
+|---|---|---|
+| **1** | **Watch** | SAM 3.1 tracks every vehicle in real dashcam footage, and plain code works out when the struck car became a danger. |
+| **2** | **Witness** | Muse Spark 1.3 watches the same clip and describes what it sees: lighting, weather, brake lights. |
+| **3** | **Investigate** | A Muse Wonder agent reads the car's own logs with tools, runs "what if it had reacted normally?" simulations, and decides which step failed. |
+| **4** | **Check** | Plain Python redoes every number and the verdict itself. Anything it cannot prove is blocked; if it disagrees, the report is held for a human. |
+
+## What we found
+
+- **Tested on 400 real crashes labelled by people.** When Telltale flagged the danger, it was within 2 seconds of
+  the human mark 74% of the time, and it flagged one on 65% of clips. It fires too early near the start of some
+  clips, and we report that rather than hide it.
+- **The AI was wrong twice in 151 live investigations, and the checker caught both.** No wrong verdict ever got
+  through. One mistake also slipped a misleading claim past the checker's rules, so we added a rule that now blocks it.
+- **It did not make things up.** With key evidence deleted, it never invented the missing value. Given a lying
+  witness, it did not repeat the lie. It never followed an instruction planted in its evidence.
+- **Honest limit:** the checker guarantees the reasoning, not the camera. A realistic timing error in the video can
+  change the verdict about half the time, so the next step is labelling each verdict as robust or timing-sensitive.
+
+## Why it matters
+
+Language models still state things that are not true, and a crash report cannot contain a single invented number.
+Telltale's answer is architectural: the AI makes the decision, and plain code has to reproduce every word of it
+before a person sees it.
+
+## One investigation, step by step
+
+<p align="center"><img src="docs/images/how-one-case-runs.svg" alt="Sequence of one investigation: SAM 3.1 and Muse Spark write video and witness facts to the evidence store, the Muse Wonder agent queries it and submits claims, and the checker recomputes every claim and the verdict before a reviewer sees them." width="100%"></p>
+
+The agent reads the video facts, the witness answers, the logs and the vehicle profile. It never sees the
+checker's physics facts (`PHYS:*`) or the deterministic attribution (`ATTR:*`). It can add facts only through two
+tools: a witness recheck (`WIT2:*`) and a counterfactual run (`CF:*`). The evidence store is immutable and hashed
+with SHA-256.
+
+## Architecture
+
+<p align="center"><img src="docs/images/architecture.svg" alt="Architecture: perception by Meta AI feeds an immutable SHA-256 evidence store with the CAN and ADAS logs; the Muse Wonder agent sees only agent-visible facts; the checker and 1-D physics see all facts and produce the replay site and incident report." width="720"></p>
+
+## Try it
+
+- **Live demo:** [huggingface.co/spaces/Allen05254/telltale](https://huggingface.co/spaces/Allen05254/telltale)
+  replays real, recorded investigations step by step, from the dashcam video to the verified verdict.
+- **Run it yourself, with no API key:**
+
+```bash
+python3.12 -m venv .venv && source .venv/bin/activate
+pip install -e .
+telltale export-site && telltale serve     # http://127.0.0.1:8000
+```
+
+- **Investigate your own dashcam clip** (needs a Meta API key in `.env` and Meta's SAM cookbook, see *Run it*
+  below; runs only on your machine):
+
+```bash
+telltale upload-ui                           # http://127.0.0.1:8001
+```
+
+The video and the AI models are real. The car's CAN and ADAS logs are generated, because real fleet logs are
+proprietary; swap in real logs and nothing else changes. Details under *Data honesty* below.
 
 ---
 
-## The problem
+## Technical details
+
+Everything below is for engineers who want to check the work: the math, the checker's rules, every benchmark with
+its caveats, and how to reproduce it. Each section opens on click.
+
+<details>
+<summary><b>The problem, in full</b></summary>
 
 When a car with driver-assist crashes, someone has to work out what the system did. Did it notice the hazard too
 late? Did it notice in time but command the brakes too late? Did the brakes build pressure too slowly? Did it hand
@@ -67,9 +124,10 @@ and Gmail was never connected ([report](https://futurism.com/artificial-intellig
 A crash report cannot contain statements like that. Telltale lets the agent make the decision, and requires code to
 reproduce every statement before it reaches a person.
 
----
+</details>
 
-## What Telltale does
+<details>
+<summary><b>What each part does</b></summary>
 
 | Part | What it does |
 |---|---|
@@ -82,74 +140,10 @@ reproduce every statement before it reaches a person.
 | Any dashcam clip | One command, or a local-only upload page, runs SAM 3.1 and the witness on your own clip and adds a video-only report to the site. It states plainly that cause cannot be determined without the vehicle's logs. |
 | Vehicle profiles | A passenger car and a laden Class 8 tractor-trailer with air brakes, each with its own braking physics and tolerances. |
 
----
+</details>
 
-## How one case runs
-
-```mermaid
-sequenceDiagram
-    autonumber
-    participant V as Dashcam clip
-    participant S as SAM 3.1
-    participant W as Muse Spark 1.3
-    participant E as Evidence store
-    participant A as Muse Wonder agent
-    participant C as Checker
-    participant P as Reviewer
-
-    V->>S: track every vehicle
-    S->>E: VID facts: hazard onset, impact, lane changes
-    V->>W: describe what is visible
-    W->>E: WIT facts: brake lights, lighting, weather
-    Note over E: plus CAN and ADAS logs, SHA-256 hashed
-    A->>E: list_evidence, get_series, measure
-    A->>E: run_counterfactual, witness_recheck
-    A->>C: claims and verdict via submit_findings
-    C->>E: recompute every claim and the verdict
-    C->>P: verified timeline, blocked claims, verdict or withheld
-```
-
-The agent reads the video facts, the witness answers, the logs and the vehicle profile. It never sees the
-checker's physics facts (`PHYS:*`) or the deterministic attribution (`ATTR:*`). It can add facts only through two
-tools: a witness recheck (`WIT2:*`) and a counterfactual run (`CF:*`). The evidence store is immutable and hashed
-with SHA-256.
-
----
-
-## Architecture
-
-```mermaid
-flowchart LR
-    subgraph Perception["Perception (Meta AI)"]
-        CLIP[Nexar dashcam clip] --> SAM[SAM 3.1<br/>vehicle tracks]
-        SAM --> VF[Video facts<br/>hazard onset, TTC, lane changes]
-        CLIP --> SPARK[Muse Spark 1.3<br/>video witness]
-    end
-
-    subgraph Evidence["Evidence"]
-        LOGS[CAN and ADAS logs<br/>candump, MCAP] --> STORE[(Immutable store<br/>SHA-256)]
-        VF --> STORE
-        SPARK --> STORE
-    end
-
-    subgraph Investigation["Investigation (Meta AI)"]
-        STORE -->|agent-visible facts only| AGENT[Muse Wonder agent<br/>6 tools]
-        AGENT --> CLAIMS[Claims and verdict]
-    end
-
-    subgraph Verification["Verification (plain Python)"]
-        CLAIMS --> CHECK[Checker<br/>rules R1 to R5]
-        STORE -->|all facts| CHECK
-        STORE --> PHYS[1-D physics and<br/>attribution]
-        PHYS --> CHECK
-    end
-
-    CHECK --> SITE[Static replay site<br/>and incident report]
-```
-
----
-
-## The physics and the math
+<details>
+<summary><b>The physics and the math</b></summary>
 
 Everything in this section is deterministic code. No model computes any of it.
 
@@ -407,9 +401,10 @@ which for `cand37` is about 4.4 m/s² at $\Delta v_0 = 4$ m/s: a firm stop by th
 plausible. Because $\mathrm{TTC}_0$ is itself an estimate, v2 should carry it as an interval rather than a point.
 v2 is documented only: changing the generator regenerates every case, and the committed live runs were made on v1.
 
----
+</details>
 
-## The checker
+<details>
+<summary><b>The checker: rules R1 to R6 and the verdict</b></summary>
 
 Each claim carries its evidence IDs and a machine-checkable assertion, for example
 `{"op": "diff", "a": "AV:first_seen_t", "b": "VID:hazard_onset_t", "equals": 1.36}`. Supported operations are
@@ -465,9 +460,10 @@ the checker unchanged, it blocked the claim ("recomputed 1.102, claimed 0.25") a
 ("independent recomputation from the same evidence gives PERCEPTION_LATE; report withheld pending human review").
 The red-team case always replays its edited run, even with `--live`.
 
----
+</details>
 
-## Results
+<details>
+<summary><b>Results, with every caveat</b></summary>
 
 | Benchmark | Result |
 |---|---|
@@ -525,9 +521,10 @@ The red-team case always replays its edited run, even with `--live`.
 
 Every claim in [`agent_bench.json`](agent_bench.json) can be re-checked offline from the committed runs.
 
----
+</details>
 
-## Findings from the build
+<details>
+<summary><b>Findings from the build</b></summary>
 
 Measured on the real clips while building, and each one changed the code:
 
@@ -561,9 +558,10 @@ Measured on the real clips while building, and each one changed the code:
   skewed by 5 s left the ADAS offset unrecoverable in 83 of 83 cases, with no error raised. Not fixed before the
   freeze, because a fix adds a fact and changes every evidence digest.
 
----
+</details>
 
-## Data honesty
+<details>
+<summary><b>Data honesty</b></summary>
 
 **The video is real.** Every clip comes from the Nexar Collision Prediction Dataset, under the Nexar Open Data
 License ([`data/clips/NEXAR_LICENSE`](data/clips/NEXAR_LICENSE)). Attribution: Moura & Zvitia, "Nexar Collision
@@ -579,9 +577,10 @@ benchmark scoring code reads it. The agent, the checker and the evidence builder
 **Only public data reaches the Meta API.** Free-tier credits allow Meta to use submitted content, so nothing
 private is sent.
 
----
+</details>
 
-## Run it
+<details>
+<summary><b>Run it: replay, live, and any dashcam clip</b></summary>
 
 ### Replay, no API key
 
@@ -618,7 +617,7 @@ telltale export-site && telltale serve
 ```
 
 `investigate-clip` registers the clip, runs SAM 3.1 and the witness, and writes a video-only report that the site
-shows under **Video only**. The impact time is a required input; it is never estimated by a model.
+shows under **Any dashcam clip**. The impact time is a required input; it is never estimated by a model.
 
 Or use the local upload page, which runs the same function:
 
@@ -658,9 +657,10 @@ logs.
 
 </details>
 
----
+</details>
 
-## Tech stack
+<details>
+<summary><b>Tech stack</b></summary>
 
 <table>
 <tr><td valign="top" width="50%">
@@ -699,9 +699,10 @@ logs.
 </td></tr>
 </table>
 
----
+</details>
 
-## Project structure
+<details>
+<summary><b>Project structure</b></summary>
 
 ```
 telltale/
@@ -723,9 +724,10 @@ telltale/
 └── AGENTS.md          # engineering rules for every contributor and coding agent
 ```
 
----
+</details>
 
-## Security
+<details>
+<summary><b>Security</b></summary>
 
 - API keys live only in `.env`. They are never logged, committed or shipped, and the hosted Space has no key.
 - Model output is treated as data: parsed defensively, enums validated, unknown evidence IDs rejected.
@@ -734,9 +736,10 @@ telltale/
 - The site is static: no endpoints, case IDs are validated before they become paths, and all text is HTML-escaped.
 - gitleaks scans the full history; pip-audit, CodeQL (Python and JavaScript) and dependency review run in CI.
 
----
+</details>
 
-## Scope, limits and next steps
+<details>
+<summary><b>Scope, limits and next steps</b></summary>
 
 Full attribution covers forward conflicts: rear-end and cut-in crashes, because the crash physics is
 one-dimensional. Cross-path crashes, such as the intersection U-turn in clip `cand60`, get the video-only report,
@@ -761,7 +764,10 @@ Next steps, each based on something measured during the build:
   clips did not need it.
 - **A real-log adapter** for a fleet's own DBC files and log exports.
 
----
+</details>
+
+The full single-page version of this README, with every section expanded, is kept in
+[`docs/case-study/README-full.md`](docs/case-study/README-full.md).
 
 ## How it was built
 
