@@ -81,3 +81,16 @@ def test_publishing_one_new_video_case_adds_it_without_rebuilding(dirs):
 
 def test_video_page_uses_the_same_csp_as_the_replay_page():
     assert _csp("clips.html") == _csp("index.html")
+
+
+@pytest.mark.parametrize("geometry", ["forward", "cross-path"])
+def test_a_clip_can_carry_its_crash_geometry(dirs, geometry):
+    (dirs["videos"] / "cand60.json").write_text(json.dumps({**VIDEO, "geometry": geometry}))
+    exported = json.loads((build(dirs) / "video" / "cand60.json").read_text())
+    assert exported == {**VIDEO, "geometry": geometry}
+
+
+def test_an_unknown_crash_geometry_is_rejected(dirs):
+    (dirs["videos"] / "cand60.json").write_text(json.dumps({**VIDEO, "geometry": "<script>"}))
+    with pytest.raises(ValueError, match="unknown crash geometry"):
+        build(dirs)

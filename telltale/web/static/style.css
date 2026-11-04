@@ -558,3 +558,16 @@ a.wordmark { color: var(--ink); text-decoration: none; }
   .actor-role { min-height: 0; }
   .glance-v { font-size: 18px; }
 }
+
+.run-own { margin-top: 14px; }
+.run-own code { font-size: 12.5px; background: var(--bg-soft); padding: 1px 6px; border-radius: 4px; }
+.geometry-note {
+  font-size: 13.5px;
+  color: var(--ink);
+  background: var(--bg-soft);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 12px 0 4px;
+  line-height: 1.5;
+}
+.geometry-note[hidden] { display: none; }

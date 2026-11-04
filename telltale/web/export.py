@@ -102,6 +102,7 @@ def report_with_narrative(bundle: dict, sections: list[Section]) -> str:
 
 
 VIDEO_KEYS = ("clip_id", "video_url", "fps", "width", "height", "lane_polygon", "tracks", "report")
+GEOMETRIES = ("forward", "cross-path")
 
 
 def _copy_clip(video_url: str, out: Path, clips_dir: Path) -> None:
@@ -111,10 +112,18 @@ def _copy_clip(video_url: str, out: Path, clips_dir: Path) -> None:
 
 
 def video_case(bundle: dict) -> dict:
-    """A video-only case for the site, by allowlist, so a verdict or claim can never reach that page."""
+    """A video-only case for the site, by allowlist, so a verdict or claim can never reach that page.
+
+    `geometry` is optional and annotated by a person: "cross-path" marks a crash the 1-D physics cannot attribute.
+    """
     if not SAFE_ID.match(str(bundle.get("clip_id", ""))):
         raise ValueError(f"unsafe clip id {bundle.get('clip_id')!r} in a video-only bundle")
-    return {key: bundle[key] for key in VIDEO_KEYS}
+    case = {key: bundle[key] for key in VIDEO_KEYS}
+    if "geometry" in bundle:
+        if bundle["geometry"] not in GEOMETRIES:
+            raise ValueError(f"unknown crash geometry {bundle['geometry']!r} for {case['clip_id']}")
+        case["geometry"] = bundle["geometry"]
+    return case
 
 
 def publish_video_case(bundle: dict, out: Path, clips_dir: Path = CLIPS) -> None:
