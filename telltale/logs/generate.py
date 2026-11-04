@@ -33,6 +33,29 @@ EXPECTED = {
     "dropout": "INCONCLUSIVE",
 }
 STORIES = tuple(EXPECTED)
+# Hard stories for the agent benchmark: the label is decided by small margins, a near miss, or a fault that did not
+# matter. The intended label is only accepted when deterministic attribution of the drawn truth reaches it.
+HARD_EXPECTED = {
+    "tight_perception_command": "PERCEPTION_LATE",
+    "tight_command_perception": "COMMAND_LATE",
+    "tight_actuation_perception": "BRAKE_ACTUATION_LATE",
+    "tight_perception_actuation": "PERCEPTION_LATE",
+    "tight_handoff_perception": "LATE_HANDOFF",
+    "marginal_perception": "PERCEPTION_LATE",
+    "marginal_command": "COMMAND_LATE",
+    "marginal_actuation": "BRAKE_ACTUATION_LATE",
+    "unavoidable_with_fault": "UNAVOIDABLE",
+}
+HARD_STORIES = tuple(HARD_EXPECTED)
+TIGHT_PRIMARY_EXCESS_S = (0.10, 0.45)
+TIGHT_WIN_MARGIN_S = (0.03, 0.09)
+MARGINAL_EXCESS_S = (0.01, 0.10)
+MARGINAL_ACTUATION_EXCESS_S = (0.03, 0.10)  # CAN pressure frames are 20 ms apart, so stay clear of quantization
+NEAR_MISS_EXCESS_S = (-0.04, -0.005)
+NONCAUSAL_EXCESS_S = (0.05, 0.40)
+HARD_CAN_SKEW_S = 8.0
+HARD_AV_REL_SKEW_S = 1.3  # the ADAS aligner searches +/-1.5 s around the CAN offset
+PRESSURE_LN = math.log(1.0 / (1.0 - 0.6))
 
 
 class GenerationError(RuntimeError):
@@ -98,8 +121,44 @@ def truth_label(t: Truth, profile, T: float) -> str:
     return attribute(m, profile).label
 
 
+def _hard_excess(story: str, rng: np.random.Generator) -> dict[str, float]:
+    """How far each faulty layer overran its tolerance (negative: a near miss). Unlisted layers stay nominal."""
+    kind, _, layers = story.partition("_")
+    if kind == "tight":
+        primary, secondary = layers.split("_")
+        top = float(rng.uniform(*TIGHT_PRIMARY_EXCESS_S))
+        return {primary: top, secondary: top - float(rng.uniform(*TIGHT_WIN_MARGIN_S))}
+    if kind == "marginal":
+        span = MARGINAL_ACTUATION_EXCESS_S if layers == "actuation" else MARGINAL_EXCESS_S
+        near = "command" if layers == "perception" else "perception"
+        return {layers: float(rng.uniform(*span)), near: float(rng.uniform(*NEAR_MISS_EXCESS_S))}
+    layer = ("perception", "command", "actuation")[int(rng.integers(3))]
+    return {layer: float(rng.uniform(*NONCAUSAL_EXCESS_S))}
+
+
+def _draw_hard(story: str, profile, T: float, rng: np.random.Generator) -> tuple[float, float, float | None, float]:
+    """(first_seen, brake_request, handoff, tau) for a hard story, from per-layer excesses over the tolerances."""
+    thr = profile.thresholds
+    excess = _hard_excess(story, rng)
+    first_seen = float(rng.uniform(0.10, 0.25))
+    command = float(rng.uniform(0.03, 0.08))
+    tau = profile.tau_nominal * float(rng.uniform(0.9, 1.1))
+    if "perception" in excess:
+        first_seen = thr["perception_s"] + excess["perception"]
+    if "command" in excess:
+        command = thr["command_s"] + excess["command"]
+    if "actuation" in excess:
+        tau = (thr["actuation_s"] + excess["actuation"]) / PRESSURE_LN
+    if "handoff" not in excess:
+        return first_seen, first_seen + command, None, tau
+    handoff = T - (thr["human_prt_s"] - excess["handoff"])
+    return first_seen, handoff + float(rng.uniform(1.2, 1.6)), handoff, tau
+
+
 def sample_truth(timing: ClipTiming, profile, story: str, rng: np.random.Generator, max_attempts: int = 400) -> Truth:
     """Draw randomized hidden parameters until the story's expected label is the one attribution would reach."""
+    if story in HARD_EXPECTED:
+        return _sample_hard_truth(timing, profile, story, rng)
     if story not in EXPECTED:
         raise ValueError(story)
     T = timing.impact_t - timing.hazard_onset_t
@@ -145,6 +204,47 @@ def sample_truth(timing: ClipTiming, profile, story: str, rng: np.random.Generat
         )
         truth.label = truth_label(truth, profile, T)
         if truth.label == EXPECTED[story]:
+            return truth
+    raise GenerationError(f"no {story} parameters found for {timing}")
+
+
+def _sample_hard_truth(
+    timing: ClipTiming, profile, story: str, rng: np.random.Generator, max_attempts: int = 3000
+) -> Truth:
+    """Like `sample_truth`, for the hard stories, with larger clock skews on both logs."""
+    T = timing.impact_t - timing.hazard_onset_t
+    if T <= 0.3:
+        raise GenerationError("impact too soon after hazard onset")
+    for _ in range(max_attempts):
+        v_ego0 = float(rng.uniform(18.0, 30.0))
+        dv = float(rng.uniform(3.0, min(16.0, v_ego0 - 2.0)))
+        first_seen, t_req, handoff, tau = _draw_hard(story, profile, T, rng)
+        if first_seen >= T - 0.1 or (handoff is not None and handoff <= first_seen + 0.05):
+            continue
+        brake = BrakeModel(profile.a_max, tau)
+        try:
+            d0 = solve_d0(v_ego0, v_ego0 - dv, t_req, brake, T)
+        except GenerationError:
+            continue
+        contact = simulate(v_ego0, v_ego0 - dv, d0, t_req, brake, t_end=T + 2.0).contact_t
+        can_skew = float(rng.uniform(-HARD_CAN_SKEW_S, HARD_CAN_SKEW_S))
+        av_skew = can_skew + float(rng.uniform(-HARD_AV_REL_SKEW_S, HARD_AV_REL_SKEW_S))
+        truth = Truth(
+            story,
+            profile.name,
+            v_ego0,
+            v_ego0 - dv,
+            d0,
+            first_seen,
+            t_req,
+            handoff,
+            tau,
+            float(contact),
+            can_skew,
+            av_skew,
+        )
+        truth.label = truth_label(truth, profile, T)
+        if truth.label == HARD_EXPECTED[story]:
             return truth
     raise GenerationError(f"no {story} parameters found for {timing}")
 
@@ -245,5 +345,5 @@ def generate_case(timing: ClipTiming, profile, story: str, seed: int, out_root, 
     )
     gt = Path(gt_root)
     gt.mkdir(parents=True, exist_ok=True)
-    (gt / f"{case_id}.json").write_text(json.dumps({**asdict(truth), "expected_label": EXPECTED[story]}, indent=2))
+    (gt / f"{case_id}.json").write_text(json.dumps({**asdict(truth), "expected_label": truth.label}, indent=2))
     return case_id
