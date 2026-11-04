@@ -116,3 +116,26 @@ def test_hosted_export_never_includes_local_uploads(dirs, tmp_path):
     )
     assert json.loads((local / "videos.json").read_text()) == [{"clip_id": "mine"}]
     assert (local / "media" / "mine.mp4").exists()
+
+
+def _build_id(page: str) -> str:
+    return re.search(r'<meta name="build" content="([0-9a-f]{10})">', page).group(1)
+
+
+def test_export_stamps_a_content_build_id_on_pages_and_assets(dirs):
+    (dirs["videos"] / "cand60.json").write_text(json.dumps(VIDEO))
+    site = build(dirs)
+    index, clips = (site / "index.html").read_text(), (site / "clips.html").read_text()
+    build_id = _build_id(index)
+    assert _build_id(clips) == build_id
+    assert f'src="app.js?v={build_id}"' in index
+    assert f'href="style.css?v={build_id}"' in index
+    assert f'src="clips.js?v={build_id}"' in clips
+
+
+def test_build_id_changes_when_a_bundle_changes(dirs):
+    (dirs["videos"] / "cand60.json").write_text(json.dumps(VIDEO))
+    first = _build_id((build(dirs) / "index.html").read_text())
+    assert _build_id((build(dirs) / "index.html").read_text()) == first
+    (dirs["videos"] / "cand60.json").write_text(json.dumps({**VIDEO, "fps": 29.97}))
+    assert _build_id((build(dirs) / "index.html").read_text()) != first

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import shutil
@@ -139,6 +140,29 @@ def publish_video_case(bundle: dict, out: Path, clips_dir: Path = CLIPS) -> None
     index_path.write_text(json.dumps(sorted(index, key=lambda entry: entry["clip_id"])))
 
 
+PAGES = ("index.html", "clips.html")
+ASSETS = ("app.js", "clips.js", "style.css")
+
+
+def stamp_build(out: Path) -> str:
+    """Version every page's assets and data by the site's content, so a new deploy is never served stale.
+
+    The id is a hash of every data and asset file in the built site, so it changes exactly when they do.
+    """
+    digest = hashlib.sha256()
+    for path in sorted(p for p in out.rglob("*") if p.is_file() and p.suffix in {".json", ".js", ".css"}):
+        digest.update(path.relative_to(out).as_posix().encode())
+        digest.update(path.read_bytes())
+    build = digest.hexdigest()[:10]
+    for page in PAGES:
+        html = (out / page).read_text()
+        for asset in ASSETS:
+            html = html.replace(f'"{asset}"', f'"{asset}?v={build}"')
+        html = html.replace("<head>", f'<head>\n  <meta name="build" content="{build}">', 1)
+        (out / page).write_text(html)
+    return build
+
+
 def export_site(
     bundles_dir: Path = CACHE / "bundles",
     out: Path = SITE,
@@ -177,4 +201,5 @@ def export_site(
         for path in sorted((uploads_dir / "video_bundles").glob("*.json")):
             publish_video_case(json.loads(path.read_text()), out, uploads_dir / "clips")
     (out / "README.md").write_text(SPACE_README)
+    stamp_build(out)
     return out

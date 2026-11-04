@@ -5,13 +5,18 @@
 
 const $ = (id) => document.getElementById(id);
 
+/* The export stamps a content build id on the page; every data and video URL carries it, so a new deploy is never
+   served from a stale cache. */
+const BUILD = (document.querySelector('meta[name="build"]') || {}).content || '';
+const bust = (url) => (BUILD ? `${url}${url.includes('?') ? '&' : '?'}v=${BUILD}` : url);
+
 const esc = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
 const num = (v, d = 2) => (Number.isFinite(Number(v)) ? Number(v).toFixed(d) : '-');
 
 async function getJSON(url) {
-  const r = await fetch(url);
+  const r = await fetch(bust(url));
   if (!r.ok) throw new Error(`${url}: ${r.status}`);
   return r.json();
 }
@@ -51,7 +56,7 @@ async function init() {
 async function load(id) {
   clip = await getJSON(`video/${encodeURIComponent(id)}.json`);
   const video = $('video');
-  if (video.getAttribute('src') !== clip.video_url) video.src = clip.video_url;
+  if (video.getAttribute('src') !== bust(clip.video_url)) video.src = bust(clip.video_url);
   $('scrim').hidden = false;
   $('replay').hidden = true;
   $('clock').textContent = '0.00 s';
