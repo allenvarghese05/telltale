@@ -163,7 +163,8 @@ raised an error, so the run crashed.
 - Under the pre-registration (no tool changes after the pilot), the tool was not patched.
 - The run was resumed once, the case re-ran fresh, and it completed normally.
 - The crashed partial run cost one extra investigation.
-- Fixing it (returning an error to the agent instead of crashing) is a follow-up.
+- Fixed after the study, in commit `89c9a06`: a repeated slug now gets an error before the video upload, and a
+  duplicate fact id is refused instead of crashing. Cached runs, including these 20, are unaffected.
 
 **Cost:** 20 completed runs plus 1 crashed partial run. At the pessimistic $0.33 per run (list prices, no
 caching, $0.05 per recheck) that is about **$6.90**, under the $10 cap. No 503s were logged.
