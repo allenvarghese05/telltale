@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' https://cdn.plot.ly; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; media-src 'self' https://*.hf.co; connect-src 'self'; object-src 'none'; base-uri 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="light">
+  <title>Telltale. Any dashcam clip, video only.</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="bar">
+  <a class="wordmark" href="index.html">Telltale</a>
+  <nav class="modes" aria-label="Pages">
+    <a href="index.html">Investigated crashes</a>
+    <a href="clips.html" aria-current="page">Video only</a>
+  </nav>
+  <label class="picker">
+    <span>Clip</span>
+    <select id="clip"></select>
+  </label>
+</header>
+
+<section class="intro">
+  <h1>Any dashcam clip.<br>What the footage alone can show.</h1>
+  <p class="lede">SAM 3.1 tracks every vehicle and marks when the struck one became a hazard. Muse Spark describes the
+     conditions. Neither needs anything but the video.</p>
+  <p class="notice"><strong>Cause not determined from video alone:</strong> needs the vehicle's CAN and ADAS logs.
+     These clips have no vehicle logs, so this page shows no verdict and checks no cause.</p>
+</section>
+
+<section class="replay" aria-label="Video-only replay">
+  <div class="stage">
+    <figure class="screen">
+      <video id="video" muted playsinline preload="auto"></video>
+      <canvas id="overlay"></canvas>
+      <div id="scrim" class="scrim">
+        <button id="play" class="primary">Play clip</button>
+        <p id="scrim-note" class="scrim-note"></p>
+      </div>
+    </figure>
+    <div class="transport">
+      <button id="replay" class="text-button" hidden>Replay</button>
+      <span id="clock" class="clock">0.00 s</span>
+    </div>
+  </div>
+
+  <aside class="ledger" aria-label="What the footage shows">
+    <div class="ledger-head">
+      <h2>What the footage shows</h2>
+    </div>
+    <dl id="facts" class="facts"></dl>
+  </aside>
+
+  <div class="chain-wrap">
+    <h3 class="list-title">Timeline</h3>
+    <ol id="timeline" class="timeline-list"></ol>
+    <p class="caption">Select a moment to move the video there.</p>
+  </div>
+</section>
+
+<section class="report" aria-labelledby="report-title">
+  <div class="report-inner">
+    <div class="report-head">
+      <h2 id="report-title">Video report</h2>
+    </div>
+    <p class="report-lede">Written by deterministic code from SAM's tracks and the witness's answers, never by a
+       model. Every number is a measured value.</p>
+    <div id="summary" class="narrative"></div>
+  </div>
+</section>
+
+<footer class="foot">
+  <dl>
+    <dt>Video</dt>
+    <dd>Nexar Collision Prediction Dataset, under the Nexar Open Data License. Attribution: Moura &amp; Zvitia,
+        "Nexar Collision Dataset", Hugging Face, 2025. No resale, no re-identification of people, vehicles or
+        plates.</dd>
+    <dt>Your own clip</dt>
+    <dd><code>telltale investigate-clip my_dashcam.mp4 --clip-id mine --event-time 7.4</code>, then
+        <code>telltale export-site</code>. The impact time is yours to give; it is never guessed.</dd>
+  </dl>
+</footer>
+
+<script src="clips.js"></script>
+</body>
+</html>

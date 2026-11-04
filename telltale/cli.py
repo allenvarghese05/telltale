@@ -53,6 +53,20 @@ def _video_report(a: argparse.Namespace) -> None:
     _print_json(video_report(a.clip_id))
 
 
+def _investigate_clip(a: argparse.Namespace) -> None:
+    from pathlib import Path
+
+    from telltale.pipeline.investigate_clip import STEPS, ClipInputError, investigate_clip
+
+    labels = dict(STEPS)
+    try:
+        bundle = investigate_clip(Path(a.path), a.clip_id, a.event_time, progress=lambda step: print(labels[step]))
+    except ClipInputError as exc:
+        raise SystemExit(str(exc)) from exc
+    _print_json(bundle["report"])
+    print("Run `telltale export-site` to add it to the site's video-only page.")
+
+
 def _video_bench(a: argparse.Namespace) -> None:
     from telltale.video.bench import run_video_bench
 
@@ -117,6 +131,17 @@ def _serve(a: argparse.Namespace) -> None:
     ThreadingHTTPServer(("127.0.0.1", a.port), handler).serve_forever()
 
 
+def _upload_ui(a: argparse.Namespace) -> None:
+    from telltale.web.export import SITE
+    from telltale.web.upload import make_server
+
+    if not (SITE / "index.html").exists():
+        raise SystemExit("No site built yet: run `telltale export-site` first.")
+    server = make_server(a.port)
+    print(f"Local upload page at http://127.0.0.1:{a.port} (this machine only; never deployed)")
+    server.serve_forever()
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="telltale", description="Meta AI investigates; the checker verifies.")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -142,6 +167,10 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("clip_id")
     p = add("video-report", _video_report, "video-only timeline for any clip")
     p.add_argument("clip_id")
+    p = add("investigate-clip", _investigate_clip, "any dashcam clip, end to end: register, SAM, witness, report")
+    p.add_argument("path")
+    p.add_argument("--clip-id", required=True)
+    p.add_argument("--event-time", type=float, required=True, help="impact time, seconds from the clip start")
     p = add("video-bench", _video_bench, "benchmark against Nexar human labels")
     p.add_argument("--n", type=int, default=40)
     p = add("generate", _generate, "generate one vehicle-log case")
@@ -162,6 +191,8 @@ def build_parser() -> argparse.ArgumentParser:
     add("export-site", _export_site, "build the static replay site into site/")
     p = add("serve", _serve, "serve the built site locally")
     p.add_argument("--port", type=int, default=8000)
+    p = add("upload-ui", _upload_ui, "local-only page to upload your own clip and run investigate-clip")
+    p.add_argument("--port", type=int, default=8001)
     return parser
 
 

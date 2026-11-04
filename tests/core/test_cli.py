@@ -10,6 +10,7 @@ COMMANDS = [
     ["sam", "nx01"],
     ["witness", "nx01"],
     ["video-report", "nx01"],
+    ["investigate-clip", "clip.mp4", "--clip-id", "mine", "--event-time", "7.4"],
     ["video-bench", "--n", "5"],
     ["generate", "nx01", "--story", "brake_slow"],
     ["make-demo"],
@@ -19,6 +20,7 @@ COMMANDS = [
     ["agent-bench", "--n", "3"],
     ["export-site"],
     ["serve", "--port", "9000"],
+    ["upload-ui", "--port", "9001"],
 ]
 
 

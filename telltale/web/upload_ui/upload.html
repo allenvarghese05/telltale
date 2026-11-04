@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="light">
+  <title>Telltale. Investigate your own clip (local).</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .upload { max-width: 640px; padding-top: 8px; }
+    .field { display: flex; flex-direction: column; gap: 6px; margin-top: 22px; }
+    .field label { font-size: 14px; font-weight: 600; }
+    .field .help { font-size: 13px; color: var(--mute); }
+    .field input[type="text"], .field input[type="number"] {
+      font: inherit; font-size: 15px; color: var(--ink); background: var(--bg-soft);
+      border: 1px solid transparent; border-radius: 6px; padding: 9px 11px; max-width: 320px;
+    }
+    .field input:focus { outline: 2px solid var(--ink); outline-offset: 1px; }
+    .field input[type="file"] { font-size: 14px; }
+    .submit { margin-top: 28px; background: var(--ink); color: #fff; }
+    .submit:disabled { opacity: 0.4; cursor: default; }
+    .steps { list-style: none; padding: 0; margin: 32px 0 0; border-top: 1px solid var(--line-2); }
+    .steps li { padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--mute); }
+    .steps li.active { color: var(--ink); font-weight: 600; }
+    .steps li.done { color: var(--ink); }
+    .steps li.done::after { content: "  done"; color: var(--ok); font-weight: 500; }
+    .alert { margin-top: 20px; font-size: 14px; color: var(--blocked); }
+    .done-link { display: inline-block; margin-top: 20px; font-weight: 600; color: var(--ink); }
+    .done-link[hidden], .steps[hidden] { display: none; }
+  </style>
+</head>
+<body>
+
+<header class="bar">
+  <a class="wordmark" href="index.html">Telltale</a>
+  <nav class="modes" aria-label="Pages">
+    <a href="index.html">Investigated crashes</a>
+    <a href="clips.html">Video only</a>
+    <a href="/" aria-current="page">Your clip</a>
+  </nav>
+</header>
+
+<section class="intro upload">
+  <h1>Investigate your own clip.</h1>
+  <p class="lede">This page runs only on your computer. Your clip is tracked by SAM 3.1 and described by the Muse
+     Spark witness, then added to the video-only page.</p>
+  <p class="notice">This sends your clip to Meta's API. Use only footage you have the right to share. Free-tier credits allow Meta to use submitted content.</p>
+
+  <form id="form" novalidate>
+    <div class="field">
+      <label for="file">Dashcam video</label>
+      <input id="file" type="file" accept=".mp4,.mov,video/mp4,video/quicktime" required>
+      <span class="help">An .mp4 or .mov file, up to 200 MB.</span>
+    </div>
+    <div class="field">
+      <label for="clip-id">Clip id</label>
+      <input id="clip-id" type="text" pattern="[A-Za-z0-9_-]+" placeholder="my-clip" required>
+      <span class="help">Letters, digits, hyphens and underscores.</span>
+    </div>
+    <div class="field">
+      <label for="impact">Impact time</label>
+      <input id="impact" type="number" step="0.01" min="0" placeholder="7.4" required>
+      <span class="help">Seconds from the start of the video. You give this; it is never guessed.</span>
+    </div>
+    <button id="submit" class="primary submit" type="submit">Upload and investigate</button>
+  </form>
+
+  <ol id="steps" class="steps" hidden></ol>
+  <p id="alert" class="alert" role="alert"></p>
+  <a id="done" class="done-link" hidden>Open it on the video-only page</a>
+</section>
+
+<script src="upload.js"></script>
+</body>
+</html>
