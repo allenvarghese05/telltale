@@ -162,12 +162,6 @@ function frame() {
   requestAnimationFrame(frame);
 }
 
-function nearest(dets, f) {
-  let best = null;
-  for (const d of dets) if (!best || Math.abs(d[0] - f) < Math.abs(best[0] - f)) best = d;
-  return best && Math.abs(best[0] - f) <= 2 ? best : null;
-}
-
 function drawOverlay(now) {
   const video = $('video');
   const canvas = $('overlay');
@@ -191,26 +185,11 @@ function drawOverlay(now) {
     ctx.lineWidth = 1.5;
     ctx.stroke();
   }
-  const f = Math.round(now * clip.fps);
-  const sx = canvas.width / clip.width;
-  const sy = canvas.height / clip.height;
   const r = clip.report || {};
-  const struck = r.struck_vehicle;
-  const hazard = r.hazard_onset && now >= r.hazard_onset.t;
-  for (const [oid, dets] of Object.entries(clip.tracks || {})) {
-    const d = nearest(dets, f);
-    if (!d) continue;
-    const [, l, t, rr, b] = d;
-    const isStruck = oid === struck;
-    ctx.lineWidth = isStruck ? 2 : 1;
-    ctx.strokeStyle = isStruck ? (hazard ? '#ff453a' : 'rgba(255,255,255,0.95)') : 'rgba(255,255,255,0.4)';
-    ctx.strokeRect(l * sx, t * sy, (rr - l) * sx, (b - t) * sy);
-    if (isStruck) {
-      ctx.fillStyle = ctx.strokeStyle;
-      ctx.font = '600 12px -apple-system, BlinkMacSystemFont, Helvetica Neue, sans-serif';
-      ctx.fillText(hazard ? "Telltale's pick: hazard" : "Telltale's pick", l * sx, Math.max(t * sy - 7, 13));
-    }
-  }
+  const onsets = {};
+  for (const h of r.other_hazards || []) if (!(h.object_id in onsets)) onsets[h.object_id] = h.t;
+  if (r.struck_vehicle != null && r.hazard_onset) onsets[r.struck_vehicle] = r.hazard_onset.t;
+  drawVehicles(ctx, canvas, clip.tracks, clip, now, { struck: r.struck_vehicle, onsets, impactT: r.impact_t });
 }
 
 init();

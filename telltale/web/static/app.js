@@ -348,6 +348,10 @@ function drawOverlay() {
     ctx.lineWidth = 1.5;
     ctx.stroke();
   }
+  if (bundle.tracks && Object.keys(bundle.tracks).length) {
+    drawVehicles(ctx, canvas, bundle.tracks, bundle, video.currentTime, caseVehicleScene(bundle));
+    return;
+  }
   const boxes = bundle.target_boxes || [];
   if (!boxes.length || !bundle.fps || !bundle.width) return;
   const f = Math.round(video.currentTime * bundle.fps);
@@ -363,6 +367,14 @@ function drawOverlay() {
   ctx.fillStyle = ctx.strokeStyle;
   ctx.font = '600 12px -apple-system, BlinkMacSystemFont, Helvetica Neue, sans-serif';
   ctx.fillText(hazard ? 'Hazard' : 'Tracked vehicle', l * sx, Math.max(t * sy - 7, 13));
+}
+
+function caseVehicleScene(b) {
+  const scene = b.scene || {};
+  const onsets = {};
+  for (const h of scene.hazards || []) if (!(h.object_id in onsets)) onsets[h.object_id] = h.onset_t;
+  const impact = (b.facts || []).find((f) => f.id === 'VID:impact_t');
+  return { struck: scene.target_object_id, onsets, impactT: impact ? impact.value : null };
 }
 
 /* ---------- verdict ---------- */
