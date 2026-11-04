@@ -19,6 +19,7 @@ SOURCE = "cand36-car-s1775"
 RED_TEAM_ID = "cand36-redteam"
 ALTERED_LATENCY_S = 0.25
 ALTERED_VERDICT = "NO_FAULT_FOUND"
+REWRITE = {"above the 0.3 s": "below the 0.3 s"}
 PERCEPTION_DIFF = {"op": "diff", "a": "AV:first_seen_t", "b": "VID:hazard_onset_t"}
 
 
@@ -30,7 +31,7 @@ def main() -> None:
         if claim.get("type") == "timing"
         and all((claim.get("assertion") or {}).get(k) == v for k, v in PERCEPTION_DIFF.items())
     )
-    made = make_red_team_case(SOURCE, RED_TEAM_ID, index, ALTERED_LATENCY_S, ALTERED_VERDICT)
+    made = make_red_team_case(SOURCE, RED_TEAM_ID, index, ALTERED_LATENCY_S, ALTERED_VERDICT, REWRITE)
     print(f"{made}: claim {index} of {SOURCE} altered to {ALTERED_LATENCY_S} s, verdict to {ALTERED_VERDICT}")
 
 

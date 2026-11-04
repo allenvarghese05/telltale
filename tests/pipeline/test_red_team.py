@@ -45,6 +45,7 @@ def test_replaces_the_verdict_and_records_exactly_what_changed():
         "altered_value": 0.25,
         "original_verdict": "PERCEPTION_LATE",
         "altered_verdict": "NO_FAULT_FOUND",
+        "rewrite": {},
     }
 
 
@@ -104,3 +105,16 @@ def test_refuses_to_overwrite_a_case_that_is_not_red_team(tmp_path):
         make_red_team_case(
             "cand36-car-s1775", "cand36-car-s2775", 1, 0.25, "NO_FAULT_FOUND", cases_dir=cases, agent_dir=agent
         )
+
+
+def test_rewrites_the_wording_so_the_altered_claim_reads_coherently():
+    altered = alter_run(RUN, 1, 0.25, "NO_FAULT_FOUND", rewrite={"above the 0.3 s": "below the 0.3 s"})
+    assert altered["claims"][1]["text"] == (
+        "Perception took 0.25 s from hazard onset to first detection, below the 0.3 s threshold."
+    )
+    assert altered["red_team"]["rewrite"] == {"above the 0.3 s": "below the 0.3 s"}
+
+
+def test_a_rewrite_that_does_not_match_fails_rather_than_silently_doing_nothing():
+    with pytest.raises(ValueError, match="does not contain"):
+        alter_run(RUN, 1, 0.25, "NO_FAULT_FOUND", rewrite={"faster than": "slower than"})

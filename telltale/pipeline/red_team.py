@@ -19,14 +19,18 @@ from telltale.core.schema import LABELS
 from telltale.web.export import SAFE_ID
 
 RED_TEAM_NOTE = (
-    "Red-team: one claim's number and the investigator's verdict were altered by hand to show the checker at "
-    "work. This is not a natural agent output."
+    "Red-team: one claim and the investigator's verdict were altered by hand to show the checker at work. "
+    "This is not a natural agent output."
 )
 NUMBER = re.compile(r"\d+(?:\.\d+)?")
 
 
-def alter_run(run: dict, claim_index: int, value: float, verdict: str) -> dict:
-    """A copy of `run` with one claim's figure replaced in its text and assertion, and a new verdict."""
+def alter_run(run: dict, claim_index: int, value: float, verdict: str, rewrite: dict[str, str] | None = None) -> dict:
+    """A copy of `run` with one claim's figure replaced in its text and assertion, and a new verdict.
+
+    `rewrite` swaps phrases in that claim's text, so an altered figure reads coherently: a latency moved under
+    its threshold should say "below", as a motivated investigator would write it.
+    """
     if verdict not in LABELS:
         raise ValueError(f"{verdict!r} is not a verdict label; expected one of {LABELS}")
     altered = copy.deepcopy(run)
@@ -40,6 +44,10 @@ def alter_run(run: dict, claim_index: int, value: float, verdict: str) -> dict:
         raise ValueError(f"claim {claim_index} text does not quote its figure {original}: {claim['text']!r}")
     whole_number = re.compile(rf"(?<![\d.]){re.escape(quoted)}(?![\d.])")
     claim["text"] = whole_number.sub(f"{value:g}", claim["text"], count=1)
+    for old, new in (rewrite or {}).items():
+        if old not in claim["text"]:
+            raise ValueError(f"claim {claim_index} text does not contain {old!r}: {claim['text']!r}")
+        claim["text"] = claim["text"].replace(old, new)
     assertion["equals"] = value
     altered["verdict"] = verdict
     altered["red_team"] = {
@@ -48,6 +56,7 @@ def alter_run(run: dict, claim_index: int, value: float, verdict: str) -> dict:
         "altered_value": value,
         "original_verdict": run["verdict"],
         "altered_verdict": verdict,
+        "rewrite": dict(rewrite or {}),
     }
     return altered
 
@@ -58,6 +67,7 @@ def make_red_team_case(
     claim_index: int,
     value: float,
     verdict: str,
+    rewrite: dict[str, str] | None = None,
     cases_dir: Path = CASES,
     agent_dir: Path = CACHE / "agent",
 ) -> str:
@@ -74,6 +84,6 @@ def make_red_team_case(
     case = json.loads((target / "case.json").read_text())
     (target / "case.json").write_text(json.dumps({**case, "case_id": red_team_id, "red_team": RED_TEAM_NOTE}))
     run = json.loads((agent_dir / f"{source_case_id}.json").read_text())
-    altered = alter_run(run, claim_index, value, verdict)
+    altered = alter_run(run, claim_index, value, verdict, rewrite)
     (agent_dir / f"{red_team_id}.json").write_text(json.dumps(altered, indent=2))
     return red_team_id
