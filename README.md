@@ -195,9 +195,13 @@ Every claim the agent submits carries its evidence IDs and a machine-checkable a
 > The recheck did run over 6–8 s, but that window was a tool argument, not a fact. A true statement the checker
 > cannot prove does not reach a report.
 
-The replay also includes one clearly labelled **red-team case**: a copy of a real run with one claim's number and
-the verdict deliberately altered, so you can watch the checker block the claim and withhold the verdict. It is
-never presented as a natural agent output.
+> **A staged catch: the red-team case.** The replay includes one clearly labelled case, `cand36-redteam`. It is a
+> copy of a real perception-late run in which one claim and the verdict were altered by hand, the way a careless or
+> motivated investigator might write them. The agent's measured 1.10 s perception time became *"Perception took
+> 0.25 s … below the 0.3 s perception threshold"*, and the verdict became "no fault found". The checker was not
+> modified. It **blocked** the claim (*recomputed 1.102, claimed 0.25*) and **withheld** the verdict: *independent
+> recomputation from the same evidence gives PERCEPTION_LATE; report withheld pending human review*. The red-team
+> case always replays its altered run, even under `--live`, and is never presented as a natural agent output.
 
 ---
 
@@ -207,6 +211,7 @@ never presented as a natural agent output.
 |---|---|
 | 🎯 **Danger onset vs Nexar's human labels**<br/>40 unseen clips, no per-clip tuning | Median absolute error **0.905 s** (middle half 0.545–1.387 s). **80% within 2 s**, 53% within 1 s. Onset found on 30 of 40 clips (75%). Spread of the signed error 1.947 s. |
 | 🕵️ **Agent alone vs agent + checker**<br/>19 blind cases, run live | Muse Wonder's verdict was correct on **19 of 19**, and the independent recomputation agreed on all 19. Of **172 claims, 171 verified, 1 blocked, 0 single-source**. No wrong verdict was verified. |
+| 🔁 **Demo cases on the replay site**<br/>16 cases, 4 real clips, run live | **16 of 16** verdicts correct and verified. Of **142 claims, 139 verified, 3 blocked, 0 single-source**. |
 | 🧪 **Synthetic attribution consistency**<br/>6 failure stories × car and truck | **162 of 162** correct, every story 1.000. Every dropout case returned "inconclusive" and no other case did. |
 
 <details>
@@ -228,6 +233,11 @@ came from; the rest tried to confirm the witness with a recheck tool that could 
 Both were fixed on the agent side, in its instructions and in the recheck tool (commit `2a23728`). **The checker
 did not change between the two runs.** Every claim in [`agent_bench.json`](agent_bench.json) can be re-checked
 offline from the committed runs.
+
+**The 3 blocks on the demo site are not 3 falsehoods.** One is the same pattern as the benchmark catch: a recheck
+"on 6.00-7.00 s window" whose window is not in the evidence (`cand36-car-s3775`). The other two, both in
+`cand37-car-s1313`, state correct facts ("no contact", "brake log complete") but use a numeric check on a yes/no
+fact, so the checker could not evaluate them. Those are form blocks: the content was right, the proof was not.
 
 **This benchmark did not exercise catching a wrong verdict**, because the agent was right on all 19. That path is
 covered by the test suite (`test_analyze_rejects_a_wrong_agent_verdict`, `test_verdict_verified_and_rejected`) and
