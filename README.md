@@ -478,7 +478,7 @@ The red-team case always replays its edited run, even with `--live`.
 | Repeatability (6 cases, 3 fresh live runs each) | 18 of 18 runs agreed and were correct. Claim counts varied by at most one. |
 | Demo cases on the replay site (34 cases: 16 car, 18 truck, 4 real clips, run live) | 34 of 34 verdicts correct and verified. Of 307 claims, 304 verified, 3 blocked, 0 single-source. |
 | Confusable timelines (20 blind cases built around the agent's one mistake, run live) | 1 of 20 wrong verdicts, **withheld**. 8 wrong-interval claims: R6 blocked 8 of 8; the old checker would have verified all 8. |
-| Perception sensitivity (83 cases, deterministic, no API calls) | Right on 83 of 83 given the true onset. With SAM's measured real-world timing error applied, the verdict is unchanged **46%** of the time (50% on the 53 cases not built to sit on a threshold). Typical flip at 0.30 to 0.45 s of onset error. |
+| Perception sensitivity (83 cases, deterministic, no API calls) | Right on 83 of 83 given the true onset. With SAM's measured real-world timing error applied, the verdict is unchanged **46%** of the time: 46% on the 34 demo cases alone, 58% on the original 19-case benchmark, 39% on the 30 hard cases. Typical flip at 0.30 to 0.45 s of onset error. |
 | Synthetic attribution consistency (6 failure stories, car and truck) | 162 of 162 correct. Every dropout case returned INCONCLUSIVE and no other case did. |
 
 **How to read these.**
