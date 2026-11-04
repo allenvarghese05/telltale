@@ -34,6 +34,8 @@ from telltale.video.scene import summarize_scene
 
 logger = logging.getLogger(__name__)
 
+POOL_EXCLUSIONS = BENCH_CLIPS / "pool_exclusions.json"
+
 
 def summarize(rows: list[dict]) -> dict:
     """Describe the error distribution, not just how often it lands inside a tight band.
@@ -64,22 +66,43 @@ def summarize(rows: list[dict]) -> dict:
     }
 
 
-def _fetch_pool(n: int, seed: int) -> dict:
+def benchmark_pool(clips: list[dict], excluded: set[str], seed: int) -> list[dict]:
+    """Every labelled positive not excluded, in the seeded order the benchmark draws from."""
+    pool = [c for c in clips if c["nexar_id"] not in excluded and c.get("time_of_alert") is not None]
+    random.Random(seed).shuffle(pool)
+    return pool
+
+
+def _excluded() -> set[str]:
+    """The clips the benchmark must never draw: the frozen original exclusions plus today's demo clips.
+
+    The first 40-clip run excluded the 64 demo candidates then in the manifest. The manifest now holds 4, and
+    excluding only those reshuffles the whole pool, so the original 40 would no longer be a prefix of any draw.
+    `pool_exclusions.json` freezes the original 64 so every run, at any n, draws from the same order.
+    """
+    if not POOL_EXCLUSIONS.exists():
+        raise FileNotFoundError(f"{POOL_EXCLUSIONS} is missing; without it the benchmark draws a different pool")
+    frozen = set(json.loads(POOL_EXCLUSIONS.read_text()))
+    return frozen | {c["nexar_id"] for c in load_manifest()["clips"].values()}
+
+
+def _fetch_pool(n: int, seed: int) -> tuple[dict, list[dict], list[str]]:
+    """Download the first n clips of the draw; returns the bench manifest, the draw and any failed downloads."""
     from telltale.data.fetch import fetch_trimmed, positive_clips
 
-    taken = {c.get("nexar_id") for c in load_manifest()["clips"].values()}
-    pool = [c for c in positive_clips() if c["nexar_id"] not in taken and c.get("time_of_alert") is not None]
-    random.Random(seed).shuffle(pool)
+    drawn = benchmark_pool(positive_clips(), _excluded(), seed)[:n]
     bench = load_manifest(BENCH_MANIFEST)
-    for meta in pool[:n]:
+    failed = []
+    for meta in drawn:
         if meta["nexar_id"] in bench["clips"]:
             continue
         try:
             bench["clips"][meta["nexar_id"]] = fetch_trimmed(meta, BENCH_CLIPS, meta["nexar_id"], delete_raw=True)
         except Exception as exc:  # noqa: BLE001 - one bad clip must not end the benchmark
             logger.warning("fetch failed for %s: %s", meta["nexar_id"], exc)
+            failed.append(meta["nexar_id"])
     save_manifest(bench, BENCH_MANIFEST)
-    return bench
+    return bench, drawn, failed
 
 
 def _score(entry: dict) -> dict:
@@ -102,10 +125,10 @@ def _score(entry: dict) -> dict:
 
 
 def run_video_bench(n: int = 40, seed: int = 7, workers: int = 4) -> dict:
-    bench = _fetch_pool(n, seed)
-    entries = list(bench["clips"].values())[:n]
+    bench, drawn, fetch_failed = _fetch_pool(n, seed)
+    entries = [bench["clips"][m["nexar_id"]] for m in drawn if m["nexar_id"] in bench["clips"]]
     with ThreadPoolExecutor(workers) as pool:
         rows = list(pool.map(_score, entries))
-    result = {"summary": summarize(rows), "rows": rows}
+    result = {"summary": summarize(rows), "rows": rows, "fetch_failed": fetch_failed}
     (ROOT / "video_bench.json").write_text(json.dumps(result, indent=2))
     return result

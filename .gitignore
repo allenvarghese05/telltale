@@ -25,3 +25,6 @@ site/
 .DS_Store
 .idea/
 .vscode/
+
+# Benchmark clips are re-downloadable from the manifest; only the manifest and results are tracked
+data/bench_clips/*.mp4

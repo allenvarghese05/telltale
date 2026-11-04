@@ -1,18 +1,18 @@
 {
   "summary": {
-    "n_attempted": 40,
-    "n_target_found": 40,
-    "n_onset_found": 30,
-    "onset_coverage": 0.75,
-    "median_abs_err_s": 0.905,
-    "p25_abs_err_s": 0.545,
-    "p75_abs_err_s": 1.387,
-    "mean_signed_err_s": -0.861,
-    "median_signed_err_s": -0.617,
-    "stdev_signed_err_s": 1.947,
-    "within_0_5s": 0.233,
-    "within_1_0s": 0.533,
-    "within_2_0s": 0.8
+    "n_attempted": 400,
+    "n_target_found": 400,
+    "n_onset_found": 260,
+    "onset_coverage": 0.65,
+    "median_abs_err_s": 0.909,
+    "p25_abs_err_s": 0.423,
+    "p75_abs_err_s": 2.042,
+    "mean_signed_err_s": -0.998,
+    "median_signed_err_s": -0.288,
+    "stdev_signed_err_s": 2.108,
+    "within_0_5s": 0.296,
+    "within_1_0s": 0.515,
+    "within_2_0s": 0.742
   },
   "rows": [
     {
@@ -108,8 +108,8 @@
     {
       "nexar_id": "01019",
       "ok": true,
-      "onset_t": 5.6,
-      "onset_reason": "predicted",
+      "onset_t": 7.3,
+      "onset_reason": "closing",
       "first_hazard_t": 1.1,
       "alert_t": 6.268,
       "event_t": 8.0
@@ -144,8 +144,8 @@
     {
       "nexar_id": "00252",
       "ok": true,
-      "onset_t": 5.033333333333333,
-      "onset_reason": "closing",
+      "onset_t": 2.466666666666667,
+      "onset_reason": "entering",
       "first_hazard_t": 0.13333333333333333,
       "alert_t": 6.383,
       "event_t": 8.0
@@ -171,8 +171,8 @@
     {
       "nexar_id": "00887",
       "ok": true,
-      "onset_t": null,
-      "onset_reason": null,
+      "onset_t": 3.3333333333333335,
+      "onset_reason": "closing",
       "first_hazard_t": 0.6,
       "alert_t": 7.2,
       "event_t": 8.0
@@ -189,8 +189,8 @@
     {
       "nexar_id": "00401",
       "ok": true,
-      "onset_t": 7.2,
-      "onset_reason": "predicted",
+      "onset_t": null,
+      "onset_reason": null,
       "first_hazard_t": 3.3333333333333335,
       "alert_t": 7.317,
       "event_t": 8.0
@@ -198,8 +198,8 @@
     {
       "nexar_id": "00010",
       "ok": true,
-      "onset_t": 4.533333333333333,
-      "onset_reason": "predicted",
+      "onset_t": null,
+      "onset_reason": null,
       "first_hazard_t": 4.533333333333333,
       "alert_t": 5.633,
       "event_t": 8.0
@@ -216,8 +216,8 @@
     {
       "nexar_id": "00843",
       "ok": true,
-      "onset_t": 6.258503401360545,
-      "onset_reason": "predicted",
+      "onset_t": null,
+      "onset_reason": null,
       "first_hazard_t": 6.258503401360545,
       "alert_t": 6.878,
       "event_t": 8.0
@@ -234,8 +234,8 @@
     {
       "nexar_id": "00765",
       "ok": true,
-      "onset_t": null,
-      "onset_reason": null,
+      "onset_t": 4.262295081967213,
+      "onset_reason": "entering",
       "first_hazard_t": 0.5901639344262295,
       "alert_t": 6.987,
       "event_t": 8.0
@@ -261,8 +261,8 @@
     {
       "nexar_id": "00114",
       "ok": true,
-      "onset_t": 6.7,
-      "onset_reason": "predicted",
+      "onset_t": null,
+      "onset_reason": null,
       "first_hazard_t": 3.1,
       "alert_t": 6.367,
       "event_t": 8.0
@@ -315,8 +315,8 @@
     {
       "nexar_id": "00751",
       "ok": true,
-      "onset_t": 4.4,
-      "onset_reason": "closing",
+      "onset_t": null,
+      "onset_reason": null,
       "first_hazard_t": 0.0,
       "alert_t": 6.767,
       "event_t": 8.0
@@ -360,8 +360,8 @@
     {
       "nexar_id": "00875",
       "ok": true,
-      "onset_t": 5.1644736842105265,
-      "onset_reason": "closing",
+      "onset_t": null,
+      "onset_reason": null,
       "first_hazard_t": 0.0,
       "alert_t": 6.295,
       "event_t": 8.0
@@ -374,6 +374,3247 @@
       "first_hazard_t": 0.032679738562091505,
       "alert_t": 6.335,
       "event_t": 8.0
+    },
+    {
+      "nexar_id": "00653",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 5.802047781569966,
+      "alert_t": 5.953,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00431",
+      "ok": true,
+      "onset_t": 6.9,
+      "onset_reason": "closing",
+      "first_hazard_t": 6.9,
+      "alert_t": 6.617,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00427",
+      "ok": true,
+      "onset_t": 6.336633663366336,
+      "onset_reason": "entering",
+      "first_hazard_t": 5.544554455445544,
+      "alert_t": 6.681,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00543",
+      "ok": true,
+      "onset_t": 6.533333333333333,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.6,
+      "alert_t": 6.466,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00841",
+      "ok": true,
+      "onset_t": 6.333333333333333,
+      "onset_reason": "predicted",
+      "first_hazard_t": 6.333333333333333,
+      "alert_t": 5.167,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00353",
+      "ok": true,
+      "onset_t": 5.9,
+      "onset_reason": "closing",
+      "first_hazard_t": 5.9,
+      "alert_t": 7.75,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00895",
+      "ok": true,
+      "onset_t": 6.0130718954248366,
+      "onset_reason": "closing",
+      "first_hazard_t": 1.0457516339869282,
+      "alert_t": 6.301,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00097",
+      "ok": true,
+      "onset_t": 7.9865771812080535,
+      "onset_reason": "predicted",
+      "first_hazard_t": 7.9865771812080535,
+      "alert_t": 7.967,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00998",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 1.3013698630136987,
+      "alert_t": 7.112,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00840",
+      "ok": true,
+      "onset_t": 3.5,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.3,
+      "alert_t": 7.034,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00921",
+      "ok": true,
+      "onset_t": 5.150501672240803,
+      "onset_reason": "predicted",
+      "first_hazard_t": 5.150501672240803,
+      "alert_t": 6.264,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00410",
+      "ok": true,
+      "onset_t": 7.266666666666667,
+      "onset_reason": "entering",
+      "first_hazard_t": 7.266666666666667,
+      "alert_t": 7.167,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00802",
+      "ok": true,
+      "onset_t": 6.241830065359477,
+      "onset_reason": "closing",
+      "first_hazard_t": 2.5816993464052285,
+      "alert_t": 6.987,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00250",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.501,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "01039",
+      "ok": true,
+      "onset_t": 6.1,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.1,
+      "alert_t": 7.3,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00486",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.335,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00618",
+      "ok": true,
+      "onset_t": 7.233333333333333,
+      "onset_reason": "predicted",
+      "first_hazard_t": 1.2333333333333334,
+      "alert_t": 6.7,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00028",
+      "ok": true,
+      "onset_t": 6.9607843137254894,
+      "onset_reason": "closing",
+      "first_hazard_t": 6.9607843137254894,
+      "alert_t": 5.811,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00605",
+      "ok": true,
+      "onset_t": 3.5294117647058822,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.0,
+      "alert_t": 6.563,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00668",
+      "ok": true,
+      "onset_t": 2.8,
+      "onset_reason": "predicted",
+      "first_hazard_t": 2.8,
+      "alert_t": 6.466,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00046",
+      "ok": true,
+      "onset_t": 4.533333333333333,
+      "onset_reason": "predicted",
+      "first_hazard_t": 2.8,
+      "alert_t": 5.767,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00542",
+      "ok": true,
+      "onset_t": 0.29411764705882354,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.29411764705882354,
+      "alert_t": 5.256,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00079",
+      "ok": true,
+      "onset_t": 2.8,
+      "onset_reason": "predicted",
+      "first_hazard_t": 2.8,
+      "alert_t": 7.0,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00447",
+      "ok": true,
+      "onset_t": 5.566666666666666,
+      "onset_reason": "predicted",
+      "first_hazard_t": 1.3666666666666667,
+      "alert_t": 6.734,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00313",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.0,
+      "alert_t": 7.085,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00882",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 1.2374581939799332,
+      "alert_t": 5.431,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00896",
+      "ok": true,
+      "onset_t": 5.966666666666667,
+      "onset_reason": "entering",
+      "first_hazard_t": 5.966666666666667,
+      "alert_t": 6.7,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00475",
+      "ok": true,
+      "onset_t": 6.895424836601307,
+      "onset_reason": "predicted",
+      "first_hazard_t": 6.895424836601307,
+      "alert_t": 7.053,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00369",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 6.066666666666666,
+      "alert_t": 5.533,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00827",
+      "ok": true,
+      "onset_t": 4.4,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.03333333333333333,
+      "alert_t": 6.833,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00777",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 5.356,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00170",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 5.766666666666667,
+      "alert_t": 6.867,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00272",
+      "ok": true,
+      "onset_t": 0.5901639344262295,
+      "onset_reason": "entering",
+      "first_hazard_t": 0.0,
+      "alert_t": 6.332,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00593",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.06666666666666667,
+      "alert_t": 6.334,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00677",
+      "ok": true,
+      "onset_t": 1.3333333333333333,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.36666666666666664,
+      "alert_t": 6.867,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00349",
+      "ok": true,
+      "onset_t": 6.470588235294118,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.19607843137254902,
+      "alert_t": 6.007,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00601",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 2.1,
+      "alert_t": 6.7,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00579",
+      "ok": true,
+      "onset_t": 4.013377926421405,
+      "onset_reason": "entering",
+      "first_hazard_t": 3.210702341137124,
+      "alert_t": 6.797,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00867",
+      "ok": true,
+      "onset_t": 2.1,
+      "onset_reason": "entering",
+      "first_hazard_t": 2.1,
+      "alert_t": 6.867,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00085",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 7.5,
+      "alert_t": 7.6,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00880",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 7.1,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00581",
+      "ok": true,
+      "onset_t": 5.394736842105264,
+      "onset_reason": "closing",
+      "first_hazard_t": 1.611842105263158,
+      "alert_t": 6.229,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00857",
+      "ok": true,
+      "onset_t": 4.803921568627451,
+      "onset_reason": "closing",
+      "first_hazard_t": 4.183006535947713,
+      "alert_t": 5.713,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "01034",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 7.7,
+      "alert_t": 6.833,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00544",
+      "ok": true,
+      "onset_t": 6.187290969899665,
+      "onset_reason": "closing",
+      "first_hazard_t": 6.187290969899665,
+      "alert_t": 6.899,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00497",
+      "ok": true,
+      "onset_t": 1.5333333333333334,
+      "onset_reason": "predicted",
+      "first_hazard_t": 1.5333333333333334,
+      "alert_t": 6.666,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00472",
+      "ok": true,
+      "onset_t": 3.4,
+      "onset_reason": "entering",
+      "first_hazard_t": 3.4,
+      "alert_t": 7.133,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00658",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.7023411371237459,
+      "alert_t": 7.599,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00656",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 1.4666666666666666,
+      "alert_t": 6.633,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00666",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 4.566666666666666,
+      "alert_t": 6.467,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00021",
+      "ok": true,
+      "onset_t": 1.9,
+      "onset_reason": "entering",
+      "first_hazard_t": 1.9,
+      "alert_t": 6.734,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "01016",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.0,
+      "alert_t": 6.987,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00577",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 1.278688524590164,
+      "alert_t": 6.725,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00356",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 6.0,
+      "alert_t": 6.8,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00774",
+      "ok": true,
+      "onset_t": 3.933333333333333,
+      "onset_reason": "entering",
+      "first_hazard_t": 2.033333333333333,
+      "alert_t": 7.0,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00022",
+      "ok": true,
+      "onset_t": 7.2,
+      "onset_reason": "predicted",
+      "first_hazard_t": 1.8666666666666667,
+      "alert_t": 6.834,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00473",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 6.833333333333333,
+      "alert_t": 5.533,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00111",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.384,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00787",
+      "ok": true,
+      "onset_t": 6.166666666666667,
+      "onset_reason": "closing",
+      "first_hazard_t": 6.166666666666667,
+      "alert_t": 6.5,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00527",
+      "ok": true,
+      "onset_t": 6.733333333333333,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.0,
+      "alert_t": 5.2,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00617",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 5.424836601307189,
+      "alert_t": 6.792,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00629",
+      "ok": true,
+      "onset_t": 5.066666666666666,
+      "onset_reason": "closing",
+      "first_hazard_t": 5.066666666666666,
+      "alert_t": 5.967,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00952",
+      "ok": true,
+      "onset_t": 6.721311475409836,
+      "onset_reason": "predicted",
+      "first_hazard_t": 6.721311475409836,
+      "alert_t": 7.182,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00888",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.868,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00729",
+      "ok": true,
+      "onset_t": 6.9607843137254894,
+      "onset_reason": "closing",
+      "first_hazard_t": 3.071895424836601,
+      "alert_t": 6.727,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00948",
+      "ok": true,
+      "onset_t": 7.792642140468228,
+      "onset_reason": "closing",
+      "first_hazard_t": 2.1739130434782608,
+      "alert_t": 6.932,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00554",
+      "ok": true,
+      "onset_t": 7.254901960784314,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.22875816993464052,
+      "alert_t": 6.106,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00235",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 3.433333333333333,
+      "alert_t": 6.051,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00955",
+      "ok": true,
+      "onset_t": 5.0,
+      "onset_reason": "predicted",
+      "first_hazard_t": 3.3666666666666667,
+      "alert_t": 5.367,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00613",
+      "ok": true,
+      "onset_t": 6.633333333333334,
+      "onset_reason": "predicted",
+      "first_hazard_t": 3.3333333333333335,
+      "alert_t": 6.5,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00825",
+      "ok": true,
+      "onset_t": 6.666666666666667,
+      "onset_reason": "predicted",
+      "first_hazard_t": 6.533333333333333,
+      "alert_t": 6.467,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00539",
+      "ok": true,
+      "onset_t": 6.2745098039215685,
+      "onset_reason": "closing",
+      "first_hazard_t": 2.5816993464052285,
+      "alert_t": 6.923,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00520",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.498,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00181",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 5.885,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00183",
+      "ok": true,
+      "onset_t": 5.9,
+      "onset_reason": "predicted",
+      "first_hazard_t": 3.6,
+      "alert_t": 6.333,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00991",
+      "ok": true,
+      "onset_t": 7.1,
+      "onset_reason": "entering",
+      "first_hazard_t": 0.9,
+      "alert_t": 7.067,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00923",
+      "ok": true,
+      "onset_t": 6.426229508196721,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.0,
+      "alert_t": 5.873,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00082",
+      "ok": true,
+      "onset_t": 5.9,
+      "onset_reason": "predicted",
+      "first_hazard_t": 5.9,
+      "alert_t": 5.266,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00750",
+      "ok": true,
+      "onset_t": 7.918088737201365,
+      "onset_reason": "predicted",
+      "first_hazard_t": 7.918088737201365,
+      "alert_t": 6.401,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00876",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.5228758169934641,
+      "alert_t": 6.53,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00904",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 7.418300653594771,
+      "alert_t": 7.314,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00309",
+      "ok": true,
+      "onset_t": 7.1,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.0,
+      "alert_t": 7.2,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00737",
+      "ok": true,
+      "onset_t": 7.133333333333334,
+      "onset_reason": "predicted",
+      "first_hazard_t": 6.833333333333333,
+      "alert_t": 7.167,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00260",
+      "ok": true,
+      "onset_t": 0.6,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.6,
+      "alert_t": 5.966,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00435",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 4.266666666666667,
+      "alert_t": 6.8,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00041",
+      "ok": true,
+      "onset_t": 6.133333333333334,
+      "onset_reason": "closing",
+      "first_hazard_t": 6.133333333333334,
+      "alert_t": 6.333,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00208",
+      "ok": true,
+      "onset_t": 6.166666666666667,
+      "onset_reason": "closing",
+      "first_hazard_t": 3.1,
+      "alert_t": 7.433,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00389",
+      "ok": true,
+      "onset_t": 7.166666666666667,
+      "onset_reason": "entering",
+      "first_hazard_t": 6.766666666666667,
+      "alert_t": 7.7,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00835",
+      "ok": true,
+      "onset_t": 6.966666666666667,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.16666666666666666,
+      "alert_t": 6.834,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00043",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 7.6,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00057",
+      "ok": true,
+      "onset_t": 7.266666666666667,
+      "onset_reason": "closing",
+      "first_hazard_t": 1.3666666666666667,
+      "alert_t": 6.816,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00145",
+      "ok": true,
+      "onset_t": 7.2,
+      "onset_reason": "closing",
+      "first_hazard_t": 7.1,
+      "alert_t": 5.833,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00990",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.032679738562091505,
+      "alert_t": 7.183,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00366",
+      "ok": true,
+      "onset_t": 6.033333333333333,
+      "onset_reason": "closing",
+      "first_hazard_t": 3.433333333333333,
+      "alert_t": 5.466,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00678",
+      "ok": true,
+      "onset_t": 1.1,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.0,
+      "alert_t": 5.433,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00093",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 5.6,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00877",
+      "ok": true,
+      "onset_t": 6.266666666666667,
+      "onset_reason": "entering",
+      "first_hazard_t": 2.566666666666667,
+      "alert_t": 6.433,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00063",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.25,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00256",
+      "ok": true,
+      "onset_t": 5.7,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.4,
+      "alert_t": 7.084,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00179",
+      "ok": true,
+      "onset_t": 7.033333333333333,
+      "onset_reason": "closing",
+      "first_hazard_t": 1.6333333333333333,
+      "alert_t": 6.967,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00898",
+      "ok": true,
+      "onset_t": 5.183946488294315,
+      "onset_reason": "entering",
+      "first_hazard_t": 0.6020066889632107,
+      "alert_t": 6.798,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00883",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.06666666666666667,
+      "alert_t": 5.734,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00291",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 5.582,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00049",
+      "ok": true,
+      "onset_t": 5.48494983277592,
+      "onset_reason": "entering",
+      "first_hazard_t": 0.4682274247491639,
+      "alert_t": 6.865,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00387",
+      "ok": true,
+      "onset_t": 4.867549668874172,
+      "onset_reason": "predicted",
+      "first_hazard_t": 4.867549668874172,
+      "alert_t": 6.312,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00090",
+      "ok": true,
+      "onset_t": 7.6,
+      "onset_reason": "entering",
+      "first_hazard_t": 7.6,
+      "alert_t": 7.066,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00266",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.266,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00485",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 5.8,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00307",
+      "ok": true,
+      "onset_t": 2.066666666666667,
+      "onset_reason": "predicted",
+      "first_hazard_t": 2.066666666666667,
+      "alert_t": 6.766,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00910",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.03333333333333333,
+      "alert_t": 6.466,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00288",
+      "ok": true,
+      "onset_t": 5.88235294117647,
+      "onset_reason": "predicted",
+      "first_hazard_t": 4.248366013071895,
+      "alert_t": 6.954,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00128",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.0,
+      "alert_t": 7.066,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00213",
+      "ok": true,
+      "onset_t": 6.722408026755853,
+      "onset_reason": "closing",
+      "first_hazard_t": 1.37123745819398,
+      "alert_t": 5.297,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00236",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 7.301,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00945",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 1.6326530612244898,
+      "alert_t": 7.117,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00217",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 7.067,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00854",
+      "ok": true,
+      "onset_t": 7.558528428093646,
+      "onset_reason": "predicted",
+      "first_hazard_t": 7.558528428093646,
+      "alert_t": 6.831,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00348",
+      "ok": true,
+      "onset_t": 7.049180327868853,
+      "onset_reason": "predicted",
+      "first_hazard_t": 7.049180327868853,
+      "alert_t": 6.363,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00078",
+      "ok": true,
+      "onset_t": 6.733333333333333,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.9,
+      "alert_t": 7.067,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00141",
+      "ok": true,
+      "onset_t": 6.0130718954248366,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.22875816993464052,
+      "alert_t": 7.216,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00788",
+      "ok": true,
+      "onset_t": 4.444444444444445,
+      "onset_reason": "entering",
+      "first_hazard_t": 1.3398692810457515,
+      "alert_t": 6.857,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00583",
+      "ok": true,
+      "onset_t": 7.3202614379084965,
+      "onset_reason": "closing",
+      "first_hazard_t": 5.522875816993464,
+      "alert_t": 6.072,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00172",
+      "ok": true,
+      "onset_t": 6.933333333333334,
+      "onset_reason": "closing",
+      "first_hazard_t": 2.6666666666666665,
+      "alert_t": 7.367,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00963",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 5.953177257525084,
+      "alert_t": 6.365,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00868",
+      "ok": true,
+      "onset_t": 6.140939597315436,
+      "onset_reason": "closing",
+      "first_hazard_t": 6.140939597315436,
+      "alert_t": 6.394,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00928",
+      "ok": true,
+      "onset_t": 1.5333333333333334,
+      "onset_reason": "closing",
+      "first_hazard_t": 1.5333333333333334,
+      "alert_t": 6.167,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00148",
+      "ok": true,
+      "onset_t": 1.3666666666666667,
+      "onset_reason": "predicted",
+      "first_hazard_t": 1.3666666666666667,
+      "alert_t": 6.067,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00015",
+      "ok": true,
+      "onset_t": 6.533333333333333,
+      "onset_reason": "closing",
+      "first_hazard_t": 6.533333333333333,
+      "alert_t": 5.967,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00360",
+      "ok": true,
+      "onset_t": 0.16666666666666666,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.16666666666666666,
+      "alert_t": 7.9,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00694",
+      "ok": true,
+      "onset_t": 4.566666666666666,
+      "onset_reason": "predicted",
+      "first_hazard_t": 4.566666666666666,
+      "alert_t": 5.8,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00597",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.367,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00831",
+      "ok": true,
+      "onset_t": 4.327868852459017,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.0,
+      "alert_t": 7.117,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00794",
+      "ok": true,
+      "onset_t": 6.7973856209150325,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.45751633986928103,
+      "alert_t": 6.726,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00557",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 2.7,
+      "alert_t": 6.6,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00403",
+      "ok": true,
+      "onset_t": 6.166666666666667,
+      "onset_reason": "predicted",
+      "first_hazard_t": 6.166666666666667,
+      "alert_t": 7.967,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00715",
+      "ok": true,
+      "onset_t": 2.1305841924398625,
+      "onset_reason": "entering",
+      "first_hazard_t": 0.0,
+      "alert_t": 5.322,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00697",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 7.533333333333333,
+      "alert_t": 7.767,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00909",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 5.696,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00817",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.0,
+      "alert_t": 6.497,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00703",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.3,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00805",
+      "ok": true,
+      "onset_t": 7.026143790849673,
+      "onset_reason": "closing",
+      "first_hazard_t": 7.026143790849673,
+      "alert_t": 6.367,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00418",
+      "ok": true,
+      "onset_t": 7.366666666666666,
+      "onset_reason": "closing",
+      "first_hazard_t": 1.9,
+      "alert_t": 6.367,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00327",
+      "ok": true,
+      "onset_t": 7.516339869281046,
+      "onset_reason": "closing",
+      "first_hazard_t": 5.6535947712418295,
+      "alert_t": 6.236,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00758",
+      "ok": true,
+      "onset_t": 4.816053511705686,
+      "onset_reason": "closing",
+      "first_hazard_t": 2.1070234113712374,
+      "alert_t": 7.399,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00298",
+      "ok": true,
+      "onset_t": 7.0588235294117645,
+      "onset_reason": "closing",
+      "first_hazard_t": 7.0588235294117645,
+      "alert_t": 6.432,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00378",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 3.066666666666667,
+      "alert_t": 5.433,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00006",
+      "ok": true,
+      "onset_t": 6.9,
+      "onset_reason": "closing",
+      "first_hazard_t": 6.9,
+      "alert_t": 5.9,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00133",
+      "ok": true,
+      "onset_t": 4.342105263157895,
+      "onset_reason": "predicted",
+      "first_hazard_t": 4.342105263157895,
+      "alert_t": 6.373,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00074",
+      "ok": true,
+      "onset_t": 6.866666666666666,
+      "onset_reason": "predicted",
+      "first_hazard_t": 4.766666666666667,
+      "alert_t": 6.734,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00382",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.0,
+      "alert_t": 7.032,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00757",
+      "ok": true,
+      "onset_t": 6.733333333333333,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.26666666666666666,
+      "alert_t": 5.533,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00004",
+      "ok": true,
+      "onset_t": 1.9666666666666666,
+      "onset_reason": "closing",
+      "first_hazard_t": 1.9666666666666666,
+      "alert_t": 7.8,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00664",
+      "ok": true,
+      "onset_t": 7.333333333333333,
+      "onset_reason": "predicted",
+      "first_hazard_t": 7.333333333333333,
+      "alert_t": 6.6,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00916",
+      "ok": true,
+      "onset_t": 6.7973856209150325,
+      "onset_reason": "closing",
+      "first_hazard_t": 6.7973856209150325,
+      "alert_t": 5.421,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00238",
+      "ok": true,
+      "onset_t": 5.833333333333333,
+      "onset_reason": "closing",
+      "first_hazard_t": 2.066666666666667,
+      "alert_t": 5.15,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00856",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.06666666666666667,
+      "alert_t": 5.634,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00643",
+      "ok": true,
+      "onset_t": 5.719063545150502,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.3010033444816054,
+      "alert_t": 6.531,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00714",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 3.1103678929765888,
+      "alert_t": 6.729,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00918",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 7.522,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00568",
+      "ok": true,
+      "onset_t": 4.3,
+      "onset_reason": "entering",
+      "first_hazard_t": 0.5666666666666667,
+      "alert_t": 6.767,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00516",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 7.566666666666666,
+      "alert_t": 7.033,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00626",
+      "ok": true,
+      "onset_t": 7.1,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.7666666666666667,
+      "alert_t": 6.466,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00556",
+      "ok": true,
+      "onset_t": 4.448160535117057,
+      "onset_reason": "closing",
+      "first_hazard_t": 4.448160535117057,
+      "alert_t": 6.131,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "01031",
+      "ok": true,
+      "onset_t": 7.633333333333334,
+      "onset_reason": "predicted",
+      "first_hazard_t": 7.633333333333334,
+      "alert_t": 7.434,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00833",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.734,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00393",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 7.5,
+      "alert_t": 6.0,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "01000",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.0,
+      "alert_t": 7.215,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00112",
+      "ok": true,
+      "onset_t": 6.366666666666666,
+      "onset_reason": "predicted",
+      "first_hazard_t": 1.9666666666666666,
+      "alert_t": 6.466,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00330",
+      "ok": true,
+      "onset_t": 7.166666666666667,
+      "onset_reason": "predicted",
+      "first_hazard_t": 7.166666666666667,
+      "alert_t": 7.134,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00533",
+      "ok": true,
+      "onset_t": 5.1,
+      "onset_reason": "predicted",
+      "first_hazard_t": 2.533333333333333,
+      "alert_t": 5.5,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00195",
+      "ok": true,
+      "onset_t": 7.033333333333333,
+      "onset_reason": "predicted",
+      "first_hazard_t": 7.033333333333333,
+      "alert_t": 7.367,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00961",
+      "ok": true,
+      "onset_t": 0.7,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.03333333333333333,
+      "alert_t": 6.933,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00474",
+      "ok": true,
+      "onset_t": 5.766666666666667,
+      "onset_reason": "predicted",
+      "first_hazard_t": 2.1,
+      "alert_t": 6.333,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00071",
+      "ok": true,
+      "onset_t": 5.966666666666667,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.7333333333333333,
+      "alert_t": 7.1,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00286",
+      "ok": true,
+      "onset_t": 1.5359477124183005,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.16339869281045752,
+      "alert_t": 5.746,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00014",
+      "ok": true,
+      "onset_t": 6.833333333333333,
+      "onset_reason": "predicted",
+      "first_hazard_t": 1.3666666666666667,
+      "alert_t": 7.333,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00976",
+      "ok": true,
+      "onset_t": 1.4715719063545152,
+      "onset_reason": "predicted",
+      "first_hazard_t": 1.4715719063545152,
+      "alert_t": 6.465,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00456",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.867,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00167",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.03333333333333333,
+      "alert_t": 6.233,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00623",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 7.51,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00077",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 5.681,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00570",
+      "ok": true,
+      "onset_t": 6.366666666666666,
+      "onset_reason": "closing",
+      "first_hazard_t": 1.6333333333333333,
+      "alert_t": 5.8,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00303",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.0,
+      "alert_t": 6.333,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00119",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.742,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00131",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 7.064,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00705",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.032679738562091505,
+      "alert_t": 6.007,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00117",
+      "ok": true,
+      "onset_t": 7.866666666666666,
+      "onset_reason": "predicted",
+      "first_hazard_t": 2.3333333333333335,
+      "alert_t": 7.834,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00977",
+      "ok": true,
+      "onset_t": 7.2,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.0,
+      "alert_t": 7.166,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00927",
+      "ok": true,
+      "onset_t": 6.633333333333334,
+      "onset_reason": "predicted",
+      "first_hazard_t": 6.633333333333334,
+      "alert_t": 4.367,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00763",
+      "ok": true,
+      "onset_t": 0.6666666666666666,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.6666666666666666,
+      "alert_t": 6.333,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00147",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 7.033333333333333,
+      "alert_t": 6.85,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00959",
+      "ok": true,
+      "onset_t": 4.833333333333333,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.0,
+      "alert_t": 6.367,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00380",
+      "ok": true,
+      "onset_t": 2.966666666666667,
+      "onset_reason": "closing",
+      "first_hazard_t": 2.966666666666667,
+      "alert_t": 7.534,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00839",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 6.65551839464883,
+      "alert_t": 6.966,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00371",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 7.049180327868853,
+      "alert_t": 7.246,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00129",
+      "ok": true,
+      "onset_t": 6.066666666666666,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.0,
+      "alert_t": 7.166,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00521",
+      "ok": true,
+      "onset_t": 6.539792387543253,
+      "onset_reason": "closing",
+      "first_hazard_t": 2.0069204152249136,
+      "alert_t": 6.274,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00660",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.30201342281879195,
+      "alert_t": 6.593,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00461",
+      "ok": true,
+      "onset_t": 5.833333333333333,
+      "onset_reason": "closing",
+      "first_hazard_t": 5.833333333333333,
+      "alert_t": 5.9,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00967",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 7.366666666666666,
+      "alert_t": 6.267,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00089",
+      "ok": true,
+      "onset_t": 7.491638795986622,
+      "onset_reason": "predicted",
+      "first_hazard_t": 7.491638795986622,
+      "alert_t": 6.932,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00259",
+      "ok": true,
+      "onset_t": 5.686274509803921,
+      "onset_reason": "predicted",
+      "first_hazard_t": 3.0065359477124183,
+      "alert_t": 7.053,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00634",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.667,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00954",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 5.033333333333333,
+      "alert_t": 5.7,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00008",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 7.966,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00177",
+      "ok": true,
+      "onset_t": 0.5333333333333333,
+      "onset_reason": "entering",
+      "first_hazard_t": 0.5333333333333333,
+      "alert_t": 7.4,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00464",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 3.4,
+      "alert_t": 7.067,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00016",
+      "ok": true,
+      "onset_t": 0.06711409395973154,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.06711409395973154,
+      "alert_t": 6.09,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00771",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 1.4379084967320261,
+      "alert_t": 6.53,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00604",
+      "ok": true,
+      "onset_t": 6.843853820598007,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.2990033222591362,
+      "alert_t": 6.805,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00488",
+      "ok": true,
+      "onset_t": 4.833333333333333,
+      "onset_reason": "predicted",
+      "first_hazard_t": 4.833333333333333,
+      "alert_t": 4.233,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00589",
+      "ok": true,
+      "onset_t": 4.749163879598663,
+      "onset_reason": "predicted",
+      "first_hazard_t": 2.1739130434782608,
+      "alert_t": 7.132,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00810",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.032679738562091505,
+      "alert_t": 5.78,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00285",
+      "ok": true,
+      "onset_t": 7.156862745098039,
+      "onset_reason": "closing",
+      "first_hazard_t": 7.156862745098039,
+      "alert_t": 6.498,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00655",
+      "ok": true,
+      "onset_t": 6.925675675675675,
+      "onset_reason": "closing",
+      "first_hazard_t": 3.4797297297297294,
+      "alert_t": 6.818,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00652",
+      "ok": true,
+      "onset_t": 6.7,
+      "onset_reason": "entering",
+      "first_hazard_t": 3.2,
+      "alert_t": 7.466,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "01008",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 5.433,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00296",
+      "ok": true,
+      "onset_t": 7.1,
+      "onset_reason": "predicted",
+      "first_hazard_t": 2.7,
+      "alert_t": 7.067,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00494",
+      "ok": true,
+      "onset_t": 7.352941176470588,
+      "onset_reason": "closing",
+      "first_hazard_t": 7.352941176470588,
+      "alert_t": 7.053,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00029",
+      "ok": true,
+      "onset_t": 2.1,
+      "onset_reason": "closing",
+      "first_hazard_t": 2.1,
+      "alert_t": 7.167,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00792",
+      "ok": true,
+      "onset_t": 6.766666666666667,
+      "onset_reason": "closing",
+      "first_hazard_t": 6.766666666666667,
+      "alert_t": 5.834,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00151",
+      "ok": true,
+      "onset_t": 6.488294314381271,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.0,
+      "alert_t": 5.932,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00324",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 7.117,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00302",
+      "ok": true,
+      "onset_t": 0.3,
+      "onset_reason": "entering",
+      "first_hazard_t": 0.3,
+      "alert_t": 6.433,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00136",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 7.810457516339869,
+      "alert_t": 5.357,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00153",
+      "ok": true,
+      "onset_t": 6.789297658862877,
+      "onset_reason": "closing",
+      "first_hazard_t": 5.986622073578595,
+      "alert_t": 5.097,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00003",
+      "ok": true,
+      "onset_t": 1.5666666666666667,
+      "onset_reason": "entering",
+      "first_hazard_t": 1.5666666666666667,
+      "alert_t": 5.667,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00339",
+      "ok": true,
+      "onset_t": 5.355805243445693,
+      "onset_reason": "entering",
+      "first_hazard_t": 0.8239700374531835,
+      "alert_t": 6.802,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00930",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 5.767,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00048",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.4666666666666667,
+      "alert_t": 7.633,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00398",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.6,
+      "alert_t": 6.033,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00413",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.067,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00968",
+      "ok": true,
+      "onset_t": 5.566666666666666,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.0,
+      "alert_t": 5.566,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00292",
+      "ok": true,
+      "onset_t": 4.866666666666666,
+      "onset_reason": "closing",
+      "first_hazard_t": 2.5,
+      "alert_t": 6.733,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00005",
+      "ok": true,
+      "onset_t": 6.601307189542483,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.06535947712418301,
+      "alert_t": 7.935,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00270",
+      "ok": true,
+      "onset_t": 5.966666666666667,
+      "onset_reason": "predicted",
+      "first_hazard_t": 4.2,
+      "alert_t": 6.334,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00669",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 3.6721311475409837,
+      "alert_t": 5.908,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00480",
+      "ok": true,
+      "onset_t": 1.7320261437908495,
+      "onset_reason": "closing",
+      "first_hazard_t": 1.4705882352941175,
+      "alert_t": 6.302,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00553",
+      "ok": true,
+      "onset_t": 6.30718954248366,
+      "onset_reason": "entering",
+      "first_hazard_t": 3.202614379084967,
+      "alert_t": 7.314,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00574",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 4.183006535947713,
+      "alert_t": 5.681,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00124",
+      "ok": true,
+      "onset_t": 7.166666666666667,
+      "onset_reason": "closing",
+      "first_hazard_t": 7.166666666666667,
+      "alert_t": 7.267,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00929",
+      "ok": true,
+      "onset_t": 6.766666666666667,
+      "onset_reason": "closing",
+      "first_hazard_t": 6.766666666666667,
+      "alert_t": 5.566,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00565",
+      "ok": true,
+      "onset_t": 3.6,
+      "onset_reason": "closing",
+      "first_hazard_t": 3.6,
+      "alert_t": 6.933,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00639",
+      "ok": true,
+      "onset_t": 6.8561872909699,
+      "onset_reason": "closing",
+      "first_hazard_t": 2.876254180602007,
+      "alert_t": 5.998,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00428",
+      "ok": true,
+      "onset_t": 7.166666666666667,
+      "onset_reason": "closing",
+      "first_hazard_t": 1.9666666666666666,
+      "alert_t": 6.6,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00496",
+      "ok": true,
+      "onset_t": 1.8300653594771241,
+      "onset_reason": "entering",
+      "first_hazard_t": 0.0,
+      "alert_t": 6.597,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00818",
+      "ok": true,
+      "onset_t": 7.466666666666667,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.6,
+      "alert_t": 6.734,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00528",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.667,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00184",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 7.866666666666666,
+      "alert_t": 7.867,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00143",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.26229508196721313,
+      "alert_t": 6.855,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00084",
+      "ok": true,
+      "onset_t": 4.673202614379084,
+      "onset_reason": "predicted",
+      "first_hazard_t": 1.0784313725490196,
+      "alert_t": 6.106,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00866",
+      "ok": true,
+      "onset_t": 4.6,
+      "onset_reason": "predicted",
+      "first_hazard_t": 2.3333333333333335,
+      "alert_t": 5.433,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00044",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 5.466666666666667,
+      "alert_t": 7.233,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00931",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.23333333333333334,
+      "alert_t": 5.967,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00449",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 7.051,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00537",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 7.281,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00042",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 3.856209150326797,
+      "alert_t": 6.301,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00162",
+      "ok": true,
+      "onset_t": 5.2,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.43333333333333335,
+      "alert_t": 7.967,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00467",
+      "ok": true,
+      "onset_t": 2.466666666666667,
+      "onset_reason": "predicted",
+      "first_hazard_t": 1.9666666666666666,
+      "alert_t": 7.833,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00108",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.933,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00682",
+      "ok": true,
+      "onset_t": 7.0,
+      "onset_reason": "predicted",
+      "first_hazard_t": 1.4333333333333333,
+      "alert_t": 6.833,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00253",
+      "ok": true,
+      "onset_t": 7.091503267973856,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.5555555555555556,
+      "alert_t": 6.661,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00098",
+      "ok": true,
+      "onset_t": 6.5359477124183005,
+      "onset_reason": "predicted",
+      "first_hazard_t": 2.9084967320261437,
+      "alert_t": 5.713,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00755",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 7.5,
+      "alert_t": 7.2,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00890",
+      "ok": true,
+      "onset_t": 5.852842809364549,
+      "onset_reason": "predicted",
+      "first_hazard_t": 1.7725752508361206,
+      "alert_t": 5.264,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00813",
+      "ok": true,
+      "onset_t": 6.8,
+      "onset_reason": "closing",
+      "first_hazard_t": 4.866666666666666,
+      "alert_t": 5.733,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00100",
+      "ok": true,
+      "onset_t": 6.9,
+      "onset_reason": "predicted",
+      "first_hazard_t": 6.9,
+      "alert_t": 6.766,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00670",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 7.2727272727272725,
+      "alert_t": 6.655,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00529",
+      "ok": true,
+      "onset_t": 6.098360655737705,
+      "onset_reason": "entering",
+      "first_hazard_t": 3.7704918032786887,
+      "alert_t": 6.824,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00957",
+      "ok": true,
+      "onset_t": 7.423728813559322,
+      "onset_reason": "closing",
+      "first_hazard_t": 7.423728813559322,
+      "alert_t": 6.951,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00076",
+      "ok": true,
+      "onset_t": 4.5,
+      "onset_reason": "predicted",
+      "first_hazard_t": 4.5,
+      "alert_t": 5.9,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00995",
+      "ok": true,
+      "onset_t": 7.133333333333334,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.7666666666666667,
+      "alert_t": 6.734,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00234",
+      "ok": true,
+      "onset_t": 6.166666666666667,
+      "onset_reason": "closing",
+      "first_hazard_t": 6.166666666666667,
+      "alert_t": 4.735,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00429",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 7.9,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00915",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.101,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00510",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.867,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00700",
+      "ok": true,
+      "onset_t": 5.618729096989967,
+      "onset_reason": "predicted",
+      "first_hazard_t": 3.645484949832776,
+      "alert_t": 6.332,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00135",
+      "ok": true,
+      "onset_t": 1.5666666666666667,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.4666666666666667,
+      "alert_t": 7.767,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00466",
+      "ok": true,
+      "onset_t": 7.166666666666667,
+      "onset_reason": "closing",
+      "first_hazard_t": 7.166666666666667,
+      "alert_t": 6.567,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "01037",
+      "ok": true,
+      "onset_t": 6.622073578595318,
+      "onset_reason": "closing",
+      "first_hazard_t": 3.879598662207358,
+      "alert_t": 5.498,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00055",
+      "ok": true,
+      "onset_t": 6.466666666666667,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.0,
+      "alert_t": 6.667,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00157",
+      "ok": true,
+      "onset_t": 6.568627450980392,
+      "onset_reason": "entering",
+      "first_hazard_t": 0.42483660130718953,
+      "alert_t": 6.302,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00072",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.06557377049180328,
+      "alert_t": 7.967,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00411",
+      "ok": true,
+      "onset_t": 5.4,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.9666666666666667,
+      "alert_t": 7.4,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00373",
+      "ok": true,
+      "onset_t": 6.903225806451613,
+      "onset_reason": "predicted",
+      "first_hazard_t": 6.903225806451613,
+      "alert_t": 6.58,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00469",
+      "ok": true,
+      "onset_t": 4.87719298245614,
+      "onset_reason": "predicted",
+      "first_hazard_t": 4.87719298245614,
+      "alert_t": 6.982,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00333",
+      "ok": true,
+      "onset_t": 0.0,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.0,
+      "alert_t": 5.333,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00580",
+      "ok": true,
+      "onset_t": 6.633333333333334,
+      "onset_reason": "closing",
+      "first_hazard_t": 2.1,
+      "alert_t": 6.633,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00873",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.122,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00958",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 6.287625418060201,
+      "alert_t": 6.53,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "01028",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 5.601,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00433",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 5.266666666666667,
+      "alert_t": 5.167,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00331",
+      "ok": true,
+      "onset_t": 6.950819672131147,
+      "onset_reason": "closing",
+      "first_hazard_t": 4.852459016393443,
+      "alert_t": 6.497,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00622",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.734,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00793",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 4.166,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00970",
+      "ok": true,
+      "onset_t": 7.475409836065574,
+      "onset_reason": "closing",
+      "first_hazard_t": 3.2459016393442623,
+      "alert_t": 5.124,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00745",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 7.3,
+      "alert_t": 7.1,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00671",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 5.535,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "01022",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 3.2,
+      "alert_t": 6.5,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00444",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 7.133333333333334,
+      "alert_t": 5.183,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00902",
+      "ok": true,
+      "onset_t": 7.533333333333333,
+      "onset_reason": "predicted",
+      "first_hazard_t": 2.566666666666667,
+      "alert_t": 6.433,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00849",
+      "ok": true,
+      "onset_t": 6.133333333333334,
+      "onset_reason": "predicted",
+      "first_hazard_t": 0.0,
+      "alert_t": 5.3,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00739",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 1.2745098039215685,
+      "alert_t": 5.517,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00321",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.16666666666666666,
+      "alert_t": 6.8,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00742",
+      "ok": true,
+      "onset_t": 7.483221476510067,
+      "onset_reason": "predicted",
+      "first_hazard_t": 3.1543624161073827,
+      "alert_t": 7.263,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00132",
+      "ok": true,
+      "onset_t": 7.233333333333333,
+      "onset_reason": "predicted",
+      "first_hazard_t": 1.9666666666666666,
+      "alert_t": 7.1,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00783",
+      "ok": true,
+      "onset_t": 7.647058823529411,
+      "onset_reason": "entering",
+      "first_hazard_t": 7.647058823529411,
+      "alert_t": 7.085,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00766",
+      "ok": true,
+      "onset_t": 6.133333333333334,
+      "onset_reason": "entering",
+      "first_hazard_t": 0.7,
+      "alert_t": 6.1,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00659",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 3.1372549019607843,
+      "alert_t": 7.053,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00798",
+      "ok": true,
+      "onset_t": 6.503267973856209,
+      "onset_reason": "predicted",
+      "first_hazard_t": 6.503267973856209,
+      "alert_t": 6.138,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00222",
+      "ok": true,
+      "onset_t": 6.533333333333333,
+      "onset_reason": "entering",
+      "first_hazard_t": 6.533333333333333,
+      "alert_t": 6.567,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00455",
+      "ok": true,
+      "onset_t": 6.764705882352941,
+      "onset_reason": "entering",
+      "first_hazard_t": 6.764705882352941,
+      "alert_t": 6.628,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00311",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 6.241830065359477,
+      "alert_t": 3.819,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00741",
+      "ok": true,
+      "onset_t": 6.1764705882352935,
+      "onset_reason": "closing",
+      "first_hazard_t": 2.9084967320261437,
+      "alert_t": 7.02,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00454",
+      "ok": true,
+      "onset_t": 3.7666666666666666,
+      "onset_reason": "predicted",
+      "first_hazard_t": 3.7666666666666666,
+      "alert_t": 5.8,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00687",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 6.045751633986928,
+      "alert_t": 6.072,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00483",
+      "ok": true,
+      "onset_t": 6.2,
+      "onset_reason": "closing",
+      "first_hazard_t": 6.2,
+      "alert_t": 6.917,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00180",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 7.033,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00471",
+      "ok": true,
+      "onset_t": 6.966666666666667,
+      "onset_reason": "closing",
+      "first_hazard_t": 6.666666666666667,
+      "alert_t": 6.434,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00564",
+      "ok": true,
+      "onset_t": 7.931034482758621,
+      "onset_reason": "closing",
+      "first_hazard_t": 7.931034482758621,
+      "alert_t": 5.177,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00437",
+      "ok": true,
+      "onset_t": 1.0666666666666667,
+      "onset_reason": "entering",
+      "first_hazard_t": 1.0666666666666667,
+      "alert_t": 6.833,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00872",
+      "ok": true,
+      "onset_t": 6.366666666666666,
+      "onset_reason": "predicted",
+      "first_hazard_t": 6.366666666666666,
+      "alert_t": 7.066,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00064",
+      "ok": true,
+      "onset_t": 5.033333333333333,
+      "onset_reason": "predicted",
+      "first_hazard_t": 1.6,
+      "alert_t": 7.4,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00415",
+      "ok": true,
+      "onset_t": 4.566666666666666,
+      "onset_reason": "predicted",
+      "first_hazard_t": 1.6333333333333333,
+      "alert_t": 6.634,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00598",
+      "ok": true,
+      "onset_t": 5.866666666666666,
+      "onset_reason": "closing",
+      "first_hazard_t": 1.7,
+      "alert_t": 6.967,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00784",
+      "ok": true,
+      "onset_t": 6.633333333333334,
+      "onset_reason": "closing",
+      "first_hazard_t": 3.1666666666666665,
+      "alert_t": 6.867,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00864",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.0,
+      "alert_t": 6.2,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00762",
+      "ok": true,
+      "onset_t": 6.0,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.1,
+      "alert_t": 5.9,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00458",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.166,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00874",
+      "ok": true,
+      "onset_t": 6.983606557377049,
+      "onset_reason": "closing",
+      "first_hazard_t": 6.983606557377049,
+      "alert_t": 6.268,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00594",
+      "ok": true,
+      "onset_t": 7.311475409836065,
+      "onset_reason": "closing",
+      "first_hazard_t": 2.459016393442623,
+      "alert_t": 6.987,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00860",
+      "ok": true,
+      "onset_t": 6.4,
+      "onset_reason": "closing",
+      "first_hazard_t": 3.7666666666666666,
+      "alert_t": 7.467,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00036",
+      "ok": true,
+      "onset_t": 2.8903654485049834,
+      "onset_reason": "entering",
+      "first_hazard_t": 1.7275747508305648,
+      "alert_t": 7.238,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00614",
+      "ok": true,
+      "onset_t": 6.733333333333333,
+      "onset_reason": "closing",
+      "first_hazard_t": 1.6666666666666667,
+      "alert_t": 5.567,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "01002",
+      "ok": true,
+      "onset_t": 1.6262975778546713,
+      "onset_reason": "entering",
+      "first_hazard_t": 1.6262975778546713,
+      "alert_t": 6.962,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00355",
+      "ok": true,
+      "onset_t": 7.033333333333333,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.0,
+      "alert_t": 7.2,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00164",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.867,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00201",
+      "ok": true,
+      "onset_t": 7.466666666666667,
+      "onset_reason": "closing",
+      "first_hazard_t": 5.166666666666667,
+      "alert_t": 7.635,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00640",
+      "ok": true,
+      "onset_t": 4.019607843137255,
+      "onset_reason": "closing",
+      "first_hazard_t": 4.019607843137255,
+      "alert_t": 5.225,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00106",
+      "ok": true,
+      "onset_t": 7.2,
+      "onset_reason": "predicted",
+      "first_hazard_t": 7.2,
+      "alert_t": 6.8,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00407",
+      "ok": true,
+      "onset_t": 6.5,
+      "onset_reason": "closing",
+      "first_hazard_t": 1.4,
+      "alert_t": 6.116,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00505",
+      "ok": true,
+      "onset_t": 6.233333333333333,
+      "onset_reason": "predicted",
+      "first_hazard_t": 6.233333333333333,
+      "alert_t": 7.267,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00523",
+      "ok": true,
+      "onset_t": 6.033333333333333,
+      "onset_reason": "predicted",
+      "first_hazard_t": 3.6666666666666665,
+      "alert_t": 5.833,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00690",
+      "ok": true,
+      "onset_t": 5.133333333333334,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.0,
+      "alert_t": 3.9,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00517",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 4.426229508196721,
+      "alert_t": 6.328,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00058",
+      "ok": true,
+      "onset_t": 7.352941176470588,
+      "onset_reason": "closing",
+      "first_hazard_t": 0.9803921568627451,
+      "alert_t": 6.922,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00290",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 1.0784313725490196,
+      "alert_t": 7.118,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00713",
+      "ok": true,
+      "onset_t": 2.4,
+      "onset_reason": "predicted",
+      "first_hazard_t": 2.4,
+      "alert_t": 6.934,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "01013",
+      "ok": true,
+      "onset_t": 6.7,
+      "onset_reason": "closing",
+      "first_hazard_t": 3.966666666666667,
+      "alert_t": 7.533,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00223",
+      "ok": true,
+      "onset_t": 5.3,
+      "onset_reason": "predicted",
+      "first_hazard_t": 3.8666666666666667,
+      "alert_t": 7.033,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00891",
+      "ok": true,
+      "onset_t": 4.333333333333333,
+      "onset_reason": "closing",
+      "first_hazard_t": 2.433333333333333,
+      "alert_t": 6.467,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00832",
+      "ok": true,
+      "onset_t": 3.1333333333333333,
+      "onset_reason": "predicted",
+      "first_hazard_t": 3.1333333333333333,
+      "alert_t": 7.0,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00573",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": 0.43333333333333335,
+      "alert_t": 6.169,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00000",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 6.376,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "01003",
+      "ok": true,
+      "onset_t": 6.666666666666666,
+      "onset_reason": "closing",
+      "first_hazard_t": 1.4379084967320261,
+      "alert_t": 5.453,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00501",
+      "ok": true,
+      "onset_t": 6.928104575163398,
+      "onset_reason": "closing",
+      "first_hazard_t": 1.8627450980392155,
+      "alert_t": 5.781,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00828",
+      "ok": true,
+      "onset_t": 4.766666666666667,
+      "onset_reason": "closing",
+      "first_hazard_t": 3.5,
+      "alert_t": 6.833,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00188",
+      "ok": true,
+      "onset_t": null,
+      "onset_reason": null,
+      "first_hazard_t": null,
+      "alert_t": 7.425,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00424",
+      "ok": true,
+      "onset_t": 6.5,
+      "onset_reason": "closing",
+      "first_hazard_t": 2.1,
+      "alert_t": 6.066,
+      "event_t": 8.0
+    },
+    {
+      "nexar_id": "00344",
+      "ok": true,
+      "onset_t": 6.852459016393443,
+      "onset_reason": "closing",
+      "first_hazard_t": 1.1147540983606556,
+      "alert_t": 5.515,
+      "event_t": 8.0
     }
-  ]
+  ],
+  "fetch_failed": []
 }
