@@ -76,8 +76,6 @@ let failedKey = null;
 let revealed = 0;
 let landed = false;
 let playing = false;
-let tracks = null;
-let tracksClip = null;
 
 /* ---------- boot ---------- */
 
@@ -182,14 +180,6 @@ function markActive() {
 
 async function load(id) {
   bundle = await getJSON(`cases/${encodeURIComponent(id)}.json`);
-  if (bundle.clip_id !== tracksClip) {
-    tracksClip = bundle.clip_id;
-    try {
-      tracks = await getJSON(`tracks/${encodeURIComponent(bundle.clip_id)}.json`);
-    } catch {
-      tracks = null;
-    }
-  }
   try {
     grid = await getJSON(`cf/${encodeURIComponent(id)}.json`);
   } catch {
@@ -395,41 +385,21 @@ function drawOverlay() {
     ctx.lineWidth = 1.5;
     ctx.stroke();
   }
-  const now = video.currentTime;
-  const scene = bundle.scene || {};
-  const struck = scene.target_object_id;
-  const onsets = Object.fromEntries((scene.hazards || []).map((h) => [String(h.object_id), h.onset_t]));
-  ctx.font = '600 12px -apple-system, BlinkMacSystemFont, Helvetica Neue, sans-serif';
-  const box = ([l, t, r, b], sx, sy, color, width, label) => {
-    ctx.strokeStyle = color;
-    ctx.lineWidth = width;
-    ctx.strokeRect(l * sx, t * sy, (r - l) * sx, (b - t) * sy);
-    if (label) {
-      ctx.fillStyle = color;
-      ctx.fillText(label, l * sx, Math.max(t * sy - 7, 13));
-    }
-  };
-  /* Every tracked vehicle faintly; each turns amber when it became a hazard; the struck one is labelled. */
-  if (tracks && tracks.width) {
-    const f = Math.round(now * tracks.fps);
-    const sx = canvas.width / tracks.width;
-    const sy = canvas.height / tracks.height;
-    for (const [oid, dets] of Object.entries(tracks.objects || {})) {
-      let near = null;
-      for (const d of dets) if (!near || Math.abs(d[0] - f) < Math.abs(near[0] - f)) near = d;
-      if (!near || Math.abs(near[0] - f) > 3) continue;
-      const hazard = oid in onsets && now >= onsets[oid];
-      if (oid === String(struck)) box(near.slice(1), sx, sy, hazard ? '#ff453a' : 'rgba(255,255,255,0.95)', 2, 'Struck vehicle');
-      else box(near.slice(1), sx, sy, hazard ? '#ffb340' : 'rgba(255,255,255,0.35)', hazard ? 1.5 : 1, null);
-    }
-    return;
-  }
   const boxes = bundle.target_boxes || [];
   if (!boxes.length || !bundle.fps || !bundle.width) return;
-  const f = Math.round(now * bundle.fps);
+  const f = Math.round(video.currentTime * bundle.fps);
   const nearest = boxes.reduce((a, b) => (Math.abs(b.frame - f) < Math.abs(a.frame - f) ? b : a));
   if (Math.abs(nearest.frame - f) > 2) return;
-  box(nearest.box, canvas.width / bundle.width, canvas.height / bundle.height, revealed > 0 ? '#ff453a' : 'rgba(255,255,255,0.9)', 2, 'Struck vehicle');
+  const sx = canvas.width / bundle.width;
+  const sy = canvas.height / bundle.height;
+  const [l, t, r, b] = nearest.box;
+  const hazard = revealed > 0;
+  ctx.strokeStyle = hazard ? '#ff453a' : 'rgba(255,255,255,0.9)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(l * sx, t * sy, (r - l) * sx, (b - t) * sy);
+  ctx.fillStyle = ctx.strokeStyle;
+  ctx.font = '600 12px -apple-system, BlinkMacSystemFont, Helvetica Neue, sans-serif';
+  ctx.fillText(hazard ? 'Hazard' : 'Tracked vehicle', l * sx, Math.max(t * sy - 7, 13));
 }
 
 /* ---------- verdict ---------- */

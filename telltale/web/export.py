@@ -140,23 +140,6 @@ def publish_video_case(bundle: dict, out: Path, clips_dir: Path = CLIPS) -> None
     index_path.write_text(json.dumps(sorted(index, key=lambda entry: entry["clip_id"])))
 
 
-TRACK_STEP = 2  # every second frame: smooth enough to draw at 30 fps, half the size
-
-
-def clip_tracks(sam: dict) -> dict:
-    """Every SAM-tracked vehicle for one clip, compact for the page: [frame, left, top, right, bottom] in pixels."""
-    return {
-        "fps": sam["fps"],
-        "width": sam["width"],
-        "height": sam["height"],
-        "objects": {
-            oid: [[d["frame"], *(round(v) for v in d["box"])] for d in dets if d["frame"] % TRACK_STEP == 0]
-            or [[d["frame"], *(round(v) for v in d["box"])] for d in dets[:1]]
-            for oid, dets in sam["objects"].items()
-        },
-    }
-
-
 PAGES = ("index.html", "clips.html")
 ASSETS = ("app.js", "clips.js", "site.js", "style.css")
 
@@ -187,13 +170,12 @@ def export_site(
     thumbs_dir: Path = CACHE / "thumbs",
     video_bundles_dir: Path = SHOWCASE_BUNDLES,
     uploads_dir: Path | None = None,
-    sam_dir: Path = CACHE / "sam",
 ) -> Path:
     """Copy the pages, write every investigated case and every video-only case, plus their clips."""
     if out.exists():
         shutil.rmtree(out)
     shutil.copytree(STATIC, out)
-    for sub in ("cases", "cf", "reports", "media", "thumbs", "tracks"):
+    for sub in ("cases", "cf", "reports", "media", "thumbs"):
         (out / sub).mkdir()
     index = []
     for path in sorted(bundles_dir.glob("*.json")):
@@ -211,12 +193,6 @@ def export_site(
             shutil.copytree(thumbs_dir / case_id, out / "thumbs" / case_id)
         index.append({"case_id": case_id, "clip_id": bundle["clip_id"], "profile": bundle["profile"]})
     (out / "cases.json").write_text(json.dumps(index))
-    for clip_id in sorted({entry["clip_id"] for entry in index}):
-        if not SAFE_ID.match(clip_id):
-            raise ValueError(f"unsafe clip id {clip_id!r}")
-        if (sam_dir / f"{clip_id}.json").exists():
-            sam = json.loads((sam_dir / f"{clip_id}.json").read_text())
-            (out / "tracks" / f"{clip_id}.json").write_text(json.dumps(clip_tracks(sam)))
     (out / "videos.json").write_text("[]")
     for path in sorted(video_bundles_dir.glob("*.json")):
         publish_video_case(json.loads(path.read_text()), out, clips_dir)
