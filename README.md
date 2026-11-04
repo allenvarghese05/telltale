@@ -187,7 +187,7 @@ least-squares slope with a significance test ([`telltale/video/trend.py`](tellta
 \operatorname{SE}(\hat\beta) = \frac{\hat\sigma}{\sqrt{\sum_i (t_i - \bar t)^2}}
 ```
 
-4. Report the slope as real only if $\lvert\hat\beta\rvert > 3\,\operatorname{SE}(\hat\beta)$.
+4. Report the slope as real only if $\lvert\hat\beta\rvert > 3 \cdot \operatorname{SE}(\hat\beta)$.
 
 ### 3. Time to collision from a single camera
 
@@ -259,7 +259,7 @@ Brake pressure, and with it deceleration, builds as a first-order lag from the b
 a(t) = a_{\max}\left(1 - e^{-(t - t_r)/\tau}\right), \qquad t \ge t_r
 ```
 
-The time to reach 60% of full pressure is therefore $\tau \ln 2.5 \approx 0.916\,\tau$. That is how a measured
+The time to reach 60% of full pressure is therefore $\tau \ln 2.5 \approx 0.916 \tau$. That is how a measured
 actuation latency converts back to a time constant: $\hat\tau = L_{\text{actuation}} / \ln 2.5$.
 
 The crash itself is one-dimensional. The ego car starts $d_0$ metres behind a lead vehicle moving at constant speed
