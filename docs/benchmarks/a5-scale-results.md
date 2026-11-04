@@ -187,14 +187,21 @@ not by benchmark results**, as `bee03f6` was. On cand14 a taxi strikes our right
 turns across our path; scoring A picked some small car ahead as the struck vehicle on both. Neither clip is in the
 benchmark pool. The change adds a lane-agnostic test, `collision_course`: a vehicle whose time to collision from the
 growth of its box *height* stays under 2 s for 9 frames while it touches the ego lane. Height, because an
-edge-clipped or turning vehicle's width stops tracking its distance. The test is used twice:
+edge-clipped or turning vehicle's width stops tracking its distance: on cand14 the taxi's box is clipped at the
+right edge from 6.98 s and its width stops growing, while its height keeps growing until impact. An overtaking
+vehicle alongside (cand56's pickup) is the opposite case: its width grows as more of it slides into view, while its
+height stays flat. The classic constant-bearing rule (a vehicle whose bearing holds steady while it grows is on a
+collision course) was tried and rejected. It assumes a point-sized ego vehicle; on a wide car a side impact does
+not hold a constant bearing, and the taxi's bearing drifted outward all the way to impact. The test is used twice:
 
 - **Struck vehicle:** a vehicle also qualifies if it was on a collision course at any point in the 2 s before
   impact, beside the "last second mostly in our lane" rule of `bee03f6`. cand56 still picks the car ahead (3);
   cand14 now picks the taxi (4); cand60 the turning car (2).
 - **Hazard onset:** `collision_course` is a fallback reason, used only for a vehicle that no lane test
-  (entering, predicted, closing) flags. Making it an equal reason, earliest wins, moved the onset on three of the
-  four demo clips, which would have invalidated their committed live runs, so it was not done. On the four demo
+  (entering, predicted, closing) flags. Making it an equal reason, earliest wins, was tried and rejected: it moved
+  the onset *earlier* on three of the four demo clips (cand36, 37, 38), which would have invalidated their
+  committed live runs, and earlier onsets would also worsen the detector's existing early bias against the human
+  labels (see [The early bias, re-examined](#the-early-bias-re-examined)). On the four demo
   clips the struck vehicle, onset time and reason are unchanged, and a test pins that.
 
 **The headline stays scoring A.** C is reported as a new row; nothing above was re-scored or rewritten.
