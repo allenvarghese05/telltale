@@ -41,7 +41,7 @@ about the model: the agent genuinely decides, and code proves or blocks every st
 | Benchmark | Result |
 |---|---|
 | Danger onset against Nexar's human labels, 40 unseen clips, no per-clip tuning | Median absolute error 0.905 s, with the middle half of clips between 0.545 s and 1.387 s. Spread of the signed error 1.947 s. 80% within 2 s, 53% within 1 s. Onset found on 30 of 40 clips (75%). |
-| Agent alone against agent plus checker, 19 blind cases | Muse Wonder's verdict was correct on 19 of 19. The independent recomputation agreed on all 19, and no wrong verdict was verified. Of 165 claims, 153 were verified, 12 blocked and 0 single-source. |
+| Agent alone against agent plus checker, 19 blind cases | Muse Wonder's verdict was correct on 19 of 19. The independent recomputation agreed on all 19, and no wrong verdict was verified. Of 172 claims, 171 were verified, 1 blocked and 0 single-source. |
 | Synthetic attribution consistency, six failure stories, car and truck profiles | Accuracy 1.000 on 162 cases, every story 1.000. Every dropout case correctly returned "inconclusive", and no other case did. 30 cases were not generated (below). |
 
 **Danger onset is the only row with an outside answer key, and its median is not quotable on its own.** Against
@@ -51,18 +51,19 @@ one. On average Telltale fires 0.861 s earlier than the human annotator, and the
 analysis, including the five worst clips and why, is in [`docs/benchmarks/a5-results.md`](docs/benchmarks/a5-results.md).
 The raw rows are in [`video_bench.json`](video_bench.json). No threshold was tuned in response to them.
 
-**What the 12 blocked claims were.** Every claim in [`agent_bench.json`](agent_bench.json) can be re-checked
-offline from the committed runs, and none of the 12 blocked claims stated anything false. Each number in them
-matches the checker's own value. They were blocked because they could not be proven from what they cited:
+**What was blocked, and what changed.** Every claim in [`agent_bench.json`](agent_bench.json) can be
+re-checked offline from the committed runs. The one blocked claim is true. It says the witness's "daylight" was
+confirmed by a recheck "at 6-8 s", and the recheck did run over 6 to 8 seconds and did answer daylight. But that
+window was an argument to a tool, not a fact in the evidence, so the checker could not reproduce the number and
+blocked the sentence. The checker is strict by design: a true statement it cannot prove does not reach a report.
 
-- 7 stated a correct interval or threshold in prose, but cited only the timestamps it came from, or used a fact
-  the claim did not cite. This is the checker enforcing citation, not catching an invention.
-- 4 tried to confirm the witness's description with a second look. The recheck tool answers yes, no or unclear,
-  so "daylight" can never equal "yes". This is a limit of our tool, and it is also why no claim is single-source:
-  the corroboration path cannot currently succeed.
-- 1 wrote its check wrongly, comparing a raw timestamp to the threshold instead of the interval.
+An earlier run of the same 19 cases blocked 12 of 165 claims (commit `280254d`). None of those 12 was false
+either. Most stated a correct interval in prose while citing only the timestamps it came from. The rest tried to
+confirm the witness with a recheck tool that could only answer yes, no or unclear, so "daylight" could never
+match. Both were fixed on our side, in the agent's instructions and in the recheck tool (commit `2a23728`). The
+checker did not change between the two runs.
 
-The 16 demo cases on the hosted page show the same pattern: 13 of 142 claims blocked, all of them true.
+The 16 demo cases on the hosted page are from before that fix: 13 of 142 claims blocked there, all of them true.
 
 **This run did not test catching a wrong verdict.** The agent was right on all 19 cases, so the checker never
 had a wrong verdict to withhold. That path is covered by the test suite (`test_analyze_rejects_a_wrong_agent_verdict`
