@@ -152,9 +152,9 @@ Everything in this section is deterministic code. No model computes any of it.
 Each SAM box is reduced to its bottom-centre point $(x_c, y_b)$. The ego-lane edges are lines in the image, so at
 the box's own depth $y_b$ the lane spans $x_L(y_b)$ to $x_R(y_b)$. Lane position is measured in lane widths:
 
-```math
+$$
 u = \frac{x_c - x_L(y_b)}{x_R(y_b) - x_L(y_b)}
-```
+$$
 
 $u = 0$ is the left edge, $u = 1$ the right edge, and values outside $[0, 1]$ are outside the lane. Dividing by the
 lane width at the vehicle's depth cancels perspective, so the same thresholds apply to a car 10 m away and one 60 m
@@ -170,17 +170,17 @@ least-squares slope with a significance test ([`telltale/video/trend.py`](tellta
 1. Median-filter the series over 5 frames, which deletes single-frame spikes instead of smearing them.
 2. Over a 15-frame window, fit a line:
 
-```math
+$$
 \hat\beta = \frac{\sum_i (t_i - \bar t)(y_i - \bar y)}{\sum_i (t_i - \bar t)^2}
-```
+$$
 
 3. Estimate the noise from the raw residuals $r_i$ with the median absolute deviation, so one outlier cannot inflate it:
 
-```math
+$$
 \hat\sigma = 1.4826 \cdot \mathrm{median}\big(\lvert r_i - \mathrm{median}(r)\rvert\big),
 \qquad
 \mathrm{SE}(\hat\beta) = \frac{\hat\sigma}{\sqrt{\sum_i (t_i - \bar t)^2}}
-```
+$$
 
 4. Report the slope as real only if $\lvert\hat\beta\rvert > 3 \cdot \mathrm{SE}(\hat\beta)$.
 
@@ -190,9 +190,9 @@ A vehicle's apparent width $w$ is inversely proportional to its distance $Z$, so
 $\dot w / w = -\dot Z / Z$. Time to collision is distance over closing speed, which gives the scale-expansion
 formula ([`telltale/video/ttc.py`](telltale/video/ttc.py)):
 
-```math
+$$
 \mathrm{TTC} = \frac{Z}{-\dot Z} = \frac{w}{\dot w}
-```
+$$
 
 $w$ is the fitted width and $\dot w$ the significant slope from step 2. If the slope is not significant, TTC is
 infinite: the vehicle is not approaching.
@@ -210,14 +210,14 @@ Every tracked vehicle is tested three ways, and the earliest test to fire is the
 
 For `predicted`, time to lane crossing uses the lateral rate $\dot u$ from step 2:
 
-```math
+$$
 \mathrm{TLC} =
 \begin{cases}
 \dfrac{u - 1}{-\dot u} & u > 1,\ \dot u < 0 \\[2ex]
 \dfrac{-u}{\dot u} & u < 0,\ \dot u > 0 \\[1ex]
 \infty & \text{otherwise}
 \end{cases}
-```
+$$
 
 Each test also requires a finite TTC, so a car travelling alongside in the next lane never counts as a hazard.
 
@@ -228,31 +228,31 @@ impact trigger ($t_{\text{video}} = t_{\text{CAN}} + \Delta_{\text{CAN}}$). The 
 matching its ego-speed trace to CAN wheel speed, with a grid search over $\pm 1.5$ s in 2 ms steps
 ([`telltale/evidence/align.py`](telltale/evidence/align.py)):
 
-```math
+$$
 \Delta_{\text{ADAS}} = \arg\min_{\delta} \; \frac{1}{N} \sum_{k} \big(v_{\text{CAN}}(t_k) - v_{\text{ADAS}}(t_k - \delta)\big)^2
-```
+$$
 
 ### 6. The four latencies
 
 With every timestamp in video seconds, and $t_0$ the video's hazard onset:
 
-```math
+$$
 \begin{aligned}
 L_{\text{perception}} &= t_{\text{first seen}} - t_0 \\
 L_{\text{command}}    &= t_{\text{brake request}} - t_{\text{first seen}} \\
 L_{\text{actuation}}  &= t_{p \ge 0.6\,p_{\max}} - t_{\text{brake request}} \\
 M_{\text{handoff}}    &= t_{\text{impact}} - t_{\text{handoff}}
 \end{aligned}
-```
+$$
 
 ### 7. Brakes and the crash simulation
 
 Brake pressure, and with it deceleration, builds as a first-order lag from the brake request $t_r$
 ([`telltale/physics/sim.py`](telltale/physics/sim.py)):
 
-```math
+$$
 a(t) = a_{\max}\left(1 - e^{-(t - t_r)/\tau}\right), \qquad t \ge t_r
-```
+$$
 
 The time to reach 60% of full pressure is therefore $\tau \ln 2.5 \approx 0.916 \tau$. That is how a measured
 actuation latency converts back to a time constant: $\hat\tau = L_{\text{actuation}} / \ln 2.5$.
@@ -260,11 +260,11 @@ actuation latency converts back to a time constant: $\hat\tau = L_{\text{actuati
 The crash itself is one-dimensional. The ego car starts $d_0$ metres behind a lead vehicle moving at constant speed
 $v_o$, and the simulation integrates with a 1 ms step:
 
-```math
+$$
 \dot v_e = -a(t), \quad v_e \ge 0, \qquad
 g(t) = d_0 + v_o t - x_e(t), \qquad
 \text{contact when } g(t) \le 0
-```
+$$
 
 The starting gap comes from the ADAS radar track: the range at first detection, plus how far the gap closed between
 hazard onset and that detection, $d_0 = r_{\text{first seen}} + \Delta v \cdot L_{\text{perception}}$.
@@ -281,10 +281,10 @@ These tolerances are illustrative engineering values, not regulatory limits
 
 Each step's excess over its tolerance $\theta$ is
 
-```math
+$$
 e_k = L_k - \theta_k \quad (k \in \{\text{perception}, \text{command}, \text{actuation}\}), \qquad
 e_{\text{handoff}} = 1.5\,\text{s} - M_{\text{handoff}}
-```
+$$
 
 and the verdict follows a fixed order ([`telltale/physics/attribution.py`](telltale/physics/attribution.py)):
 
@@ -336,9 +336,9 @@ Its assumptions, stated plainly:
 The second assumption can be tested against the footage. Under v1, ego braking can only delay contact, so the time
 from onset to impact must be at least the time to collision measured at onset:
 
-```math
+$$
 T = t_{\text{imp}} - t_0 \;\ge\; \mathrm{TTC}_0 \qquad \text{(v1, constant-speed target)}
-```
+$$
 
 On the three rear-end demo clips:
 
@@ -358,21 +358,21 @@ Written for the truck profile; the car is identical with $v_{\text{car}}$ in pla
 
 **Dynamic relative velocity.** The target vehicle may decelerate, so the closing speed changes over time:
 
-```math
+$$
 v_{\text{target}}(t) = \max\left(v_{\text{target},0} - a_{\text{target}}\, t,\ 0\right), \qquad
 \Delta v(t) = v_{\text{truck}}(t) - v_{\text{target}}(t)
-```
+$$
 
 **Dynamic gap closure.** The gap integrates the changing closing speed, and contact is its first zero:
 
-```math
+$$
 g(t) = d_0 - \int_0^t \Delta v(s)\, ds, \qquad t_{\text{contact}} = \min\{\, t : g(t) \le 0 \,\}
-```
+$$
 
 **Pneumatic pressure rise.** Air brakes add a transport delay $t_d$, while the brake signal and air travel down the
 lines, before the pressure rise with time constant $\tau_{\text{air}}$. v1 folds both into one lag. v2 separates them:
 
-```math
+$$
 p(t) =
 \begin{cases}
 0 & t < t_r + t_d \\[1ex]
@@ -380,22 +380,22 @@ p_{\max}\left(1 - e^{-(t - t_r - t_d)/\tau_{\text{air}}}\right) & t \ge t_r + t_
 \end{cases}
 \qquad
 a_{\text{truck}}(t) = a_{\max}\,\frac{p(t)}{p_{\max}}
-```
+$$
 
 **Anchoring to three video measurements instead of two.**
 
-```math
+$$
 d_0 = \Delta v_0 \cdot \mathrm{TTC}_0, \qquad g(T) = 0
-```
+$$
 
 With the truck's trajectory fixed by the injected latencies and $\Delta v_0$ drawn at random as in v1, the target's
 deceleration $a_{\text{target}} \ge 0$ is solved by bisection so that contact lands on the filmed impact. When the
 footage allows it, with $`T \ge \mathrm{TTC}_0`$, the solution is $`a_{\text{target}} = 0`$ and v2 reduces to v1. Ignoring
 ego braking, the required deceleration is roughly
 
-```math
+$$
 a_{\text{target}} \approx \frac{2\,\Delta v_0\,(\mathrm{TTC}_0 - T)}{T^2}
-```
+$$
 
 which for `cand37` is about 4.4 m/s² at $\Delta v_0 = 4$ m/s: a firm stop by the target vehicle, physically
 plausible. Because $\mathrm{TTC}_0$ is itself an estimate, v2 should carry it as an interval rather than a point.
@@ -410,9 +410,9 @@ Each claim carries its evidence IDs and a machine-checkable assertion, for examp
 `{"op": "diff", "a": "AV:first_seen_t", "b": "VID:hazard_onset_t", "equals": 1.36}`. Supported operations are
 `value`, `diff`, `gt`, `lt`, `is`, `agree` and `same`. A number matches when
 
-```math
+$$
 \lvert x - y \rvert \le \max(0.05,\ 0.05\,\lvert y \rvert)
-```
+$$
 
 with unit conversions for milliseconds, km/h and mph. The rules in
 [`telltale/verify/checker.py`](telltale/verify/checker.py):
