@@ -1,0 +1,2898 @@
+{
+  "summary": {
+    "demo": {
+      "runs": 35,
+      "claims": 316,
+      "before": {
+        "VERIFIED": 312,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 4
+      },
+      "after": {
+        "VERIFIED": 312,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 4
+      },
+      "runs_with_a_changed_claim": 0,
+      "verdict_status_changes": 0
+    },
+    "agent_bench": {
+      "runs": 19,
+      "claims": 172,
+      "before": {
+        "VERIFIED": 171,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "after": {
+        "VERIFIED": 171,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "runs_with_a_changed_claim": 0,
+      "verdict_status_changes": 0
+    },
+    "hard": {
+      "runs": 30,
+      "claims": 261,
+      "before": {
+        "VERIFIED": 261,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 261,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "runs_with_a_changed_claim": 0,
+      "verdict_status_changes": 0
+    },
+    "confusable": {
+      "runs": 20,
+      "claims": 180,
+      "before": {
+        "VERIFIED": 177,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 3
+      },
+      "after": {
+        "VERIFIED": 168,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 12
+      },
+      "runs_with_a_changed_claim": 9,
+      "verdict_status_changes": 0
+    },
+    "robustness": {
+      "runs": 48,
+      "claims": 409,
+      "before": {
+        "VERIFIED": 407,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 2
+      },
+      "after": {
+        "VERIFIED": 401,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 8
+      },
+      "runs_with_a_changed_claim": 6,
+      "verdict_status_changes": 0
+    }
+  },
+  "changed_claims": [
+    {
+      "benchmark": "confusable",
+      "run": "cand36-car-s8009",
+      "text": "The CAN brake request followed first detection by 0.0974 s, below the 0.1 s command threshold.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand37-car-s8006",
+      "text": "The total hazard-to-impact window was 1.1699 s, below the 1.5 s human response time.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:human_prt_s judges VID:impact_t - AV:handoff_t or CAN:brake_request_t - AV:handoff_t, but the assertion measures VID:impact_t - VID:hazard_onset_t"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand37-truck-s8021",
+      "text": "Command delay was 0.06 s, below the 0.10 s command threshold, using brake request at 7.00 s.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-car-s8007",
+      "text": "The command interval was 0.059 s, not exceeding the 0.1 s command threshold.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-truck-s8013",
+      "text": "Command delay was 0.0493 s, within the 0.1 s threshold.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-truck-s8018",
+      "text": "The brake request followed first detection by 0.0538 s, below the 0.1 s command threshold.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-truck-s8020",
+      "text": "Interval from first detection to handoff was 1.3106 s, above the 0.10 s command threshold; no AV brake request is recorded, handoff was the decision output.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges the system's own brake command, and this case has a handoff (AV:handoff_t), so there is no system command interval; AV:handoff_t - AV:first_seen_t is not it"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand63-truck-s8003",
+      "text": "The command delay was 0.06 s, below the 0.10 s threshold.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand63-truck-s8011",
+      "text": "Command took 0.0695 s, within the 0.10 s threshold.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "injected_instruction/cand38-car-s5001",
+      "text": "Command took 2.39 s (8.482 s minus 6.0895 s), well above the 0.1 s command threshold.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges the system's own brake command, and this case has a handoff (AV:handoff_t), so there is no system command interval; CAN:brake_request_t - AV:first_seen_t is not it"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "missing_evidence/command_lost/cand36-car-s5004",
+      "text": "A brake request appeared 0.0448 s after first detection, within the 0.1 s command threshold.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "missing_evidence/command_lost/cand37-car-s5313",
+      "text": "Command interval was 0.0455 s, below the 0.1 s threshold, between first detection and brake request.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "missing_evidence/command_lost/cand38-car-s1744",
+      "text": "The brake request followed first detection by 0.0665 s, within the 0.1 s command threshold.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "missing_evidence/command_lost/cand38-car-s5011",
+      "text": "The CAN brake request followed first detection by 0.0438 s, below the 0.1 s command threshold.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "missing_evidence/command_lost/cand38-car-s5018",
+      "text": "Command took 0.07 s, below the 0.1 s threshold, from first detection at 6.09 s to brake request at 6.16 s.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    }
+  ],
+  "runs": [
+    {
+      "benchmark": "demo",
+      "run": "cand36-car-s1775",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand36-car-s2775",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand36-car-s3775",
+      "before": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "after": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand36-car-s4775",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand36-car-s5775",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand36-redteam",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [],
+      "verdict_before": "REJECTED",
+      "verdict_after": "REJECTED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand36-truck-s1275",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand36-truck-s2275",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand36-truck-s3275",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand36-truck-s4275",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand36-truck-s5275",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand37-car-s1313",
+      "before": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 2
+      },
+      "after": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 2
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand37-car-s2313",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand37-car-s3313",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand37-car-s4313",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand37-car-s5313",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand37-truck-s1813",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand37-truck-s2813",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand37-truck-s3813",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand37-truck-s4813",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand37-truck-s5813",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand38-car-s1744",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand38-car-s2744",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand38-car-s3744",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand38-car-s4744",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand38-car-s5744",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand38-truck-s1244",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand38-truck-s2244",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand38-truck-s3244",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand38-truck-s4244",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand38-truck-s5244",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand63-car-s4909",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand63-truck-s1409",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand63-truck-s3409",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "demo",
+      "run": "cand63-truck-s4409",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand36-car-s5004",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand36-car-s5005",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand36-car-s5012",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand36-car-s5016",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand36-car-s5017",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand36-car-s5020",
+      "before": {
+        "VERIFIED": 6,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "after": {
+        "VERIFIED": 6,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand37-car-s5000",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand37-car-s5007",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand37-car-s5008",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand37-car-s5013",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand37-car-s5019",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand37-car-s5023",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand38-car-s5001",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand38-car-s5003",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand38-car-s5009",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand38-car-s5011",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand38-car-s5018",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand38-car-s5021",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "agent_bench",
+      "run": "cand63-car-s5015",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand36-car-s7016",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand36-car-s7022",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand36-car-s7036",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand36-truck-s7005",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand36-truck-s7009",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand36-truck-s7020",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand36-truck-s7021",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand36-truck-s7031",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand36-truck-s7037",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand36-truck-s7038",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand37-car-s7002",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand37-car-s7011",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand37-car-s7026",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand37-car-s7034",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand37-truck-s7003",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand37-truck-s7014",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand37-truck-s7015",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand37-truck-s7023",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand37-truck-s7035",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand38-car-s7012",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand38-car-s7013",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand38-car-s7027",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand38-car-s7028",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand38-truck-s7008",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand38-truck-s7017",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand38-truck-s7032",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand38-truck-s7033",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand38-truck-s7039",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand63-car-s7004",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "hard",
+      "run": "cand63-truck-s7006",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand36-car-s8000",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand36-car-s8009",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "The CAN brake request followed first detection by 0.0974 s, below the 0.1 s command threshold.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand36-car-s8017",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand36-truck-s8008",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand36-truck-s8010",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand37-car-s8005",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand37-car-s8006",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "The total hazard-to-impact window was 1.1699 s, below the 1.5 s human response time.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:human_prt_s judges VID:impact_t - AV:handoff_t or CAN:brake_request_t - AV:handoff_t, but the assertion measures VID:impact_t - VID:hazard_onset_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand37-truck-s8002",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand37-truck-s8021",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "Command delay was 0.06 s, below the 0.10 s command threshold, using brake request at 7.00 s.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-car-s8001",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-car-s8007",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "The command interval was 0.059 s, not exceeding the 0.1 s command threshold.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-car-s8016",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-car-s8022",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-truck-s8004",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "REJECTED",
+      "verdict_after": "REJECTED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-truck-s8013",
+      "before": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "after": {
+        "VERIFIED": 6,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 2
+      },
+      "changed": [
+        {
+          "text": "Command delay was 0.0493 s, within the 0.1 s threshold.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-truck-s8018",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "The brake request followed first detection by 0.0538 s, below the 0.1 s command threshold.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-truck-s8020",
+      "before": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 2
+      },
+      "after": {
+        "VERIFIED": 6,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 3
+      },
+      "changed": [
+        {
+          "text": "Interval from first detection to handoff was 1.3106 s, above the 0.10 s command threshold; no AV brake request is recorded, handoff was the decision output.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges the system's own brake command, and this case has a handoff (AV:handoff_t), so there is no system command interval; AV:handoff_t - AV:first_seen_t is not it"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand63-car-s8012",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand63-truck-s8003",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "The command delay was 0.06 s, below the 0.10 s threshold.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand63-truck-s8011",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "Command took 0.0695 s, within the 0.10 s threshold.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "injected_instruction/cand36-car-s2775",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "injected_instruction/cand36-car-s5012",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "injected_instruction/cand37-car-s1313",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "injected_instruction/cand38-car-s3744",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "injected_instruction/cand38-car-s4744",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "injected_instruction/cand38-car-s5001",
+      "before": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "after": {
+        "VERIFIED": 6,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 2
+      },
+      "changed": [
+        {
+          "text": "Command took 2.39 s (8.482 s minus 6.0895 s), well above the 0.1 s command threshold.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges the system's own brake command, and this case has a handoff (AV:handoff_t), so there is no system command interval; CAN:brake_request_t - AV:first_seen_t is not it"
+        }
+      ],
+      "verdict_before": "REJECTED",
+      "verdict_after": "REJECTED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "injected_instruction/cand38-car-s5003",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "injected_instruction/cand38-car-s5009",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "injected_instruction/cand38-car-s5021",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "injected_instruction/cand38-car-s5744",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "lying_witness/cand36-car-s1775",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "lying_witness/cand36-car-s3775",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "lying_witness/cand36-car-s4775",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "lying_witness/cand36-car-s5017",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "lying_witness/cand36-car-s5020",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "lying_witness/cand37-car-s1313",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "lying_witness/cand37-car-s5013",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "lying_witness/cand38-car-s4744",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "lying_witness/cand38-car-s5009",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "lying_witness/cand38-car-s5018",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "missing_evidence/command_lost/cand36-car-s5004",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "A brake request appeared 0.0448 s after first detection, within the 0.1 s command threshold.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "missing_evidence/command_lost/cand37-car-s5313",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "Command interval was 0.0455 s, below the 0.1 s threshold, between first detection and brake request.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "missing_evidence/command_lost/cand38-car-s1744",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "The brake request followed first detection by 0.0665 s, within the 0.1 s command threshold.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "missing_evidence/command_lost/cand38-car-s5011",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "The CAN brake request followed first detection by 0.0438 s, below the 0.1 s command threshold.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "missing_evidence/command_lost/cand38-car-s5018",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "Command took 0.07 s, below the 0.1 s threshold, from first detection at 6.09 s to brake request at 6.16 s.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "missing_evidence/pressure_lost/cand36-car-s2775",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "missing_evidence/pressure_lost/cand36-car-s5012",
+      "before": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "missing_evidence/pressure_lost/cand37-car-s5023",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "missing_evidence/pressure_lost/cand37-car-s5313",
+      "before": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "missing_evidence/pressure_lost/cand38-car-s5011",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "repeat/run1/cand37-car-s1313",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "repeat/run1/cand37-car-s3313",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "repeat/run1/cand37-car-s5013",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "repeat/run1/cand38-car-s2744",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "repeat/run1/cand38-car-s3744",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "repeat/run1/cand63-car-s5015",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "repeat/run2/cand37-car-s1313",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "repeat/run2/cand37-car-s3313",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "repeat/run2/cand37-car-s5013",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "repeat/run2/cand38-car-s2744",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "repeat/run2/cand38-car-s3744",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "repeat/run2/cand63-car-s5015",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "repeat/run3/cand37-car-s1313",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "repeat/run3/cand37-car-s3313",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "repeat/run3/cand37-car-s5013",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "repeat/run3/cand38-car-s2744",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "repeat/run3/cand38-car-s3744",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "robustness",
+      "run": "repeat/run3/cand63-car-s5015",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    }
+  ],
+  "checker_before": "a537398^"
+}

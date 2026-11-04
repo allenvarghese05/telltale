@@ -1,0 +1,17 @@
+{
+  "story": "handoff_in_time_slow_driver",
+  "profile": "truck",
+  "v_ego0": 21.732729888693274,
+  "v_other": 13.863453143827812,
+  "d0": 16.517611887466323,
+  "first_seen": 0.19929848631612132,
+  "brake_request": 2.127354913051562,
+  "handoff": 0.29033945828138025,
+  "tau": 0.3823927493917016,
+  "contact_t": 2.099,
+  "can_skew": -0.0382741018056586,
+  "av_skew": -0.6798968851335805,
+  "label": "NO_FAULT_FOUND",
+  "adas_events": "auto",
+  "expected_label": "NO_FAULT_FOUND"
+}

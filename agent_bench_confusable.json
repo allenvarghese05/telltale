@@ -1,0 +1,2141 @@
+{
+  "summary": {
+    "n": 20,
+    "agent_accuracy": 0.95,
+    "independent_accuracy": 1.0,
+    "agent_wrong": 1,
+    "agent_wrong_flagged": 1,
+    "verified_but_wrong": 0,
+    "claims_total": 180,
+    "claims_blocked": 12,
+    "claims_uncorroborated": 0,
+    "no_verdict": 0,
+    "by_profile": {
+      "car": {
+        "n": 10,
+        "agent_correct": 10
+      },
+      "truck": {
+        "n": 10,
+        "agent_correct": 9
+      }
+    },
+    "by_family": {
+      "adas": {
+        "n": 11,
+        "agent_correct": 11
+      },
+      "handoff": {
+        "n": 9,
+        "agent_correct": 8
+      }
+    },
+    "claims_blocked_interval_meaning": 9
+  },
+  "rows": [
+    {
+      "case": "cand36-car-s8000",
+      "profile": "car",
+      "story": "handoff_in_time_slow_driver",
+      "family": "handoff",
+      "expected": "NO_FAULT_FOUND",
+      "excess": {
+        "actuation": -0.13,
+        "handoff": -0.128,
+        "perception": -0.1811
+      },
+      "agent": "NO_FAULT_FOUND",
+      "independent": "NO_FAULT_FOUND",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": [],
+      "claims": [
+        {
+          "text": "Perception took 0.1189 s, below the 0.3 s perception threshold.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The AV handoff occurred 0.1198 s after first detection.",
+          "evidence": [
+            "AV:handoff_t",
+            "AV:first_seen_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The handoff margin was 1.628 s, above the 1.5 s human perception-response time.",
+          "evidence": [
+            "VID:impact_t",
+            "AV:handoff_t",
+            "PROFILE:human_prt_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake actuation took 0.12 s, below the 0.25 s actuation threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The CAN brake request arrived 0.3017 s after impact.",
+          "evidence": [
+            "CAN:brake_request_t",
+            "VID:impact_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The CAN brake request occurred 1.9297 s after the AV handoff.",
+          "evidence": [
+            "CAN:brake_request_t",
+            "AV:handoff_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "With nominal perception 0.2 s, nominal command 0.05 s, and nominal tau 0.15 s, the counterfactual simulation reported no contact and a minimum gap of 8.3051 m.",
+          "evidence": [
+            "CF:run1_contact",
+            "CF:run1_min_gap_m",
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The witness lighting observation was daylight, and the independent recheck also saw daylight.",
+          "evidence": [
+            "WIT:lighting",
+            "WIT2:lighting"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The witness road-surface observation was dry, and the independent recheck also saw dry.",
+          "evidence": [
+            "WIT:road_surface",
+            "WIT2:road_surface"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The brake log is complete.",
+          "evidence": [
+            "DATA:brake_log_complete"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand38-car-s8001",
+      "profile": "car",
+      "story": "handoff_quick_driver",
+      "family": "handoff",
+      "expected": "LATE_HANDOFF",
+      "excess": {
+        "actuation": -0.09,
+        "handoff": 0.3233,
+        "perception": -0.0591
+      },
+      "agent": "LATE_HANDOFF",
+      "independent": "LATE_HANDOFF",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": [],
+      "claims": [
+        {
+          "text": "The struck vehicle became a hazard at 5.9 s, closing within the ego lane.",
+          "evidence": [
+            "VID:hazard_onset_t",
+            "VID:hazard_onset_reason"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Perception took 0.2409 s from hazard onset to first detection, below the 0.3 s perception threshold.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The handoff occurred 0.6824 s after first detection.",
+          "evidence": [
+            "AV:handoff_t",
+            "AV:first_seen_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Impact occurred 1.1767 s after the handoff, below the 1.5 s human perception-response threshold.",
+          "evidence": [
+            "VID:impact_t",
+            "AV:handoff_t",
+            "PROFILE:human_prt_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake pressure was reached 0.16 s after the CAN brake request, below the 0.25 s actuation threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The brake log was complete in the decision window.",
+          "evidence": [
+            "DATA:brake_log_complete"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The counterfactual using nominal perception 0.2 s, nominal command 0.05 s, and nominal tau 0.15 s avoided contact, leaving a minimum gap of 8.7979 m.",
+          "evidence": [
+            "CF:run1_contact",
+            "CF:run1_min_gap_m",
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The independent witness recheck reported daylight, matching the original lighting observation.",
+          "evidence": [
+            "WIT:lighting",
+            "WIT2:lighting"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The primary contributing factor was the late handoff, because only 1.1767 s remained from handoff to impact, below the 1.5 s human perception-response threshold, while nominal braking in the counterfactual avoided contact.",
+          "evidence": [
+            "VID:impact_t",
+            "AV:handoff_t",
+            "PROFILE:human_prt_s",
+            "CF:run1_contact"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand37-truck-s8002",
+      "profile": "truck",
+      "story": "handoff_quick_driver",
+      "family": "handoff",
+      "expected": "LATE_HANDOFF",
+      "excess": {
+        "actuation": -0.17,
+        "handoff": 0.5546,
+        "perception": -0.1431
+      },
+      "agent": "LATE_HANDOFF",
+      "independent": "LATE_HANDOFF",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": [],
+      "claims": [
+        {
+          "text": "The struck vehicle was a closing hazard at 6.8301 s, with time-to-collision 1.9217 s at onset.",
+          "evidence": [
+            "VID:hazard_onset_reason",
+            "VID:hazard_onset_t",
+            "VID:ttc_at_onset_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Perception took 0.1569 s from hazard onset to first detection, below the 0.3 s perception threshold.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The handoff occurred at 7.0546 s, 0.0676 s after first detection at 6.987 s.",
+          "evidence": [
+            "AV:handoff_t",
+            "AV:first_seen_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The handoff at 7.0546 s left 0.9454 s until impact at 8.0 s, below the 1.5 s human perception-response time.",
+          "evidence": [
+            "AV:handoff_t",
+            "VID:impact_t",
+            "PROFILE:human_prt_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The CAN brake request at 7.5219 s followed the handoff by 0.4673 s.",
+          "evidence": [
+            "CAN:brake_request_t",
+            "AV:handoff_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake actuation took 0.28 s from brake request to pressure reached, below the 0.45 s actuation threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "With nominal perception 0.2 s, nominal command 0.05 s, and nominal tau 0.35 s, the counterfactual avoided contact and kept a minimum gap of 0.2186 m.",
+          "evidence": [
+            "CF:run1_contact",
+            "CF:run1_min_gap_m",
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The witness reported the other vehicle's brake lights were illuminated, and the independent recheck reported the same observation.",
+          "evidence": [
+            "WIT:other_vehicle_brake_lights",
+            "WIT2:other_vehicle_brake_lights"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The brake log was complete, with a maximum brake-frame gap of 0.02 s.",
+          "evidence": [
+            "DATA:brake_log_complete",
+            "DATA:max_brake_gap_s"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand63-truck-s8003",
+      "profile": "truck",
+      "story": "adas_events_lost_actuation",
+      "family": "adas",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "excess": {
+        "actuation": 1.05,
+        "perception": -0.1368
+      },
+      "agent": "BRAKE_ACTUATION_LATE",
+      "independent": "BRAKE_ACTUATION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "blocked": [
+        {
+          "text": "The command delay was 0.06 s, below the 0.10 s threshold.",
+          "reasons": [
+            "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+          ]
+        }
+      ],
+      "claims": [
+        {
+          "text": "Hazard onset was at 2.72 s when the struck vehicle was entering the ego lane.",
+          "evidence": [
+            "VID:hazard_onset_t",
+            "VID:hazard_onset_reason"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The perception delay was 0.16 s, below the 0.30 s threshold.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The command delay was 0.06 s, below the 0.10 s threshold.",
+          "evidence": [
+            "CAN:brake_request_t",
+            "AV:first_seen_t",
+            "PROFILE:command_threshold_s"
+          ],
+          "status": "BLOCKED"
+        },
+        {
+          "text": "The brake actuation delay was 1.50 s, above the 0.45 s threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Impact occurred 5.28 s after hazard onset.",
+          "evidence": [
+            "VID:impact_t",
+            "VID:hazard_onset_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The brake log is complete, so the actuation timing is not inconclusive.",
+          "evidence": [
+            "DATA:brake_log_complete"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "With nominal perception 0.20 s, nominal command 0.05 s and nominal tau 0.35 s, the counterfactual avoided contact with a minimum gap of 14.62 m.",
+          "evidence": [
+            "CF:run1_contact",
+            "CF:run1_min_gap_m",
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The witness and the independent recheck agree that the other vehicle had no turn signal.",
+          "evidence": [
+            "WIT:other_vehicle_turn_signal",
+            "WIT2:other_vehicle_turn_signal"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake actuation is the primary contributing factor because its 1.50 s delay exceeds the 0.45 s threshold while perception and command were within their thresholds.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand38-truck-s8004",
+      "profile": "truck",
+      "story": "handoff_in_time_slow_driver",
+      "family": "handoff",
+      "expected": "NO_FAULT_FOUND",
+      "excess": {
+        "actuation": -0.11,
+        "handoff": -0.3082,
+        "perception": -0.0992
+      },
+      "agent": "LATE_HANDOFF",
+      "independent": "NO_FAULT_FOUND",
+      "status": "REJECTED",
+      "counts": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": [],
+      "claims": [
+        {
+          "text": "The struck vehicle became a hazard at 5.9 s by closing, with the AV first seeing it at 6.1008 s.",
+          "evidence": [
+            "VID:hazard_onset_t",
+            "VID:hazard_onset_reason",
+            "AV:first_seen_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Perception took 0.2008 s, at or below the 0.3 s threshold.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The AV handed off at 6.1918 s, which is 0.091 s after first seeing the vehicle at 6.1008 s.",
+          "evidence": [
+            "AV:handoff_t",
+            "AV:first_seen_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The handoff margin to impact at 8.0 s was 1.8082 s, above the 1.5 s human PRT threshold.",
+          "evidence": [
+            "VID:impact_t",
+            "AV:handoff_t",
+            "PROFILE:human_prt_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake actuation took 0.34 s, below the 0.45 s threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The brake request at 8.042 s came 1.8502 s after handoff at 6.1918 s, showing the driver response consumed the handoff margin before braking.",
+          "evidence": [
+            "CAN:brake_request_t",
+            "AV:handoff_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake log is complete, so the timing analysis is not inconclusive.",
+          "evidence": [
+            "DATA:brake_log_complete"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "With nominal perception 0.2 s, command 0.05 s and tau 0.35 s the counterfactual avoided contact, so the crash was avoidable in that replay.",
+          "evidence": [
+            "CF:run1_contact",
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Witness lighting daylight was corroborated on recheck.",
+          "evidence": [
+            "WIT:lighting",
+            "WIT2:lighting"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand37-car-s8005",
+      "profile": "car",
+      "story": "adas_brake_then_handoff",
+      "family": "adas",
+      "expected": "UNAVOIDABLE",
+      "excess": {
+        "actuation": -0.11,
+        "handoff": 0.6968,
+        "perception": -0.0591
+      },
+      "agent": "UNAVOIDABLE",
+      "independent": "UNAVOIDABLE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": [],
+      "claims": [
+        {
+          "text": "The struck vehicle became a hazard at 6.83 s while closing within the ego lane, with time-to-collision 1.92 s at onset.",
+          "evidence": [
+            "VID:hazard_onset_t",
+            "VID:hazard_onset_reason",
+            "VID:ttc_at_onset_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The system took 0.24 s to perceive the hazard, below the 0.30 s it is allowed.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The command took 0.04 s after first detection, below the 0.10 s it is allowed.",
+          "evidence": [
+            "AV:brake_request_t",
+            "AV:first_seen_t",
+            "PROFILE:command_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake actuation took 0.14 s from CAN brake request to pressure reached, below the 0.25 s it is allowed.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The handoff margin was 0.80 s before impact at 8.00 s, below the human perception-response time of 1.50 s, but the but-for counterfactual controls the verdict.",
+          "evidence": [
+            "VID:impact_t",
+            "AV:handoff_t",
+            "PROFILE:human_prt_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "With nominal timings of 0.20 s perception, 0.05 s command and 0.15 s brake tau, the counterfactual still results in contact, with impact speed 3.56 m/s and minimum gap -0.00 m.",
+          "evidence": [
+            "CF:run1_contact",
+            "CF:run1_impact_speed_mps",
+            "CF:run1_min_gap_m",
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The brake log is complete, so the case is not inconclusive.",
+          "evidence": [
+            "DATA:brake_log_complete"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The ego speed at hazard onset was 26.44 m/s, supporting the short available response window.",
+          "evidence": [
+            "CAN:speed_at_onset_mps"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand37-car-s8006",
+      "profile": "car",
+      "story": "handoff_quick_driver",
+      "family": "handoff",
+      "expected": "LATE_HANDOFF",
+      "excess": {
+        "actuation": -0.13,
+        "handoff": 0.6122,
+        "perception": -0.0724
+      },
+      "agent": "LATE_HANDOFF",
+      "independent": "LATE_HANDOFF",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "blocked": [
+        {
+          "text": "The total hazard-to-impact window was 1.1699 s, below the 1.5 s human response time.",
+          "reasons": [
+            "interval meaning: PROFILE:human_prt_s judges VID:impact_t - AV:handoff_t or CAN:brake_request_t - AV:handoff_t, but the assertion measures VID:impact_t - VID:hazard_onset_t"
+          ]
+        }
+      ],
+      "claims": [
+        {
+          "text": "The brake log is complete.",
+          "evidence": [
+            "DATA:brake_log_complete"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The struck vehicle became a hazard by closing within the ego lane.",
+          "evidence": [
+            "VID:hazard_onset_reason"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Perception took 0.2275 s, below the 0.3 s perception threshold.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The total hazard-to-impact window was 1.1699 s, below the 1.5 s human response time.",
+          "evidence": [
+            "VID:impact_t",
+            "VID:hazard_onset_t",
+            "PROFILE:human_prt_s"
+          ],
+          "status": "BLOCKED"
+        },
+        {
+          "text": "The handoff left only 0.8878 s to impact, below the 1.5 s human response time, making the late handoff the primary contributing factor.",
+          "evidence": [
+            "VID:impact_t",
+            "AV:handoff_t",
+            "PROFILE:human_prt_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "A brake request followed the handoff by 0.4697 s.",
+          "evidence": [
+            "CAN:brake_request_t",
+            "AV:handoff_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake actuation took 0.12 s after the brake request, below the 0.25 s actuation threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Both witness observations reported 'yes' for the other vehicle's brake lights.",
+          "evidence": [
+            "WIT:other_vehicle_brake_lights",
+            "WIT2:other_vehicle_brake_lights"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Using nominal perception 0.2 s, nominal command 0.05 s, and nominal tau 0.15 s, the counterfactual avoided contact with a 1.744 m minimum gap.",
+          "evidence": [
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s",
+            "CF:run1_contact",
+            "CF:run1_min_gap_m"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand38-car-s8007",
+      "profile": "car",
+      "story": "adas_events_lost_actuation",
+      "family": "adas",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "excess": {
+        "actuation": 0.39,
+        "perception": -0.077
+      },
+      "agent": "BRAKE_ACTUATION_LATE",
+      "independent": "BRAKE_ACTUATION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "blocked": [
+        {
+          "text": "The command interval was 0.059 s, not exceeding the 0.1 s command threshold.",
+          "reasons": [
+            "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+          ]
+        }
+      ],
+      "claims": [
+        {
+          "text": "Impact occurred at 8.0 s, 2.1 s after hazard onset at 5.9 s.",
+          "evidence": [
+            "VID:impact_t",
+            "VID:hazard_onset_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The hazard onset reason was closing.",
+          "evidence": [
+            "VID:hazard_onset_reason"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The perception interval was 0.223 s, not exceeding the 0.3 s perception threshold.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The command interval was 0.059 s, not exceeding the 0.1 s command threshold.",
+          "evidence": [
+            "CAN:brake_request_t",
+            "AV:first_seen_t",
+            "PROFILE:command_threshold_s"
+          ],
+          "status": "BLOCKED"
+        },
+        {
+          "text": "The brake actuation interval was 0.64 s, exceeding the 0.25 s actuation threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "With nominal perception 0.2 s, nominal command 0.05 s, and nominal tau 0.15 s, the counterfactual produced no contact and a minimum gap of 4.8399 m.",
+          "evidence": [
+            "CF:run1_contact",
+            "CF:run1_min_gap_m",
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The brake log was complete.",
+          "evidence": [
+            "DATA:brake_log_complete"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The road surface was reported as dry and corroborated as dry on independent recheck.",
+          "evidence": [
+            "WIT:road_surface",
+            "WIT2:road_surface"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand36-truck-s8008",
+      "profile": "truck",
+      "story": "adas_brake_then_handoff",
+      "family": "adas",
+      "expected": "UNAVOIDABLE",
+      "excess": {
+        "actuation": -0.11,
+        "handoff": 0.5473,
+        "perception": -0.1644
+      },
+      "agent": "UNAVOIDABLE",
+      "independent": "UNAVOIDABLE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": [],
+      "claims": [
+        {
+          "text": "Impact occurred 1.8667 s after hazard onset, from 6.1333 s to 8.0 s.",
+          "evidence": [
+            "VID:impact_t",
+            "VID:hazard_onset_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Perception delay was 0.1356 s, below the 0.3 s threshold.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Command delay was 0.0578 s, below the 0.1 s threshold.",
+          "evidence": [
+            "AV:brake_request_t",
+            "AV:first_seen_t",
+            "PROFILE:command_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake actuation delay was 0.34 s, below the 0.45 s threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Handoff occurred 0.9527 s before impact, below the 1.5 s human response time.",
+          "evidence": [
+            "VID:impact_t",
+            "AV:handoff_t",
+            "PROFILE:human_prt_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The brake log is complete, so the case is not inconclusive on data completeness.",
+          "evidence": [
+            "DATA:brake_log_complete"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "With nominal perception 0.2 s, nominal command 0.05 s, and nominal tau 0.35 s, the counterfactual still reports contact as true, so nominal timing would not have avoided the crash.",
+          "evidence": [
+            "CF:run1_contact",
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The witness reported the road surface was dry, and the independent recheck also reported dry.",
+          "evidence": [
+            "WIT:road_surface",
+            "WIT2:road_surface"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand36-car-s8009",
+      "profile": "car",
+      "story": "adas_events_lost_perception",
+      "family": "adas",
+      "expected": "PERCEPTION_LATE",
+      "excess": {
+        "actuation": -0.13,
+        "perception": 1.071
+      },
+      "agent": "PERCEPTION_LATE",
+      "independent": "PERCEPTION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "blocked": [
+        {
+          "text": "The CAN brake request followed first detection by 0.0974 s, below the 0.1 s command threshold.",
+          "reasons": [
+            "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+          ]
+        }
+      ],
+      "claims": [
+        {
+          "text": "Impact occurred at 8.0 s, 1.8667 s after hazard onset at 6.1333 s.",
+          "evidence": [
+            "VID:impact_t",
+            "VID:hazard_onset_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Perception took 1.371 s from hazard onset to first detection, above the 0.3 s perception threshold.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The CAN brake request followed first detection by 0.0974 s, below the 0.1 s command threshold.",
+          "evidence": [
+            "CAN:brake_request_t",
+            "AV:first_seen_t",
+            "PROFILE:command_threshold_s"
+          ],
+          "status": "BLOCKED"
+        },
+        {
+          "text": "Brake pressure was reached 0.12 s after the CAN brake request, below the 0.25 s actuation threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The hazard was classified as closing, with time-to-collision 1.9427 s at onset.",
+          "evidence": [
+            "VID:hazard_onset_reason",
+            "VID:ttc_at_onset_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "At first detection the range was 1.674 m and the closing speed was 4.12 m/s.",
+          "evidence": [
+            "AV:range_at_first_seen_m",
+            "AV:rel_speed_mps"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The brake log is complete, with a maximum brake-frame gap of 0.02 s.",
+          "evidence": [
+            "DATA:brake_log_complete",
+            "DATA:max_brake_gap_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "With nominal perception 0.2 s, nominal command 0.05 s and nominal brake tau 0.15 s, the counterfactual resulted in no contact, an impact speed of 0.0 m/s and a minimum gap of 4.6973 m.",
+          "evidence": [
+            "CF:run1_contact",
+            "CF:run1_impact_speed_mps",
+            "CF:run1_min_gap_m",
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The perception interval is the primary contributing factor, as it is the stage exceeding its profile threshold while the later brake-request and pressure intervals did not exceed theirs.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s",
+            "PROFILE:command_threshold_s",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand36-truck-s8010",
+      "profile": "truck",
+      "story": "handoff_quick_driver",
+      "family": "handoff",
+      "expected": "LATE_HANDOFF",
+      "excess": {
+        "actuation": -0.11,
+        "handoff": 0.3419,
+        "perception": -0.1699
+      },
+      "agent": "LATE_HANDOFF",
+      "independent": "LATE_HANDOFF",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": [],
+      "claims": [
+        {
+          "text": "The hazard onset reason was closing.",
+          "evidence": [
+            "VID:hazard_onset_reason"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Perception took 0.13 s from hazard onset to first detection, within the 0.30 s perception threshold.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The AV issued the handoff 0.58 s after first detection.",
+          "evidence": [
+            "AV:handoff_t",
+            "AV:first_seen_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Only 1.16 s remained from handoff to impact, below the 1.50 s human perception-response time.",
+          "evidence": [
+            "VID:impact_t",
+            "AV:handoff_t",
+            "PROFILE:human_prt_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The CAN brake request followed the handoff by 0.64 s.",
+          "evidence": [
+            "CAN:brake_request_t",
+            "AV:handoff_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake actuation took 0.34 s from brake request to pressure reached, within the 0.45 s actuation threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake pressure was reached only 0.18 s before impact.",
+          "evidence": [
+            "VID:impact_t",
+            "CAN:pressure_reached_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The brake log was complete.",
+          "evidence": [
+            "DATA:brake_log_complete"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Using nominal perception 0.20 s, nominal command 0.05 s and nominal brake tau 0.35 s, the counterfactual produced no contact and a minimum gap of 3.64 m.",
+          "evidence": [
+            "CF:run1_contact",
+            "CF:run1_min_gap_m",
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "An initial witness report of a dry road surface was corroborated on independent recheck.",
+          "evidence": [
+            "WIT:road_surface",
+            "WIT2:road_surface"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand63-truck-s8011",
+      "profile": "truck",
+      "story": "adas_events_lost_perception",
+      "family": "adas",
+      "expected": "PERCEPTION_LATE",
+      "excess": {
+        "actuation": -0.13,
+        "perception": 1.2709
+      },
+      "agent": "PERCEPTION_LATE",
+      "independent": "PERCEPTION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "blocked": [
+        {
+          "text": "Command took 0.0695 s, within the 0.10 s threshold.",
+          "reasons": [
+            "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+          ]
+        }
+      ],
+      "claims": [
+        {
+          "text": "At 2.72 s the struck vehicle entered the ego lane, marking hazard onset.",
+          "evidence": [
+            "VID:hazard_onset_t",
+            "VID:hazard_onset_reason"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Impact occurred at 8.00 s.",
+          "evidence": [
+            "VID:impact_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Perception took 1.5709 s, above the 0.30 s threshold.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Command took 0.0695 s, within the 0.10 s threshold.",
+          "evidence": [
+            "CAN:brake_request_t",
+            "AV:first_seen_t",
+            "PROFILE:command_threshold_s"
+          ],
+          "status": "BLOCKED"
+        },
+        {
+          "text": "Brake actuation took 0.32 s, within the 0.45 s threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The brake log is complete, so the brake timing chain is conclusive.",
+          "evidence": [
+            "DATA:brake_log_complete"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Independent recheck agreed that the other vehicle's brake lights were illuminated.",
+          "evidence": [
+            "WIT:other_vehicle_brake_lights",
+            "WIT2:other_vehicle_brake_lights"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "With nominal perception 0.20 s, command 0.05 s, and brake tau 0.35 s, the replay avoided contact with a 20.95 m minimum gap.",
+          "evidence": [
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s",
+            "CF:run1_contact",
+            "CF:run1_min_gap_m"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Late perception is the primary contributing factor: it was the timing interval above its threshold, and nominal timing avoided contact.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s",
+            "CF:run1_contact"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand63-car-s8012",
+      "profile": "car",
+      "story": "handoff_quick_driver",
+      "family": "handoff",
+      "expected": "LATE_HANDOFF",
+      "excess": {
+        "actuation": -0.11,
+        "handoff": 0.8056,
+        "perception": -0.0665
+      },
+      "agent": "LATE_HANDOFF",
+      "independent": "LATE_HANDOFF",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": [],
+      "claims": [
+        {
+          "text": "The struck vehicle became a hazard by entering the ego lane at 2.7213 s.",
+          "evidence": [
+            "VID:hazard_onset_t",
+            "VID:hazard_onset_reason"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The system took 0.2335 s to notice the vehicle, below the 0.3 s perception threshold.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The handoff occurred at 7.3056 s, 4.3508 s after the vehicle was first seen at 2.9548 s.",
+          "evidence": [
+            "AV:handoff_t",
+            "AV:first_seen_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Impact occurred at 8.0 s, leaving a handoff margin of 0.6944 s, below the 1.5 s human response allowance.",
+          "evidence": [
+            "VID:impact_t",
+            "AV:handoff_t",
+            "PROFILE:human_prt_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake actuation took 0.14 s from brake request to target pressure, below the 0.25 s threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake pressure reached its target at 8.0817 s, after the 8.0 s impact.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "VID:impact_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Both witness checks reported no turn signal from the other vehicle.",
+          "evidence": [
+            "WIT:other_vehicle_turn_signal",
+            "WIT2:other_vehicle_turn_signal"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The brake log is complete.",
+          "evidence": [
+            "DATA:brake_log_complete"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "With nominal timing of 0.2 s perception, 0.05 s command, and 0.15 s brake tau, the replay avoided contact with a minimum gap of 57.7809 m.",
+          "evidence": [
+            "CF:run1_contact",
+            "CF:run1_min_gap_m",
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The primary contributing factor was the late handoff: the 0.6944 s margin was below the 1.5 s allowance.",
+          "evidence": [
+            "VID:impact_t",
+            "AV:handoff_t",
+            "PROFILE:human_prt_s"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand38-truck-s8013",
+      "profile": "truck",
+      "story": "adas_events_lost_perception",
+      "family": "adas",
+      "expected": "PERCEPTION_LATE",
+      "excess": {
+        "actuation": -0.11,
+        "perception": 1.1927
+      },
+      "agent": "PERCEPTION_LATE",
+      "independent": "PERCEPTION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 6,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 2
+      },
+      "blocked": [
+        {
+          "text": "Hazard onset was at 5.9 s when the struck vehicle was already in the ego lane with time-to-collision under 2 s, as shown by the closing hazard reason, and impact occurred at 8 s.",
+          "reasons": [
+            "number 2 in the text is not supported by the cited evidence"
+          ]
+        },
+        {
+          "text": "Command delay was 0.0493 s, within the 0.1 s threshold.",
+          "reasons": [
+            "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+          ]
+        }
+      ],
+      "claims": [
+        {
+          "text": "Hazard onset was at 5.9 s when the struck vehicle was already in the ego lane with time-to-collision under 2 s, as shown by the closing hazard reason, and impact occurred at 8 s.",
+          "evidence": [
+            "VID:hazard_onset_t",
+            "VID:hazard_onset_reason",
+            "VID:impact_t"
+          ],
+          "status": "BLOCKED"
+        },
+        {
+          "text": "The system took 1.4927 s to notice the vehicle, above the 0.3 s it is allowed.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Command delay was 0.0493 s, within the 0.1 s threshold.",
+          "evidence": [
+            "CAN:brake_request_t",
+            "AV:first_seen_t",
+            "PROFILE:command_threshold_s"
+          ],
+          "status": "BLOCKED"
+        },
+        {
+          "text": "Brake actuation delay was 0.34 s, within the 0.45 s threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake log is complete, so the timing verdict is not inconclusive.",
+          "evidence": [
+            "DATA:brake_log_complete"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "With nominal timing of 0.2 s perception, 0.05 s command, and 0.35 s tau, the counterfactual shows no contact and a minimum gap of 1.2614 m, so the crash was avoidable.",
+          "evidence": [
+            "CF:run1_contact",
+            "CF:run1_min_gap_m",
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Witness reported lighting daylight, corroborated by independent recheck.",
+          "evidence": [
+            "WIT:lighting",
+            "WIT2:lighting"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Witness reported road surface dry, corroborated by independent recheck.",
+          "evidence": [
+            "WIT:road_surface",
+            "WIT2:road_surface"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand38-car-s8016",
+      "profile": "car",
+      "story": "adas_brake_then_handoff",
+      "family": "adas",
+      "expected": "UNAVOIDABLE",
+      "excess": {
+        "actuation": -0.11,
+        "handoff": 0.4487,
+        "perception": -0.1141
+      },
+      "agent": "UNAVOIDABLE",
+      "independent": "UNAVOIDABLE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": [],
+      "claims": [
+        {
+          "text": "The struck vehicle became a hazard at 5.9 s in video time.",
+          "evidence": [
+            "VID:hazard_onset_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The hazard test that fired was closing.",
+          "evidence": [
+            "VID:hazard_onset_reason"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The perception interval was 0.1859 s, below the 0.3 s perception threshold.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The command interval was 0.0548 s, below the 0.1 s command threshold.",
+          "evidence": [
+            "AV:brake_request_t",
+            "AV:first_seen_t",
+            "PROFILE:command_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The brake actuation interval was 0.14 s, below the 0.25 s actuation threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The handoff left 1.0513 s before impact, below the 1.5 s human response threshold.",
+          "evidence": [
+            "VID:impact_t",
+            "AV:handoff_t",
+            "PROFILE:human_prt_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The brake log was complete.",
+          "evidence": [
+            "DATA:brake_log_complete"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "A second independent look also reported daylight, agreeing with the witness lighting observation.",
+          "evidence": [
+            "WIT:lighting",
+            "WIT2:lighting"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "With nominal perception 0.2 s, nominal command 0.05 s, and nominal tau 0.15 s, the replay still produced contact.",
+          "evidence": [
+            "CF:run1_contact",
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The nominal-timing replay had an impact speed of 2.201 m/s.",
+          "evidence": [
+            "CF:run1_impact_speed_mps"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand36-car-s8017",
+      "profile": "car",
+      "story": "adas_brake_then_handoff",
+      "family": "adas",
+      "expected": "UNAVOIDABLE",
+      "excess": {
+        "actuation": -0.11,
+        "handoff": 0.5953,
+        "perception": -0.1725
+      },
+      "agent": "UNAVOIDABLE",
+      "independent": "UNAVOIDABLE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": [],
+      "claims": [
+        {
+          "text": "Hazard onset was at 6.1333 s, classified as closing, with time-to-collision 1.9427 s at onset.",
+          "evidence": [
+            "VID:hazard_onset_t",
+            "VID:hazard_onset_reason",
+            "VID:ttc_at_onset_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Perception took 0.1276 s from hazard onset to first detection, below the 0.3 s perception threshold.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Command took 0.0651 s from first detection to brake request, below the 0.1 s command threshold.",
+          "evidence": [
+            "AV:brake_request_t",
+            "AV:first_seen_t",
+            "PROFILE:command_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake actuation took 0.14 s from CAN brake request to pressure reached, below the 0.25 s actuation threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The handoff margin was 0.9047 s from handoff to impact, below the 1.5 s human response reference.",
+          "evidence": [
+            "VID:impact_t",
+            "AV:handoff_t",
+            "PROFILE:human_prt_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "With nominal perception 0.2 s, nominal command 0.05 s and nominal tau 0.15 s, the replay still produced contact, with impact speed 5.0819 m/s and minimum gap -0.005 m.",
+          "evidence": [
+            "CF:run1_contact",
+            "CF:run1_impact_speed_mps",
+            "CF:run1_min_gap_m",
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The witness and independent recheck both reported daylight.",
+          "evidence": [
+            "WIT:lighting",
+            "WIT2:lighting"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The witness and independent recheck both reported a dry road surface.",
+          "evidence": [
+            "WIT:road_surface",
+            "WIT2:road_surface"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The brake log was complete, with maximum brake gap 0.02 s.",
+          "evidence": [
+            "DATA:brake_log_complete",
+            "DATA:max_brake_gap_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Because the nominal-timing replay still results in contact, the primary contributing factor classification is unavoidable under the but-for test.",
+          "evidence": [
+            "CF:run1_contact",
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand38-truck-s8018",
+      "profile": "truck",
+      "story": "adas_events_lost_actuation",
+      "family": "adas",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "excess": {
+        "actuation": 0.77,
+        "perception": -0.1118
+      },
+      "agent": "BRAKE_ACTUATION_LATE",
+      "independent": "BRAKE_ACTUATION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "blocked": [
+        {
+          "text": "The brake request followed first detection by 0.0538 s, below the 0.1 s command threshold.",
+          "reasons": [
+            "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+          ]
+        }
+      ],
+      "claims": [
+        {
+          "text": "The struck vehicle became a hazard at 5.9 s, with the hazard onset reason recorded as closing.",
+          "evidence": [
+            "VID:hazard_onset_t",
+            "VID:hazard_onset_reason"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Perception took 0.1882 s from hazard onset to first detection, below the 0.3 s perception threshold.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The brake request followed first detection by 0.0538 s, below the 0.1 s command threshold.",
+          "evidence": [
+            "CAN:brake_request_t",
+            "AV:first_seen_t",
+            "PROFILE:command_threshold_s"
+          ],
+          "status": "BLOCKED"
+        },
+        {
+          "text": "Brake actuation took 1.22 s from brake request to pressure reached, above the 0.45 s actuation threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Impact occurred at 8.0 s.",
+          "evidence": [
+            "VID:impact_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The brake log is complete, so the timing record is not inconclusive.",
+          "evidence": [
+            "DATA:brake_log_complete"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "With nominal perception 0.2 s, nominal command 0.05 s and nominal brake tau 0.35 s, the counterfactual avoided contact with a minimum gap of 2.2808 m.",
+          "evidence": [
+            "CF:run1_contact",
+            "CF:run1_min_gap_m",
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Lighting was daylight, corroborated by an independent witness recheck.",
+          "evidence": [
+            "WIT:lighting",
+            "WIT2:lighting"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake pressure was reached at 7.362 s, after the brake request, making brake actuation the delayed layer identified in the timeline.",
+          "evidence": [
+            "CAN:pressure_reached_t"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand38-truck-s8020",
+      "profile": "truck",
+      "story": "handoff_quick_driver",
+      "family": "handoff",
+      "expected": "LATE_HANDOFF",
+      "excess": {
+        "actuation": -0.15,
+        "handoff": 0.8131,
+        "perception": -0.1975
+      },
+      "agent": "LATE_HANDOFF",
+      "independent": "LATE_HANDOFF",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 6,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 3
+      },
+      "blocked": [
+        {
+          "text": "Interval from first detection to handoff was 1.3106 s, above the 0.10 s command threshold; no AV brake request is recorded, handoff was the decision output.",
+          "reasons": [
+            "interval meaning: PROFILE:command_threshold_s judges the system's own brake command, and this case has a handoff (AV:handoff_t), so there is no system command interval; AV:handoff_t - AV:first_seen_t is not it"
+          ]
+        },
+        {
+          "text": "Counterfactual with nominal perception 0.2 s, nominal command 0.05 s and nominal tau 0.35 s avoided contact (contact false).",
+          "reasons": [
+            "assertion could not be evaluated: CF:run1_contact is not numeric"
+          ]
+        },
+        {
+          "text": "Brake log is complete (true), so the case is not inconclusive for missing brake data.",
+          "reasons": [
+            "assertion could not be evaluated: DATA:brake_log_complete is not numeric"
+          ]
+        }
+      ],
+      "claims": [
+        {
+          "text": "Perception interval was 0.1025 s, below the 0.30 s perception threshold.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Interval from first detection to handoff was 1.3106 s, above the 0.10 s command threshold; no AV brake request is recorded, handoff was the decision output.",
+          "evidence": [
+            "AV:handoff_t",
+            "AV:first_seen_t",
+            "PROFILE:command_threshold_s"
+          ],
+          "status": "BLOCKED"
+        },
+        {
+          "text": "Brake actuation interval was 0.3 s, below the 0.45 s actuation threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Handoff margin was 0.6869 s from handoff to impact, below the 1.5 s human PRT allowance.",
+          "evidence": [
+            "VID:impact_t",
+            "AV:handoff_t",
+            "PROFILE:human_prt_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "CAN brake request followed handoff by 0.4889 s, with impact at 8.0 s, leaving insufficient time before contact.",
+          "evidence": [
+            "CAN:brake_request_t",
+            "AV:handoff_t",
+            "VID:impact_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Counterfactual with nominal perception 0.2 s, nominal command 0.05 s and nominal tau 0.35 s avoided contact (contact false).",
+          "evidence": [
+            "CF:run1_contact",
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s"
+          ],
+          "status": "BLOCKED"
+        },
+        {
+          "text": "Brake log is complete (true), so the case is not inconclusive for missing brake data.",
+          "evidence": [
+            "DATA:brake_log_complete"
+          ],
+          "status": "BLOCKED"
+        },
+        {
+          "text": "Road surface reported as dry by the witness, corroborated by independent recheck agreeing on the same value.",
+          "evidence": [
+            "WIT:road_surface",
+            "WIT2:road_surface"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Hazard onset reason was closing, with hazard onset at 5.9 s from a vehicle already in the ego lane.",
+          "evidence": [
+            "VID:hazard_onset_reason",
+            "VID:hazard_onset_t"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand37-truck-s8021",
+      "profile": "truck",
+      "story": "adas_events_lost_actuation",
+      "family": "adas",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "excess": {
+        "actuation": 0.83,
+        "perception": -0.1889
+      },
+      "agent": "BRAKE_ACTUATION_LATE",
+      "independent": "BRAKE_ACTUATION_LATE",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "blocked": [
+        {
+          "text": "Command delay was 0.06 s, below the 0.10 s command threshold, using brake request at 7.00 s.",
+          "reasons": [
+            "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+          ]
+        }
+      ],
+      "claims": [
+        {
+          "text": "The struck vehicle became a hazard at 6.83 s by closing within the ego lane, with impact at 8.00 s.",
+          "evidence": [
+            "VID:hazard_onset_t",
+            "VID:hazard_onset_reason",
+            "VID:impact_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake log is complete, with value true, so the verdict is not INCONCLUSIVE.",
+          "evidence": [
+            "DATA:brake_log_complete"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Perception delay was 0.11 s, below the 0.30 s perception threshold.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Command delay was 0.06 s, below the 0.10 s command threshold, using brake request at 7.00 s.",
+          "evidence": [
+            "CAN:brake_request_t",
+            "AV:first_seen_t",
+            "PROFILE:command_threshold_s"
+          ],
+          "status": "BLOCKED"
+        },
+        {
+          "text": "Brake actuation took 1.28 s, above the 0.45 s actuation threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake pressure was reached 0.28 s after impact at 8.00 s, with pressure reached at 8.28 s.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "VID:impact_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Counterfactual with nominal perception 0.20 s, nominal command 0.05 s and nominal tau 0.35 s avoided contact, with min gap 0.30 m and impact speed 0.00 m/s.",
+          "evidence": [
+            "CF:run1_contact",
+            "CF:run1_min_gap_m",
+            "CF:run1_impact_speed_mps",
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The other vehicle's brake lights were yes on both witness looks.",
+          "evidence": [
+            "WIT:other_vehicle_brake_lights",
+            "WIT2:other_vehicle_brake_lights"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Lighting was night on both witness looks.",
+          "evidence": [
+            "WIT:lighting",
+            "WIT2:lighting"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    },
+    {
+      "case": "cand38-car-s8022",
+      "profile": "car",
+      "story": "handoff_in_time_slow_driver",
+      "family": "handoff",
+      "expected": "NO_FAULT_FOUND",
+      "excess": {
+        "actuation": -0.13,
+        "handoff": -0.2312,
+        "perception": -0.0912
+      },
+      "agent": "NO_FAULT_FOUND",
+      "independent": "NO_FAULT_FOUND",
+      "status": "VERIFIED",
+      "counts": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "blocked": [],
+      "claims": [
+        {
+          "text": "The system first saw the struck vehicle at 6.1088 s, 0.2088 s after the 5.9 s hazard onset, below the 0.3 s perception threshold.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The hazard onset was classified as closing, with a time-to-collision of 1.9971 s at onset.",
+          "evidence": [
+            "VID:hazard_onset_reason",
+            "VID:ttc_at_onset_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The AV handed off at 6.2688 s, 1.7312 s before the 8.0 s impact, above the 1.5 s human perception-response time in the profile.",
+          "evidence": [
+            "AV:handoff_t",
+            "VID:impact_t",
+            "PROFILE:human_prt_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Brake pressure was reached at 8.362 s, 0.12 s after the 8.242 s CAN brake request, below the 0.25 s actuation threshold.",
+          "evidence": [
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The first CAN brake request at 8.242 s came 0.242 s after the 8.0 s impact.",
+          "evidence": [
+            "CAN:brake_request_t",
+            "VID:impact_t"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Using nominal perception of 0.2 s, nominal command of 0.05 s, and nominal tau of 0.15 s, the counterfactual produced no contact and a minimum gap of 11.607 m.",
+          "evidence": [
+            "PROFILE:nominal_perception_s",
+            "PROFILE:nominal_command_s",
+            "PROFILE:nominal_tau_s",
+            "CF:run1_contact",
+            "CF:run1_min_gap_m"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "The brake log was complete, so the timing record was not inconclusive on that ground.",
+          "evidence": [
+            "DATA:brake_log_complete"
+          ],
+          "status": "VERIFIED"
+        },
+        {
+          "text": "Since the counterfactual avoided contact while perception and actuation were within their thresholds and the handoff margin exceeded the profile human perception-response time, no measured AV layer was identified as the primary contributing factor.",
+          "evidence": [
+            "AV:first_seen_t",
+            "VID:hazard_onset_t",
+            "PROFILE:perception_threshold_s",
+            "CAN:pressure_reached_t",
+            "CAN:brake_request_t",
+            "PROFILE:actuation_threshold_s",
+            "AV:handoff_t",
+            "VID:impact_t",
+            "PROFILE:human_prt_s",
+            "CF:run1_contact"
+          ],
+          "status": "VERIFIED"
+        }
+      ]
+    }
+  ],
+  "skipped": [
+    "cand63-car-s8014: adas_events_lost_perception: no adas_events_lost_perception parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)",
+    "cand63-car-s8015: adas_events_lost_actuation: no adas_events_lost_actuation parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)",
+    "cand63-car-s8019: adas_brake_then_handoff: no adas_brake_then_handoff parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)"
+  ]
+}

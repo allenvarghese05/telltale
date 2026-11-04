@@ -1,0 +1,248 @@
+{
+  "model": "muse-wonder-1.0",
+  "digest": "65e1227ecb3158e517fefe9885b4e2bbabe7609394a1f1cbd18d9e8980108a2c",
+  "verdict": "LATE_HANDOFF",
+  "claims": [
+    {
+      "assertion": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 0.1025,
+        "op": "diff"
+      },
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s"
+      ],
+      "text": "Perception interval was 0.1025 s, below the 0.30 s perception threshold.",
+      "type": "timing"
+    },
+    {
+      "assertion": {
+        "a": "AV:handoff_t",
+        "b": "AV:first_seen_t",
+        "equals": 1.3106,
+        "op": "diff"
+      },
+      "evidence": [
+        "AV:handoff_t",
+        "AV:first_seen_t",
+        "PROFILE:command_threshold_s"
+      ],
+      "text": "Interval from first detection to handoff was 1.3106 s, above the 0.10 s command threshold; no AV brake request is recorded, handoff was the decision output.",
+      "type": "timing"
+    },
+    {
+      "assertion": {
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t",
+        "equals": 0.3,
+        "op": "diff"
+      },
+      "evidence": [
+        "CAN:pressure_reached_t",
+        "CAN:brake_request_t",
+        "PROFILE:actuation_threshold_s"
+      ],
+      "text": "Brake actuation interval was 0.3 s, below the 0.45 s actuation threshold.",
+      "type": "timing"
+    },
+    {
+      "assertion": {
+        "a": "VID:impact_t",
+        "b": "AV:handoff_t",
+        "equals": 0.6869,
+        "op": "diff"
+      },
+      "evidence": [
+        "VID:impact_t",
+        "AV:handoff_t",
+        "PROFILE:human_prt_s"
+      ],
+      "text": "Handoff margin was 0.6869 s from handoff to impact, below the 1.5 s human PRT allowance.",
+      "type": "timing"
+    },
+    {
+      "assertion": {
+        "a": "CAN:brake_request_t",
+        "b": "AV:handoff_t",
+        "equals": 0.4889,
+        "op": "diff"
+      },
+      "evidence": [
+        "CAN:brake_request_t",
+        "AV:handoff_t",
+        "VID:impact_t"
+      ],
+      "text": "CAN brake request followed handoff by 0.4889 s, with impact at 8.0 s, leaving insufficient time before contact.",
+      "type": "timing"
+    },
+    {
+      "assertion": {
+        "equals": false,
+        "fact": "CF:run1_contact",
+        "op": "value"
+      },
+      "evidence": [
+        "CF:run1_contact",
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s"
+      ],
+      "text": "Counterfactual with nominal perception 0.2 s, nominal command 0.05 s and nominal tau 0.35 s avoided contact (contact false).",
+      "type": "physics"
+    },
+    {
+      "assertion": {
+        "equals": true,
+        "fact": "DATA:brake_log_complete",
+        "op": "value"
+      },
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "text": "Brake log is complete (true), so the case is not inconclusive for missing brake data.",
+      "type": "other"
+    },
+    {
+      "assertion": {
+        "a": "WIT:road_surface",
+        "b": "WIT2:road_surface",
+        "op": "same"
+      },
+      "evidence": [
+        "WIT:road_surface",
+        "WIT2:road_surface"
+      ],
+      "text": "Road surface reported as dry by the witness, corroborated by independent recheck agreeing on the same value.",
+      "type": "observation"
+    },
+    {
+      "assertion": {
+        "equals": "closing",
+        "fact": "VID:hazard_onset_reason",
+        "op": "is"
+      },
+      "evidence": [
+        "VID:hazard_onset_reason",
+        "VID:hazard_onset_t"
+      ],
+      "text": "Hazard onset reason was closing, with hazard onset at 5.9 s from a vehicle already in the ego lane.",
+      "type": "observation"
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:handoff_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "AV:handoff_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:brake_request_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:brake_request_t",
+        "b": "AV:handoff_t"
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.2,
+        "command_s": 0.05,
+        "tau_s": 0.35
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Is the road surface dry?",
+        "slug": "road_surface",
+        "t0": 5.9,
+        "t1": 8.0
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:pressure_reached_t",
+        "b": "VID:impact_t"
+      }
+    },
+    {
+      "name": "submit_findings",
+      "args": {
+        "verdict": "LATE_HANDOFF",
+        "n_claims": 9
+      }
+    }
+  ],
+  "agent_facts": [
+    {
+      "id": "CF:run1_contact",
+      "value": false,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_impact_speed_mps",
+      "value": 0.0,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_min_gap_m",
+      "value": 5.2695,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "WIT2:road_surface",
+      "value": "dry",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 second look at 5.90-8.00s, asked without the first answer: Is the road surface dry?",
+      "kind": "observation"
+    }
+  ]
+}

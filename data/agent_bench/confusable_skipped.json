@@ -1,0 +1,5 @@
+{
+  "cand63-car-s8014": "adas_events_lost_perception: no adas_events_lost_perception parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)",
+  "cand63-car-s8015": "adas_events_lost_actuation: no adas_events_lost_actuation parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)",
+  "cand63-car-s8019": "adas_brake_then_handoff: no adas_brake_then_handoff parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)"
+}

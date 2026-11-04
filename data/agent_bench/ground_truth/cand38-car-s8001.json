@@ -1,0 +1,17 @@
+{
+  "story": "handoff_quick_driver",
+  "profile": "car",
+  "v_ego0": 24.6900214905255,
+  "v_other": 15.655654847164401,
+  "d0": 17.411392758693488,
+  "first_seen": 0.23867264107260688,
+  "brake_request": 1.334529516135078,
+  "handoff": 0.9210357142228172,
+  "tau": 0.16155954128206396,
+  "contact_t": 2.099,
+  "can_skew": 0.010062937184412424,
+  "av_skew": -0.6887998856634872,
+  "label": "LATE_HANDOFF",
+  "adas_events": "auto",
+  "expected_label": "LATE_HANDOFF"
+}

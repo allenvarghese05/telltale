@@ -1,0 +1,17 @@
+{
+  "story": "adas_events_lost_actuation",
+  "profile": "truck",
+  "v_ego0": 18.410910626318557,
+  "v_other": 13.454438040253189,
+  "d0": 7.714425794369253,
+  "first_seen": 0.1867965452802004,
+  "brake_request": 0.2279238738609401,
+  "handoff": null,
+  "tau": 1.3272702353613788,
+  "contact_t": 2.099,
+  "can_skew": -0.243467137964399,
+  "av_skew": 0.3108710528078648,
+  "label": "BRAKE_ACTUATION_LATE",
+  "adas_events": "none",
+  "expected_label": "BRAKE_ACTUATION_LATE"
+}

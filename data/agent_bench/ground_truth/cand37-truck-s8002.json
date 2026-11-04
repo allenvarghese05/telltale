@@ -1,0 +1,17 @@
+{
+  "story": "handoff_quick_driver",
+  "profile": "truck",
+  "v_ego0": 28.597226699486793,
+  "v_other": 23.769759121633797,
+  "d0": 5.442487113481739,
+  "first_seen": 0.15694355548404507,
+  "brake_request": 0.6722285457919795,
+  "handoff": 0.22459919629746394,
+  "tau": 0.3228079989288928,
+  "contact_t": 1.169,
+  "can_skew": -0.1974810661717764,
+  "av_skew": 0.5235179612111951,
+  "label": "LATE_HANDOFF",
+  "adas_events": "auto",
+  "expected_label": "LATE_HANDOFF"
+}

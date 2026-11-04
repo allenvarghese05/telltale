@@ -1,0 +1,17 @@
+{
+  "story": "adas_brake_then_handoff",
+  "profile": "truck",
+  "v_ego0": 18.68189801159618,
+  "v_other": 12.61590221054205,
+  "d0": 7.206813198724839,
+  "first_seen": 0.1355038427797762,
+  "brake_request": 0.1932305136452098,
+  "handoff": 0.9138781176299472,
+  "tau": 0.370424312908178,
+  "contact_t": 1.866,
+  "can_skew": 0.16013218786228267,
+  "av_skew": 0.031480996455999666,
+  "label": "UNAVOIDABLE",
+  "adas_events": "both",
+  "expected_label": "UNAVOIDABLE"
+}

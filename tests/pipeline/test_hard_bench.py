@@ -140,3 +140,41 @@ def test_cli_hard_flag_runs_the_hard_bench(monkeypatch, capsys):
     main(["agent-bench", "--hard", "--n", "5"])
     assert calls == [5]
     assert json.loads(capsys.readouterr().out) == {"n": 5}
+
+
+def test_confusable_plan_uses_its_own_stories_and_seed_range():
+    from telltale.logs.generate import CONFUSABLE_EXPECTED
+
+    plan = hb.hard_plan(CLIPS, hb.CONFUSABLE_PLAN_SEED, tuple(CONFUSABLE_EXPECTED), hb.CONFUSABLE_SEED_BASE)
+    assert {s for *_, s, _ in plan} == set(CONFUSABLE_EXPECTED)
+    assert min(seed for *_, seed in plan) == 8000
+    assert max(seed for *_, seed in plan) < 9000
+
+
+def test_summary_counts_claims_blocked_for_interval_meaning():
+    row = {
+        "profile": "car",
+        "family": "handoff",
+        "expected": "LATE_HANDOFF",
+        "agent": "LATE_HANDOFF",
+        "independent": "LATE_HANDOFF",
+        "status": "VERIFIED",
+        "counts": {"VERIFIED": 3, "UNCORROBORATED": 0, "BLOCKED": 2},
+        "blocked": [{"text": "a", "reasons": ["interval meaning: x"]}, {"text": "b", "reasons": ["number 9 ..."]}],
+    }
+    assert hb.summarize_hard([row])["claims_blocked_interval_meaning"] == 1
+
+
+def test_cli_confusable_flag_runs_the_confusable_bench(monkeypatch, capsys):
+    from telltale.cli import main
+
+    calls = []
+    monkeypatch.setattr(hb, "run_confusable_bench", lambda n: calls.append(n) or {"summary": {"n": n}})
+    main(["agent-bench", "--confusable", "--n", "3"])
+    assert calls == [3]
+    assert json.loads(capsys.readouterr().out) == {"n": 3}
+
+
+def test_bench_clips_are_pinned_so_a_growing_manifest_cannot_move_the_plan():
+    """The manifest gained clips after the hard cases ran; a reshuffled plan would no longer regenerate them."""
+    assert hb.clip_ids() == ["cand36", "cand37", "cand38", "cand63"]

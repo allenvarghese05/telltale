@@ -1,0 +1,214 @@
+{
+  "model": "muse-wonder-1.0",
+  "digest": "ecc6a521bf602aa82ba67f41c1ac4c323104a2eeb03172a214096c51b09cf376",
+  "verdict": "UNAVOIDABLE",
+  "claims": [
+    {
+      "text": "The struck vehicle became a hazard at 6.83 s while closing within the ego lane, with time-to-collision 1.92 s at onset.",
+      "type": "observation",
+      "evidence": [
+        "VID:hazard_onset_t",
+        "VID:hazard_onset_reason",
+        "VID:ttc_at_onset_s"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "VID:hazard_onset_t",
+        "equals": 6.8301
+      }
+    },
+    {
+      "text": "The system took 0.24 s to perceive the hazard, below the 0.30 s it is allowed.",
+      "type": "timing",
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 0.2409
+      }
+    },
+    {
+      "text": "The command took 0.04 s after first detection, below the 0.10 s it is allowed.",
+      "type": "timing",
+      "evidence": [
+        "AV:brake_request_t",
+        "AV:first_seen_t",
+        "PROFILE:command_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t",
+        "equals": 0.0443
+      }
+    },
+    {
+      "text": "Brake actuation took 0.14 s from CAN brake request to pressure reached, below the 0.25 s it is allowed.",
+      "type": "timing",
+      "evidence": [
+        "CAN:pressure_reached_t",
+        "CAN:brake_request_t",
+        "PROFILE:actuation_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t",
+        "equals": 0.14
+      }
+    },
+    {
+      "text": "The handoff margin was 0.80 s before impact at 8.00 s, below the human perception-response time of 1.50 s, but the but-for counterfactual controls the verdict.",
+      "type": "timing",
+      "evidence": [
+        "VID:impact_t",
+        "AV:handoff_t",
+        "PROFILE:human_prt_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "VID:impact_t",
+        "b": "AV:handoff_t",
+        "equals": 0.8032
+      }
+    },
+    {
+      "text": "With nominal timings of 0.20 s perception, 0.05 s command and 0.15 s brake tau, the counterfactual still results in contact, with impact speed 3.56 m/s and minimum gap -0.00 m.",
+      "type": "physics",
+      "evidence": [
+        "CF:run1_contact",
+        "CF:run1_impact_speed_mps",
+        "CF:run1_min_gap_m",
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": true
+      }
+    },
+    {
+      "text": "The brake log is complete, so the case is not inconclusive.",
+      "type": "other",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": true
+      }
+    },
+    {
+      "text": "The ego speed at hazard onset was 26.44 m/s, supporting the short available response window.",
+      "type": "physics",
+      "evidence": [
+        "CAN:speed_at_onset_mps"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "CAN:speed_at_onset_mps",
+        "equals": 26.44
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "AV:handoff_t"
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.2,
+        "command_s": 0.05,
+        "tau_s": 0.15
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Are the other vehicle's brake lights on?",
+        "slug": "other_vehicle_brake_lights",
+        "t0": 6.83,
+        "t1": 8.0
+      }
+    },
+    {
+      "name": "submit_findings",
+      "args": {
+        "verdict": "UNAVOIDABLE",
+        "n_claims": 8
+      }
+    }
+  ],
+  "agent_facts": [
+    {
+      "id": "CF:run1_contact",
+      "value": true,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_impact_speed_mps",
+      "value": 3.5613,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_min_gap_m",
+      "value": -0.0033,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "WIT2:other_vehicle_brake_lights",
+      "value": "unclear",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 second look at 6.83-8.00s, asked without the first answer: Are the other vehicle's brake lights on?",
+      "kind": "observation"
+    }
+  ]
+}

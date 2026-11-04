@@ -1,0 +1,17 @@
+{
+  "story": "adas_brake_then_handoff",
+  "profile": "car",
+  "v_ego0": 20.838416097769517,
+  "v_other": 5.161566134098395,
+  "d0": 21.24259358469779,
+  "first_seen": 0.18537254851144705,
+  "brake_request": 0.24012536950189628,
+  "handoff": 1.0481444387414267,
+  "tau": 0.15759732279165733,
+  "contact_t": 2.099,
+  "can_skew": 0.2628327418137305,
+  "av_skew": 0.5583214374651109,
+  "label": "UNAVOIDABLE",
+  "adas_events": "both",
+  "expected_label": "UNAVOIDABLE"
+}

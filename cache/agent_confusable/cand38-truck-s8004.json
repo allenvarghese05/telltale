@@ -1,0 +1,240 @@
+{
+  "model": "muse-wonder-1.0",
+  "digest": "be34acd73d63668cfddf753f42bc6080552b2d204ea8c0656b4bae8ab22ba911",
+  "verdict": "LATE_HANDOFF",
+  "claims": [
+    {
+      "text": "The struck vehicle became a hazard at 5.9 s by closing, with the AV first seeing it at 6.1008 s.",
+      "type": "timing",
+      "evidence": [
+        "VID:hazard_onset_t",
+        "VID:hazard_onset_reason",
+        "AV:first_seen_t"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "VID:hazard_onset_reason",
+        "equals": "closing"
+      }
+    },
+    {
+      "text": "Perception took 0.2008 s, at or below the 0.3 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 0.2008
+      }
+    },
+    {
+      "text": "The AV handed off at 6.1918 s, which is 0.091 s after first seeing the vehicle at 6.1008 s.",
+      "type": "timing",
+      "evidence": [
+        "AV:handoff_t",
+        "AV:first_seen_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:handoff_t",
+        "b": "AV:first_seen_t",
+        "equals": 0.091
+      }
+    },
+    {
+      "text": "The handoff margin to impact at 8.0 s was 1.8082 s, above the 1.5 s human PRT threshold.",
+      "type": "timing",
+      "evidence": [
+        "VID:impact_t",
+        "AV:handoff_t",
+        "PROFILE:human_prt_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "VID:impact_t",
+        "b": "AV:handoff_t",
+        "equals": 1.8082
+      }
+    },
+    {
+      "text": "Brake actuation took 0.34 s, below the 0.45 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "CAN:pressure_reached_t",
+        "CAN:brake_request_t",
+        "PROFILE:actuation_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t",
+        "equals": 0.34
+      }
+    },
+    {
+      "text": "The brake request at 8.042 s came 1.8502 s after handoff at 6.1918 s, showing the driver response consumed the handoff margin before braking.",
+      "type": "timing",
+      "evidence": [
+        "CAN:brake_request_t",
+        "AV:handoff_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:brake_request_t",
+        "b": "AV:handoff_t",
+        "equals": 1.8502
+      }
+    },
+    {
+      "text": "Brake log is complete, so the timing analysis is not inconclusive.",
+      "type": "other",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": true
+      }
+    },
+    {
+      "text": "With nominal perception 0.2 s, command 0.05 s and tau 0.35 s the counterfactual avoided contact, so the crash was avoidable in that replay.",
+      "type": "physics",
+      "evidence": [
+        "CF:run1_contact",
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": false
+      }
+    },
+    {
+      "text": "Witness lighting daylight was corroborated on recheck.",
+      "type": "observation",
+      "evidence": [
+        "WIT:lighting",
+        "WIT2:lighting"
+      ],
+      "assertion": {
+        "op": "same",
+        "a": "WIT:lighting",
+        "b": "WIT2:lighting"
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "AV:handoff_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:handoff_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:brake_request_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.2,
+        "command_s": 0.05,
+        "tau_s": 0.35
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Is the lighting daylight?",
+        "slug": "lighting",
+        "t0": 5.5,
+        "t1": 7.0
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:brake_request_t",
+        "b": "AV:handoff_t"
+      }
+    },
+    {
+      "name": "submit_findings",
+      "args": {
+        "verdict": "LATE_HANDOFF",
+        "n_claims": 9
+      }
+    }
+  ],
+  "agent_facts": [
+    {
+      "id": "CF:run1_contact",
+      "value": false,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_impact_speed_mps",
+      "value": 0.0,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_min_gap_m",
+      "value": 5.1938,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "WIT2:lighting",
+      "value": "daylight",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 second look at 5.50-7.00s, asked without the first answer: Is the lighting daylight?",
+      "kind": "observation"
+    }
+  ]
+}

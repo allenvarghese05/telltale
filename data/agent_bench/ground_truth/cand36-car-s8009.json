@@ -1,0 +1,17 @@
+{
+  "story": "adas_events_lost_perception",
+  "profile": "car",
+  "v_ego0": 26.960896113386415,
+  "v_other": 22.84080440346567,
+  "d0": 7.318346695424229,
+  "first_seen": 1.3700552289928718,
+  "brake_request": 1.4497715621939231,
+  "handoff": null,
+  "tau": 0.1426397369458355,
+  "contact_t": 1.866,
+  "can_skew": -0.11122479302260202,
+  "av_skew": 0.566998488734796,
+  "label": "PERCEPTION_LATE",
+  "adas_events": "none",
+  "expected_label": "PERCEPTION_LATE"
+}

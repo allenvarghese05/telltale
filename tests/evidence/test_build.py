@@ -2,7 +2,7 @@ import pytest
 
 from telltale.core.schema import Fact, VideoFacts
 from telltale.evidence.build import build_store
-from telltale.logs.generate import EXPECTED, ClipTiming, generate_case
+from telltale.logs.generate import CONFUSABLE_EXPECTED, EXPECTED, ClipTiming, generate_case
 from telltale.physics.profiles import PROFILES
 
 TIMING = ClipTiming(clip_id="syn", hazard_onset_t=4.0, impact_t=6.2)
@@ -48,3 +48,13 @@ def test_store_contains_core_facts_and_extra_witness_facts(tmp_path):
         assert s.has(fid), fid
     assert s.get("PHYS:perception_latency_s").value > 0.9
     assert "can.speed_mps" in s.series_names()
+
+
+@pytest.mark.parametrize("story", list(CONFUSABLE_EXPECTED))
+def test_engine_reads_confusable_timelines_blind(tmp_path, story):
+    cid = generate_case(TIMING, PROFILES["car"], story, seed=5, out_root=tmp_path / "c", gt_root=tmp_path / "g")
+    store = build_store(tmp_path / "c" / cid, VIDEO, PROFILES["car"])
+    assert store.get("ATTR:label").value == CONFUSABLE_EXPECTED[story]
+    assert store.has("AV:brake_request_t") == (story == "adas_brake_then_handoff")
+    assert store.has("AV:handoff_t") == story.startswith(("handoff", "adas_brake"))
+    assert store.has("CAN:brake_request_t")
