@@ -571,3 +571,8 @@ a.wordmark { color: var(--ink); text-decoration: none; }
   line-height: 1.5;
 }
 .geometry-note[hidden] { display: none; }
+
+/* Embedded in the local upload page: the clip, its facts, timeline and report, without the site's chrome. */
+body.embed .bar, body.embed .intro, body.embed .foot { display: none; }
+body.embed .replay { padding-top: 8px; }
+body.embed .report { margin-top: 48px; }

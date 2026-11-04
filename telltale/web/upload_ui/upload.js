@@ -1,4 +1,5 @@
-/* Local upload page. Sends one clip to this machine's telltale upload-ui server and shows each step as it runs.
+/* Local upload page. Sends one clip to this machine's telltale upload-ui server, shows each step as it runs with
+   what it is doing and how long it usually takes, then shows the finished clip inline.
    The server validates everything again; these checks only save a round trip. */
 
 const $ = (id) => document.getElementById(id);
@@ -10,14 +11,59 @@ const SAFE_ID = /^[A-Za-z0-9_-]+$/;
 const MAX_BYTES = 200 * 1024 * 1024;
 const TYPES = { mp4: 'video/mp4', mov: 'video/quicktime' };
 
+/* What each step is doing, and roughly how long it takes, so a long SAM run never looks stuck. */
+const DETAIL = {
+  prepare: { what: 'Re-encoding to H.264 and registering the clip on this computer.', expect: 'a few seconds' },
+  track: { what: "SAM 3.1 tracks every vehicle frame by frame on Meta's API.", expect: 'usually 1 to 2 min' },
+  witness: { what: 'Muse Spark watches the clip and describes the conditions.', expect: 'about 30 s' },
+  report: { what: 'Building the video-only report and adding it to the site.', expect: 'a few seconds' },
+};
+
+let activeKey = null;
+let activeSince = 0;
+let tick = null;
+let lastSteps = [];
+
 function fail(message) {
   $('alert').textContent = message;
   $('submit').disabled = false;
+  clearInterval(tick);
+}
+
+function elapsed() {
+  const s = Math.floor((Date.now() - activeSince) / 1000);
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 }
 
 function renderSteps(steps) {
-  $('steps').hidden = false;
-  $('steps').innerHTML = steps.map((s) => `<li class="${esc(s.state)}">${esc(s.label)}</li>`).join('');
+  lastSteps = steps;
+  const active = steps.find((s) => s.state === 'active');
+  if (active && active.key !== activeKey) {
+    activeKey = active.key;
+    activeSince = Date.now();
+  }
+  $('progress').hidden = false;
+  $('steps').innerHTML = steps
+    .map((s) => {
+      const d = DETAIL[s.key] || { what: '', expect: '' };
+      const time = s.state === 'active' ? `${elapsed()} of ${d.expect}` : s.state === 'done' ? 'done' : d.expect;
+      return `<li class="${esc(s.state)}"><span class="dot" aria-hidden="true"></span>
+        <span class="label">${esc(s.label)}</span><span class="time">${esc(time)}</span>
+        <span class="what">${esc(d.what)}</span></li>`;
+    })
+    .join('');
+}
+
+function showResult(clipId, link) {
+  const frame = $('result-frame');
+  frame.onload = () => {
+    frame.style.height = `${frame.contentDocument.documentElement.scrollHeight + 24}px`;
+  };
+  frame.src = `${link}&embed=1`;
+  $('result-link').href = link;
+  $('result-title').textContent = `Your clip: ${clipId}`;
+  $('result').hidden = false;
+  $('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 async function poll(clipId) {
@@ -26,16 +72,16 @@ async function poll(clipId) {
   if (!r.ok) return fail(s.error || 'Could not read the upload status.');
   renderSteps(s.steps || []);
   if (s.state === 'running') return setTimeout(() => poll(clipId), 1000);
+  clearInterval(tick);
   if (s.state === 'error') return fail(s.message);
-  $('done').href = s.link;
-  $('done').hidden = false;
   $('submit').disabled = false;
+  showResult(clipId, s.link);
 }
 
 $('form').onsubmit = async (event) => {
   event.preventDefault();
   $('alert').textContent = '';
-  $('done').hidden = true;
+  $('result').hidden = true;
   const file = $('file').files[0];
   const clipId = $('clip-id').value.trim();
   const impact = $('impact').value.trim();
@@ -46,6 +92,9 @@ $('form').onsubmit = async (event) => {
   if (!SAFE_ID.test(clipId)) return fail('Use only letters, digits, hyphens and underscores for the clip id.');
   if (impact === '' || !Number.isFinite(Number(impact))) return fail('Impact time must be a number of seconds.');
   $('submit').disabled = true;
+  activeKey = null;
+  clearInterval(tick);
+  tick = setInterval(() => renderSteps(lastSteps), 1000);
   const query = new URLSearchParams({ clip_id: clipId, impact_t: impact });
   const r = await fetch(`/api/upload?${query}`, {
     method: 'POST',

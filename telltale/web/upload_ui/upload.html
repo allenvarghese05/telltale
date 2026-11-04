@@ -10,26 +10,59 @@
   <title>Telltale. Investigate your own clip (local).</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .upload { max-width: 640px; padding-top: 8px; }
+    .upload-wrap { max-width: 760px; padding-top: 40px; padding-bottom: 24px; }
+    .upload-wrap h1 { font-size: clamp(30px, 3.6vw, 42px); }
+    .card {
+      margin-top: 28px;
+      border: 1px solid var(--line-2);
+      border-radius: 14px;
+      padding: 24px 28px 28px;
+      background: var(--bg);
+    }
+    .card .notice { margin-top: 0; font-size: 14px; }
+    .fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4px 24px; }
     .field { display: flex; flex-direction: column; gap: 6px; margin-top: 22px; }
+    .field.full { grid-column: 1 / -1; }
     .field label { font-size: 14px; font-weight: 600; }
-    .field .help { font-size: 13px; color: var(--mute); }
+    .field .help { font-size: 12.5px; color: var(--mute); line-height: 1.45; }
     .field input[type="text"], .field input[type="number"] {
       font: inherit; font-size: 15px; color: var(--ink); background: var(--bg-soft);
-      border: 1px solid transparent; border-radius: 6px; padding: 9px 11px; max-width: 320px;
+      border: 1px solid transparent; border-radius: 6px; padding: 9px 11px;
     }
     .field input:focus { outline: 2px solid var(--ink); outline-offset: 1px; }
-    .field input[type="file"] { font-size: 14px; }
-    .submit { margin-top: 28px; background: var(--ink); color: #fff; }
+    .drop {
+      display: flex; align-items: center; gap: 14px; border: 1px dashed var(--line-2); border-radius: 10px;
+      padding: 16px; background: var(--bg-soft);
+    }
+    .drop input[type="file"] { font-size: 14px; }
+    .submit { margin-top: 26px; background: var(--ink); color: #fff; }
     .submit:disabled { opacity: 0.4; cursor: default; }
-    .steps { list-style: none; padding: 0; margin: 32px 0 0; border-top: 1px solid var(--line-2); }
-    .steps li { padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--mute); }
-    .steps li.active { color: var(--ink); font-weight: 600; }
-    .steps li.done { color: var(--ink); }
-    .steps li.done::after { content: "  done"; color: var(--ok); font-weight: 500; }
-    .alert { margin-top: 20px; font-size: 14px; color: var(--blocked); }
-    .done-link { display: inline-block; margin-top: 20px; font-weight: 600; color: var(--ink); }
-    .done-link[hidden], .steps[hidden] { display: none; }
+    .progress { margin-top: 28px; }
+    .progress[hidden], .result[hidden], .alert:empty { display: none; }
+    .steps { list-style: none; padding: 0; margin: 12px 0 0; border-top: 1px solid var(--line-2); }
+    .steps li {
+      display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; gap: 4px 10px; align-items: baseline;
+      padding: 12px 0; border-bottom: 1px solid var(--line);
+    }
+    .steps .dot { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--line-2); margin-top: 4px; }
+    .steps li.active .dot { border-color: var(--ink); background: var(--ink); animation: pulse 1.2s ease-in-out infinite; }
+    .steps li.done .dot { border-color: var(--ok); background: var(--ok); }
+    .steps .label { font-size: 14.5px; font-weight: 600; color: var(--mute); }
+    .steps li.active .label, .steps li.done .label { color: var(--ink); }
+    .steps .what { grid-column: 2; font-size: 12.5px; color: var(--mute); }
+    .steps .time { font-family: var(--mono); font-size: 12px; color: var(--mute); white-space: nowrap; }
+    .steps li.active .time { color: var(--ink); }
+    .steps li.done .time { color: var(--ok); }
+    @keyframes pulse { 50% { opacity: 0.35; } }
+    @media (prefers-reduced-motion: reduce) { .steps li.active .dot { animation: none; } }
+    .alert { margin-top: 18px; font-size: 14px; color: var(--blocked); background: var(--blocked-bg); padding: 10px 12px; border-radius: 8px; }
+    .result { margin-top: 48px; }
+    .result-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+    .result-head h2 { font-size: 22px; letter-spacing: -0.02em; }
+    .result iframe { display: block; width: 100%; border: 0; margin-top: 12px; min-height: 600px; }
+    .result-frame { max-width: none; padding: 0; }
+    .result-head-wrap { max-width: calc(var(--page) + 2 * var(--side)); margin: 0 auto; padding: 0 var(--side); }
+    @media (max-width: 640px) { .fields { grid-template-columns: minmax(0, 1fr); } .card { padding: 18px; } }
   </style>
 </head>
 <body>
@@ -43,34 +76,52 @@
   </nav>
 </header>
 
-<section class="intro upload">
+<section class="intro upload-wrap">
   <h1>Investigate your own clip.</h1>
-  <p class="lede">This page runs only on your computer. Your clip is tracked by SAM 3.1 and described by the Muse
-     Spark witness, then added to the video-only page.</p>
-  <p class="notice">This sends your clip to Meta's API. Use only footage you have the right to share. Free-tier credits allow Meta to use submitted content.</p>
+  <p class="lede">Runs only on this computer. SAM 3.1 tracks every vehicle, the Muse Spark witness describes the
+     conditions, and the result appears below and on the Any dashcam clip page. No vehicle logs, so no verdict.</p>
 
-  <form id="form" novalidate>
-    <div class="field">
-      <label for="file">Dashcam video</label>
-      <input id="file" type="file" accept=".mp4,.mov,video/mp4,video/quicktime" required>
-      <span class="help">An .mp4 or .mov file, up to 200 MB.</span>
-    </div>
-    <div class="field">
-      <label for="clip-id">Clip id</label>
-      <input id="clip-id" type="text" pattern="[A-Za-z0-9_-]+" placeholder="my-clip" required>
-      <span class="help">Letters, digits, hyphens and underscores.</span>
-    </div>
-    <div class="field">
-      <label for="impact">Impact time</label>
-      <input id="impact" type="number" step="0.01" min="0" placeholder="7.4" required>
-      <span class="help">Seconds from the start of the video. You give this; it is never guessed.</span>
-    </div>
-    <button id="submit" class="primary submit" type="submit">Upload and investigate</button>
-  </form>
+  <div class="card">
+    <p class="notice">This sends your clip to Meta's API. Use only footage you have the right to share. Free-tier credits allow Meta to use submitted content.</p>
 
-  <ol id="steps" class="steps" hidden></ol>
-  <p id="alert" class="alert" role="alert"></p>
-  <a id="done" class="done-link" hidden>Open it on the video-only page</a>
+    <form id="form" novalidate>
+      <div class="field full">
+        <label for="file">Dashcam video</label>
+        <div class="drop"><input id="file" type="file" accept=".mp4,.mov,video/mp4,video/quicktime" required></div>
+        <span class="help">An .mp4 or .mov file, up to 200 MB. It is saved under a name this computer chooses.</span>
+      </div>
+      <div class="fields">
+        <div class="field">
+          <label for="clip-id">Clip id</label>
+          <input id="clip-id" type="text" pattern="[A-Za-z0-9_-]+" placeholder="my-clip" required>
+          <span class="help">Letters, digits, hyphens and underscores. Not one already used.</span>
+        </div>
+        <div class="field">
+          <label for="impact">Impact time (s)</label>
+          <input id="impact" type="number" step="0.01" min="0" placeholder="7.40" required>
+          <span class="help">Seconds from the start of the video to the moment of impact. Scrub to it in your player
+            and type it here; Telltale does not infer it.</span>
+        </div>
+      </div>
+      <button id="submit" class="primary submit" type="submit">Upload and investigate</button>
+    </form>
+
+    <div id="progress" class="progress" hidden>
+      <h3>Progress</h3>
+      <ol id="steps" class="steps"></ol>
+    </div>
+    <p id="alert" class="alert" role="alert"></p>
+  </div>
+</section>
+
+<section id="result" class="result result-frame" hidden>
+  <div class="result-head-wrap">
+    <div class="result-head">
+      <h2 id="result-title">Your clip</h2>
+      <a id="result-link" class="report-link" target="_blank" rel="noopener">Open on its own page</a>
+    </div>
+  </div>
+  <iframe id="result-frame" title="Video-only result"></iframe>
 </section>
 
 <script src="upload.js"></script>

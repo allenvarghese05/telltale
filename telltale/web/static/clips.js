@@ -39,7 +39,10 @@ async function init() {
     $('replay').hidden = false;
   });
   requestAnimationFrame(frame);
-  const wanted = new URLSearchParams(location.search).get('clip');
+  const params = new URLSearchParams(location.search);
+  /* The local upload page shows a finished clip inline by embedding this page without its own chrome. */
+  document.body.classList.toggle('embed', params.get('embed') === '1');
+  const wanted = params.get('clip');
   const first = index.some((c) => c.clip_id === wanted) ? wanted : index[0].clip_id;
   $('clip').value = first;
   await load(first);
