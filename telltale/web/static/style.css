@@ -602,21 +602,3 @@ details.fold > summary .section-title::after { content: "  +"; color: var(--mute
 details.fold[open] > summary .section-title::after { content: "  \2212"; }
 .fold-hint { font-size: 14px; color: var(--mute); }
 .investigation { padding-top: 72px; }
-
-.hero-line { font-size: 18px; color: var(--ink-2); margin-top: 18px; max-width: 56ch; }
-.hero-cta { margin-top: 24px; background: var(--ink); color: #fff; font-size: 16px; padding: 13px 24px; }
-.hero-cta:hover { background: #000; }
-.bar-button {
-  background: none; border: 1px solid var(--line-2); border-radius: 999px; padding: 6px 14px; font-size: 13px;
-  font-weight: 500; color: var(--ink); cursor: pointer; margin-right: 16px;
-}
-.bar-button:hover { border-color: var(--ink); }
-.upload-panel { max-width: calc(var(--page) + 2 * var(--side)); margin: 0 auto; padding-left: var(--side); padding-right: var(--side); display: flex; gap: 24px; align-items: baseline; justify-content: space-between; padding-top: 14px; padding-bottom: 16px; border-bottom: 1px solid var(--line-2); }
-.upload-panel[hidden] { display: none; }
-.upload-panel p { font-size: 14px; color: var(--ink-2); max-width: 80ch; line-height: 1.55; }
-.upload-panel code { font-size: 12.5px; background: var(--bg-soft); padding: 1px 6px; border-radius: 4px; }
-@media (max-width: 640px) {
-  .bar { flex-wrap: wrap; height: auto; padding-top: 12px; padding-bottom: 12px; gap: 10px; }
-  .bar-button { margin-right: 0; }
-  .upload-panel { flex-direction: column; gap: 8px; }
-}

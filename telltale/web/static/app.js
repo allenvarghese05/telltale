@@ -97,10 +97,6 @@ async function init() {
   $('replay').onclick = start;
   $('skip').onclick = skipToVerdict;
   $('sources').onclick = toggleSources;
-  $('watch').onclick = () => {
-    document.querySelector('.replay').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    start();
-  };
   $('full-investigation').addEventListener('toggle', () => {
     if ($('full-investigation').open) ['timeline', 'cf-map'].forEach((id) => window.Plotly && Plotly.Plots.resize(id));
   });

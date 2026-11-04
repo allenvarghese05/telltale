@@ -141,7 +141,7 @@ def publish_video_case(bundle: dict, out: Path, clips_dir: Path = CLIPS) -> None
 
 
 PAGES = ("index.html", "clips.html")
-ASSETS = ("app.js", "clips.js", "site.js", "style.css")
+ASSETS = ("app.js", "clips.js", "style.css")
 
 
 def stamp_build(out: Path) -> str:

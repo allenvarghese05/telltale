@@ -45,7 +45,6 @@ CSP = (
     "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; "
     "media-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'"
 )
-LOCAL_MARKER = '<meta name="upload" content="local">'
 MISSING_KEY = "MODEL_API_KEY is not set"
 
 
@@ -189,15 +188,6 @@ def make_server(
             self.end_headers()
             self.wfile.write(body)
 
-        def _site_page(self, name: str) -> None:
-            """A site page marked as served locally, so its "Upload your own clip" button opens this page."""
-            page = (site / name).read_text().replace("<head>", f"<head>\n  {LOCAL_MARKER}", 1).encode()
-            self.send_response(200)
-            self.send_header("Content-Type", "text/html; charset=utf-8")
-            self.send_header("Content-Length", str(len(page)))
-            self.end_headers()
-            self.wfile.write(page)
-
         def do_GET(self) -> None:
             url = urlparse(self.path)
             if url.path in ("/", "/upload"):
@@ -212,8 +202,6 @@ def make_server(
                 if view is None:
                     return self._json(404, {"error": f"No upload is running for {clip_id!r}."})
                 return self._json(200, view)
-            if url.path in ("/index.html", "/clips.html"):
-                return self._site_page(url.path.lstrip("/"))
             return super().do_GET()
 
         def _save_body(self, path: Path, length: int) -> None:

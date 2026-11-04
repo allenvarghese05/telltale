@@ -237,20 +237,3 @@ def test_suggest_applies_the_same_file_checks(server, kwargs, code):
     assert got == code
     assert body["error"]
     assert server["calls"]["suggest"] == []
-
-
-def test_site_pages_served_locally_are_marked_for_the_upload_button(server):
-    (server["tmp"] / "site" / "clips.html").write_text("<!doctype html><html><head><title>c</title></head></html>")
-    (server["tmp"] / "site" / "index.html").write_text("<!doctype html><html><head><title>i</title></head></html>")
-    for page in ("index.html", "clips.html"):
-        with fetch(f"{server['base']}/{page}") as r:
-            html = r.read().decode()
-        assert '<meta name="upload" content="local">' in html, page
-
-
-def test_exported_pages_never_carry_the_local_upload_marker(tmp_path):
-    site = export_site(
-        tmp_path / "none", tmp_path / "site", clips_dir=tmp_path, thumbs_dir=tmp_path, video_bundles_dir=tmp_path / "v"
-    )
-    for page in ("index.html", "clips.html"):
-        assert 'name="upload"' not in (site / page).read_text()
