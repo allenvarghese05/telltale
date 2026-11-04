@@ -1,5 +1,33 @@
 {
   "clips": {
+    "cand14": {
+      "clip_id": "cand14",
+      "ego_lane_polygon": [
+        [
+          0.4,
+          0.62
+        ],
+        [
+          0.6,
+          0.62
+        ],
+        [
+          0.85,
+          1.0
+        ],
+        [
+          0.15,
+          1.0
+        ]
+      ],
+      "file": "cand14.mp4",
+      "fps": 29.8,
+      "height": 720,
+      "nexar_id": "00981",
+      "time_of_alert": 4.248,
+      "time_of_event": 8.0,
+      "width": 1280
+    },
     "cand36": {
       "clip_id": "cand36",
       "ego_lane_polygon": [
@@ -81,6 +109,90 @@
       "height": 720,
       "nexar_id": "00596",
       "time_of_alert": 4.8,
+      "time_of_event": 8.0,
+      "width": 1280
+    },
+    "cand45": {
+      "clip_id": "cand45",
+      "ego_lane_polygon": [
+        [
+          0.4,
+          0.62
+        ],
+        [
+          0.6,
+          0.62
+        ],
+        [
+          0.85,
+          1.0
+        ],
+        [
+          0.15,
+          1.0
+        ]
+      ],
+      "file": "cand45.mp4",
+      "fps": 30.6,
+      "height": 720,
+      "nexar_id": "00702",
+      "time_of_alert": 4.896,
+      "time_of_event": 8.0,
+      "width": 1280
+    },
+    "cand56": {
+      "clip_id": "cand56",
+      "ego_lane_polygon": [
+        [
+          0.4,
+          0.62
+        ],
+        [
+          0.6,
+          0.62
+        ],
+        [
+          0.85,
+          1.0
+        ],
+        [
+          0.15,
+          1.0
+        ]
+      ],
+      "file": "cand56.mp4",
+      "fps": 30.0,
+      "height": 720,
+      "nexar_id": "00190",
+      "time_of_alert": 5.0,
+      "time_of_event": 8.0,
+      "width": 1280
+    },
+    "cand60": {
+      "clip_id": "cand60",
+      "ego_lane_polygon": [
+        [
+          0.4,
+          0.62
+        ],
+        [
+          0.6,
+          0.62
+        ],
+        [
+          0.85,
+          1.0
+        ],
+        [
+          0.15,
+          1.0
+        ]
+      ],
+      "file": "cand60.mp4",
+      "fps": 30.0,
+      "height": 720,
+      "nexar_id": "00154",
+      "time_of_alert": 5.034,
       "time_of_event": 8.0,
       "width": 1280
     },

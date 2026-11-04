@@ -1,0 +1,11 @@
+{
+  "model": "muse-spark-1.3",
+  "answers": {
+    "other_vehicle_lane_change_t": 4.4,
+    "other_vehicle_turn_signal": "no",
+    "other_vehicle_brake_lights": "yes",
+    "weather": "clear",
+    "lighting": "daylight",
+    "road_surface": "dry"
+  }
+}
