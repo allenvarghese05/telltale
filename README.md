@@ -67,28 +67,7 @@ before a person sees it.
 
 ## One investigation, step by step
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant V as Dashcam clip
-    participant S as SAM 3.1
-    participant W as Muse Spark 1.3
-    participant E as Evidence store
-    participant A as Muse Wonder agent
-    participant C as Checker
-    participant P as Reviewer
-
-    V->>S: track every vehicle
-    S->>E: VID facts: hazard onset, impact, lane changes
-    V->>W: describe what is visible
-    W->>E: WIT facts: brake lights, lighting, weather
-    Note over E: plus CAN and ADAS logs, SHA-256 hashed
-    A->>E: list_evidence, get_series, measure
-    A->>E: run_counterfactual, witness_recheck
-    A->>C: claims and verdict via submit_findings
-    C->>E: recompute every claim and the verdict
-    C->>P: verified timeline, blocked claims, verdict or withheld
-```
+<p align="center"><img src="docs/images/how-one-case-runs.svg" alt="Sequence of one investigation: SAM 3.1 and Muse Spark write video and witness facts to the evidence store, the Muse Wonder agent queries it and submits claims, and the checker recomputes every claim and the verdict before a reviewer sees them." width="100%"></p>
 
 The agent reads the video facts, the witness answers, the logs and the vehicle profile. It never sees the
 checker's physics facts (`PHYS:*`) or the deterministic attribution (`ATTR:*`). It can add facts only through two
@@ -97,34 +76,7 @@ with SHA-256.
 
 ## Architecture
 
-```mermaid
-flowchart LR
-    subgraph Perception["Perception (Meta AI)"]
-        CLIP[Nexar dashcam clip] --> SAM[SAM 3.1<br/>vehicle tracks]
-        SAM --> VF[Video facts<br/>hazard onset, TTC, lane changes]
-        CLIP --> SPARK[Muse Spark 1.3<br/>video witness]
-    end
-
-    subgraph Evidence["Evidence"]
-        LOGS[CAN and ADAS logs<br/>candump, MCAP] --> STORE[(Immutable store<br/>SHA-256)]
-        VF --> STORE
-        SPARK --> STORE
-    end
-
-    subgraph Investigation["Investigation (Meta AI)"]
-        STORE -->|agent-visible facts only| AGENT[Muse Wonder agent<br/>6 tools]
-        AGENT --> CLAIMS[Claims and verdict]
-    end
-
-    subgraph Verification["Verification (plain Python)"]
-        CLAIMS --> CHECK[Checker<br/>rules R1 to R5]
-        STORE -->|all facts| CHECK
-        STORE --> PHYS[1-D physics and<br/>attribution]
-        PHYS --> CHECK
-    end
-
-    CHECK --> SITE[Static replay site<br/>and incident report]
-```
+<p align="center"><img src="docs/images/architecture.svg" alt="Architecture: perception by Meta AI feeds an immutable SHA-256 evidence store with the CAN and ADAS logs; the Muse Wonder agent sees only agent-visible facts; the checker and 1-D physics see all facts and produce the replay site and incident report." width="720"></p>
 
 ## Try it
 
