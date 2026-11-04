@@ -1,7 +1,10 @@
 import json
+import re
+from pathlib import Path
 
 import pytest
 
+import telltale.web.export as export_module
 from telltale.web.export import PERCEPTION_GRID, TAU_GRID, counterfactual_grid, export_site
 
 BUNDLE = {
@@ -135,3 +138,11 @@ def test_unsafe_case_id_is_rejected(tmp_path):
     (bundles / "x.json").write_text(json.dumps({**BUNDLE, "case_id": "../evil"}))
     with pytest.raises(ValueError, match="unsafe case id"):
         export_site(bundles, tmp_path / "site", clips_dir=tmp_path, thumbs_dir=tmp_path)
+
+
+def test_csp_lets_the_hosted_space_play_its_videos():
+    """Hugging Face serves .mp4 files from its CDN (*.hf.co), so `media-src 'self'` alone blocks every video."""
+    index = (Path(export_module.__file__).parent / "static" / "index.html").read_text()
+    csp = re.search(r'Content-Security-Policy"\s+content="([^"]+)"', index).group(1)
+    media = next(d for d in csp.split(";") if d.strip().startswith("media-src")).split()
+    assert media[1:] == ["'self'", "https://*.hf.co"]
