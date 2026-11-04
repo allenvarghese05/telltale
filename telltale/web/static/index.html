@@ -135,10 +135,11 @@
     <div class="bench">
       <h3>Agent alone against agent plus checker</h3>
       <p class="figure-pair"><span class="num">19 of 19</span><span class="unit">verdicts correct, all independently verified</span></p>
-      <p class="figure-pair caveat"><span class="num">12 of 165</span><span class="unit">claims blocked, none of them false</span></p>
-      <p class="caption">19 blind cases. Every blocked claim was true, but could not be proven from what it
-         cited: 7 cited too little, 4 tried a witness recheck our tool cannot answer, 1 wrote its check wrongly.
-         The agent was never wrong, so this run did not test withholding a wrong verdict.</p>
+      <p class="figure-pair caveat"><span class="num">1 of 172</span><span class="unit">claims blocked, and it was true</span></p>
+      <p class="caption">19 blind cases. The blocked claim cited the witness recheck's 6 to 8 s window, a tool
+         argument rather than a fact, so it could not be proven. An earlier run blocked 12 of 165, all true; the
+         agent's instructions and the recheck tool were fixed, not the checker. The agent was never wrong, so this
+         run did not test withholding a wrong verdict.</p>
     </div>
     <div class="bench">
       <h3>Synthetic attribution consistency</h3>
