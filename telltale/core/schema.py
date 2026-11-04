@@ -21,6 +21,7 @@ HAZARD_REASONS = {
     "entering": "struck vehicle crossed laterally into the ego lane (SAM 3.1 box)",
     "predicted": "struck vehicle outside the ego lane, closing on its edge within 2 s at the measured rate",
     "closing": "struck vehicle already in the ego lane with time-to-collision under 2 s",
+    "collision_course": "struck vehicle touching the ego lane, closing with time-to-collision under 2 s (box height)",
 }
 
 

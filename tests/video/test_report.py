@@ -65,3 +65,29 @@ def test_video_report_explains_how_to_get_tracks_when_missing(tmp_path, monkeypa
     monkeypatch.setattr(rep, "get_clip", lambda _clip_id: CAND38)
     with pytest.raises(FileNotFoundError, match="telltale sam cand38"):
         rep.video_report("cand38")
+
+
+def _report_for(clip_id):
+    tracks = json.loads((CACHE / "sam" / f"{clip_id}.json").read_text())
+    return build_video_report(
+        tracks, {"clip_id": clip_id, "time_of_event": 8.0, "ego_lane_polygon": DEFAULT_POLYGON}, None
+    )
+
+
+def test_a_cross_path_crash_is_labelled_honestly():
+    """cand60: an oncoming car turning across our path. The report must not imply a forward conflict."""
+    report = _report_for("cand60")
+    assert report["struck_vehicle_geometry"] == "side_or_crossing"
+    assert any("across our path" in s for s in report["summary"])
+
+
+def test_a_rear_end_carries_no_geometry_caveat():
+    report = _report_for("cand36")
+    assert report["struck_vehicle_geometry"] == "ahead_in_lane"
+    assert not any("across our path" in s for s in report["summary"])
+
+
+def test_a_collision_course_onset_is_explained_in_the_report():
+    report = _report_for("cand14")
+    assert report["struck_vehicle"] == "4"
+    assert report["hazard_onset"]["reason"] == "collision_course"

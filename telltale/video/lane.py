@@ -2,9 +2,13 @@
 
 from __future__ import annotations
 
+from telltale.video.ttc import ttc_series
+
 MIN_BOX_FRACTION = 0.02
 TARGET_WINDOW_S = 1.0
 TARGET_MIN_LANE_OVERLAP = 0.5
+COURSE_TTC_S = 2.0
+COURSE_HOLD_FRAMES = 9
 
 
 def lane_polygon_px(tracks: dict, clip: dict) -> list[tuple[float, float]]:
@@ -64,21 +68,62 @@ def lane_overlap_fraction(box: list[float], poly: list[tuple[float, float]]) -> 
     return max(0.0, min(inside / width, 1.0))
 
 
-def select_target(tracks: dict, clip: dict, window: int = 5) -> str:
-    """The struck vehicle: the largest one near impact that spent the last second mostly in our lane.
+def mean_lane_overlap(dets: list[dict], poly_px: list[tuple[float, float]], first_frame: int, last_frame: int) -> float:
+    """The average share of the vehicle's width inside the ego lane over a span of frames; 0 if it was not seen."""
+    boxes = [d["box"] for d in dets if first_frame <= d["frame"] <= last_frame]
+    return sum(lane_overlap_fraction(b, poly_px) for b in boxes) / len(boxes) if boxes else 0.0
 
-    Largest-box-at-impact alone picks whatever is closest to the camera. On cand56 that was a pickup
-    overtaking in the next lane (0.17 mean lane overlap over the last second) instead of the car ahead (1.00).
-    Requiring the vehicle to have been in our path before impact excludes passers. Boxes too small to
-    measure are ignored. If no vehicle qualifies (one crossing our path, or a mis-drawn lane), the largest
-    box near impact is used, as before.
+
+def collision_course_frame(
+    dets: list[dict], fps: float, poly_px: list[tuple[float, float]], frame_width: int, from_frame: int | None = None
+) -> int | None:
+    """First frame from which a vehicle is closing on the ego car fast while touching the ego lane's extent.
+
+    Unlike the lane tests, this does not ask where the vehicle is in the lane, so it catches a car turning across
+    our path or striking our side. "Closing fast" is a time to collision under 2 s from the growth of the box's
+    height, held for 9 frames, the same threshold and hold the in-lane `closing` test uses. Height rather than
+    width, because an edge-clipped or turning vehicle's width stops tracking its distance. Touching the lane
+    (any overlap) keeps out oncoming traffic that grows as it approaches in its own lane, and a vehicle passing
+    alongside is excluded by its height staying flat. With `from_frame`, only runs from that frame on count, while
+    the time to collision is still estimated over the whole track.
+    """
+    if len(dets) < COURSE_HOLD_FRAMES:
+        return None
+    frames, ttc = ttc_series(dets, fps, dimension="height")
+    run = 0
+    for i, d in enumerate(dets):
+        on = (
+            (from_frame is None or d["frame"] >= from_frame)
+            and ttc[i] < COURSE_TTC_S
+            and resolvable(d["box"], frame_width)
+            and lane_overlap_fraction(d["box"], poly_px) > 0.0
+        )
+        run = run + 1 if on else 0
+        if run >= COURSE_HOLD_FRAMES:
+            return int(frames[i - COURSE_HOLD_FRAMES + 1])
+    return None
+
+
+def select_target(tracks: dict, clip: dict, window: int = 5) -> str:
+    """The struck vehicle: the largest one near impact that was in our path or on a collision course with us.
+
+    Largest-box-at-impact alone picks whatever is closest to the camera: on cand56 a pickup overtaking in the next
+    lane, instead of the car ahead. Requiring the last second mostly in our lane fixed that but assumed a forward
+    conflict, and missed a taxi striking our side (cand14) and an oncoming car turning across our path (cand60),
+    each picked as some small car ahead instead. So a vehicle also qualifies if it was on a collision course at
+    any point in the 2 s before impact. If none qualifies, the largest box near impact is used.
+
+    Ranking qualifiers by shortest time to collision was tried and rejected: distant boxes a few pixels wide give
+    noisy short TTCs and would replace the true struck vehicle on two of the four demo clips.
     """
     fps, frame_width = tracks["fps"], tracks["width"]
     impact_frame = round(clip["time_of_event"] * fps)
     first_frame = impact_frame - round(TARGET_WINDOW_S * fps)
+    course_from = impact_frame - round(COURSE_TTC_S * fps)
     poly = lane_polygon_px(tracks, clip)
-    largest, in_path = None, None
-    for oid, dets in tracks["objects"].items():
+    largest, qualified = None, None
+    for oid, raw in tracks["objects"].items():
+        dets = sorted(raw, key=lambda d: d["frame"])
         near = [d for d in dets if abs(d["frame"] - impact_frame) <= window]
         if not near:
             continue
@@ -86,14 +131,16 @@ def select_target(tracks: dict, clip: dict, window: int = 5) -> str:
         area = (box[2] - box[0]) * (box[3] - box[1])
         if largest is None or area > largest[0]:
             largest = (area, oid)
-        last_second = [d["box"] for d in dets if first_frame <= d["frame"] <= impact_frame]
-        overlap = sum(lane_overlap_fraction(b, poly) for b in last_second) / len(last_second) if last_second else 0.0
-        qualifies = overlap >= TARGET_MIN_LANE_OVERLAP and resolvable(box, frame_width)
-        if qualifies and (in_path is None or area > in_path[0]):
-            in_path = (area, oid)
+        if not resolvable(box, frame_width):
+            continue
+        overlap = mean_lane_overlap(dets, poly, first_frame, impact_frame)
+        before = [d for d in dets if d["frame"] <= impact_frame]
+        on_course = collision_course_frame(before, fps, poly, frame_width, from_frame=course_from) is not None
+        if (overlap >= TARGET_MIN_LANE_OVERLAP or on_course) and (qualified is None or area > qualified[0]):
+            qualified = (area, oid)
     if largest is None:
         raise ValueError("no tracked object visible near the impact frame")
-    return (in_path or largest)[1]
+    return (qualified or largest)[1]
 
 
 def lane_entry_frame(dets: list[dict], poly_px: list[tuple[float, float]], hold: int = 3) -> int | None:

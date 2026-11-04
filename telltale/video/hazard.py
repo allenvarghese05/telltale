@@ -3,12 +3,14 @@
 Earlier versions examined only the struck vehicle, chosen as the largest box near impact. That is a sound
 way to find *what was hit*, but a poor way to find *when the danger started*: on a real clip one car moves
 into the ego lane while another leaves it, and only looking at the biggest box hides that. Every tracked
-object is assessed here, and each can become a hazard in one of three ways:
+object is assessed here, and each can become a hazard in one of four ways:
 
 - `entering` — it crosses laterally into the ego lane;
 - `predicted` — it is still outside the lane but closing on the edge fast enough to arrive within
   `DANGER_TLC_S`, which is when a cut-in becomes foreseeable rather than when it lands;
-- `closing` — it is already in the ego lane and the time to collision stays under `DANGER_TTC_S`.
+- `closing` — it is already in the ego lane and the time to collision stays under `DANGER_TTC_S`;
+- `collision_course` — wherever it is, it is closing on the ego car fast while touching the ego lane's extent,
+  which catches a car turning across our path or striking our side (see `lane.collision_course_frame`).
 
 A vehicle is only ever a hazard while it is actually approaching, so each reason also requires a finite
 time to collision. A car in the next lane travelling alongside raises nothing.
@@ -20,7 +22,13 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from telltale.video.lane import lane_entry_frame, lane_overlap_fraction, lane_polygon_px, resolvable
+from telltale.video.lane import (
+    collision_course_frame,
+    lane_entry_frame,
+    lane_overlap_fraction,
+    lane_polygon_px,
+    resolvable,
+)
 from telltale.video.motion import lateral_offsets, lateral_rate, time_to_lane_crossing
 from telltale.video.ttc import first_sustained_below, ttc_series
 
@@ -37,7 +45,7 @@ class HazardOnset:
     object_id: str
     onset_t: float
     reason: str
-    u_at_onset: float
+    u_at_onset: float | None
     ttc_at_onset: float | None
 
 
@@ -64,33 +72,41 @@ def hazard_onsets(tracks: dict, clip: dict) -> list[HazardOnset]:
         dets = sorted(raw, key=lambda d: d["frame"])
         if len(dets) < MIN_DETECTIONS:
             continue
-        frames, offsets = lateral_offsets(dets, poly)
-        if len(frames) < MIN_DETECTIONS:
-            continue
-        rate, fitted, _ = lateral_rate(frames, offsets, fps)
         ttc_frames, ttc = ttc_series(dets, fps)
         by_frame = {int(f): ttc[i] for i, f in enumerate(ttc_frames)}
-        closing = np.array([np.isfinite(by_frame.get(int(f), np.inf)) for f in frames])
 
+        # Lane-agnostic, so it runs on the raw boxes before any test that needs a lane position.
         candidates: list[tuple[int, str]] = []
-        entry = lane_entry_frame(dets, poly)
-        if entry is not None:
-            candidates.append((entry, "entering"))
-        predicted = _first_predicted_crossing(frames, fitted, rate, fps, closing)
-        if predicted is not None:
-            candidates.append((predicted, "predicted"))
-        by_frame_box = {int(d["frame"]): d["box"] for d in dets}
-        in_lane = np.array(
-            [
-                lane_overlap_fraction(by_frame_box[int(f)], poly) >= MIN_IN_LANE_FRACTION
-                and resolvable(by_frame_box[int(f)], tracks["width"])
-                for f in frames
-            ]
-        )
-        masked = np.where(in_lane, [by_frame.get(int(f), np.inf) for f in frames], np.inf)
-        closing_frame = first_sustained_below(frames, masked, DANGER_TTC_S, HOLD_FRAMES)
-        if closing_frame is not None:
-            candidates.append((closing_frame, "closing"))
+        course = collision_course_frame(dets, fps, poly, tracks["width"])
+        if course is not None:
+            candidates.append((course, "collision_course"))
+
+        frames, offsets = lateral_offsets(dets, poly)
+        fitted = None
+        if len(frames) >= MIN_DETECTIONS:
+            rate, fitted, _ = lateral_rate(frames, offsets, fps)
+            closing = np.array([np.isfinite(by_frame.get(int(f), np.inf)) for f in frames])
+            entry = lane_entry_frame(dets, poly)
+            if entry is not None:
+                candidates.append((entry, "entering"))
+            predicted = _first_predicted_crossing(frames, fitted, rate, fps, closing)
+            if predicted is not None:
+                candidates.append((predicted, "predicted"))
+            by_frame_box = {int(d["frame"]): d["box"] for d in dets}
+            in_lane = np.array(
+                [
+                    lane_overlap_fraction(by_frame_box[int(f)], poly) >= MIN_IN_LANE_FRACTION
+                    and resolvable(by_frame_box[int(f)], tracks["width"])
+                    for f in frames
+                ]
+            )
+            masked = np.where(in_lane, [by_frame.get(int(f), np.inf) for f in frames], np.inf)
+            closing_frame = first_sustained_below(frames, masked, DANGER_TTC_S, HOLD_FRAMES)
+            if closing_frame is not None:
+                candidates.append((closing_frame, "closing"))
+        lane_based = [c for c in candidates if c[1] != "collision_course"]
+        if lane_based:
+            candidates = lane_based
         if not candidates:
             continue
 
@@ -98,16 +114,19 @@ def hazard_onsets(tracks: dict, clip: dict) -> list[HazardOnset]:
         onset_t = frame / fps
         if onset_t > impact_t:
             continue
-        index = int(np.argmin(np.abs(frames - frame)))
-        if abs(fitted[index] - 0.5) > MAX_LANES_AWAY:
-            continue
+        u_at_onset = None
+        if fitted is not None:
+            index = int(np.argmin(np.abs(frames - frame)))
+            u_at_onset = float(fitted[index])
+            if reason != "collision_course" and abs(u_at_onset - 0.5) > MAX_LANES_AWAY:
+                continue
         value = by_frame.get(frame)
         found.append(
             HazardOnset(
                 object_id=oid,
                 onset_t=onset_t,
                 reason=reason,
-                u_at_onset=float(fitted[index]),
+                u_at_onset=u_at_onset,
                 ttc_at_onset=float(value) if value is not None and np.isfinite(value) else None,
             )
         )
