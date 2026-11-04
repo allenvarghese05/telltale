@@ -1,24 +1,26 @@
 {
   "model": "muse-wonder-1.0",
-  "digest": "46feed630ededee9e8a7c691888dfbbde7ebf7d6910f517a832be7c17971965a",
+  "digest": "38fbc25004e06d023702f507ae6845768c115ac6348ba5bbb693402ec5ce19e2",
   "verdict": "PERCEPTION_LATE",
   "claims": [
     {
-      "text": "At 6.83 s the struck vehicle became a hazard by closing within the ego lane, with impact at 8.00 s.",
+      "text": "Hazard onset was at 6.83 s when the struck vehicle was already in the ego lane closing, with time-to-collision 1.92 s; impact followed at 8.00 s.",
       "type": "observation",
       "evidence": [
         "VID:hazard_onset_t",
         "VID:hazard_onset_reason",
+        "VID:ttc_at_onset_s",
         "VID:impact_t"
       ],
       "assertion": {
-        "op": "is",
-        "fact": "VID:hazard_onset_reason",
-        "equals": "closing"
+        "op": "diff",
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 1.1699
       }
     },
     {
-      "text": "Perception took 1.04 s, exceeding the 0.30 s perception threshold.",
+      "text": "The system took 1.04 s to first see the hazard vehicle, above the 0.30 s perception threshold.",
       "type": "timing",
       "evidence": [
         "AV:first_seen_t",
@@ -33,7 +35,7 @@
       }
     },
     {
-      "text": "Command took 0.08 s after detection, below the 0.10 s command threshold.",
+      "text": "Command delay after detection was 0.08 s, within the 0.10 s command threshold.",
       "type": "timing",
       "evidence": [
         "AV:brake_request_t",
@@ -48,7 +50,7 @@
       }
     },
     {
-      "text": "Brake actuation took 0.14 s, below the 0.25 s actuation threshold.",
+      "text": "Brake actuation took 0.14 s from CAN brake request to pressure reached, within the 0.25 s actuation threshold.",
       "type": "timing",
       "evidence": [
         "CAN:pressure_reached_t",
@@ -63,21 +65,7 @@
       }
     },
     {
-      "text": "Impact occurred 1.17 s after hazard onset.",
-      "type": "timing",
-      "evidence": [
-        "VID:impact_t",
-        "VID:hazard_onset_t"
-      ],
-      "assertion": {
-        "op": "diff",
-        "a": "VID:impact_t",
-        "b": "VID:hazard_onset_t",
-        "equals": 1.1699
-      }
-    },
-    {
-      "text": "The brake log is complete, so the timing record is not inconclusive.",
+      "text": "Brake log is complete (true), so the timing verdict is not inconclusive for missing data.",
       "type": "other",
       "evidence": [
         "DATA:brake_log_complete"
@@ -89,14 +77,15 @@
       }
     },
     {
-      "text": "With nominal perception of 0.20 s, nominal command of 0.05 s, and nominal tau of 0.15 s, the counterfactual avoided contact and kept a minimum gap of 1.53 m.",
+      "text": "With nominal perception 0.20 s, command 0.05 s and tau 0.15 s the counterfactual avoids contact, with minimum gap 1.53 m and impact speed 0.00 m/s.",
       "type": "physics",
       "evidence": [
+        "CF:run1_contact",
+        "CF:run1_min_gap_m",
+        "CF:run1_impact_speed_mps",
         "PROFILE:nominal_perception_s",
         "PROFILE:nominal_command_s",
-        "PROFILE:nominal_tau_s",
-        "CF:run1_contact",
-        "CF:run1_min_gap_m"
+        "PROFILE:nominal_tau_s"
       ],
       "assertion": {
         "op": "is",
@@ -105,7 +94,7 @@
       }
     },
     {
-      "text": "The witness and the independent recheck agree that the other vehicle's brake lights were on.",
+      "text": "Witness reported the other vehicle's brake lights were yes, corroborated on recheck as yes.",
       "type": "observation",
       "evidence": [
         "WIT:other_vehicle_brake_lights",
@@ -115,6 +104,19 @@
         "op": "same",
         "a": "WIT:other_vehicle_brake_lights",
         "b": "WIT2:other_vehicle_brake_lights"
+      }
+    },
+    {
+      "text": "At first detection the range was only 1.25 m with closing speed 9.98 m/s, consistent with detection occurring very late before impact.",
+      "type": "physics",
+      "evidence": [
+        "AV:range_at_first_seen_m",
+        "AV:rel_speed_mps"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "AV:range_at_first_seen_m",
+        "equals": 1.245
       }
     }
   ],
@@ -162,9 +164,9 @@
     {
       "name": "witness_recheck",
       "args": {
-        "question": "Were the other vehicle's brake lights on?",
+        "question": "Are the other vehicle's brake lights on?",
         "slug": "other_vehicle_brake_lights",
-        "t0": 6.8,
+        "t0": 6.83,
         "t1": 8.0
       }
     },
@@ -206,7 +208,7 @@
       "value": "yes",
       "unit": "",
       "source": "WIT2",
-      "derivation": "muse-spark-1.3 recheck on sub-clip 6.80-8.00s: Were the other vehicle's brake lights on?",
+      "derivation": "muse-spark-1.3 second look at 6.83-8.00s, asked without the first answer: Are the other vehicle's brake lights on?",
       "kind": "observation"
     }
   ]

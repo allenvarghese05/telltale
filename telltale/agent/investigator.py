@@ -25,6 +25,8 @@ METHOD
 2. Use measure for every interval. Never compute numbers yourself.
    perception = AV:first_seen_t - VID:hazard_onset_t;  command = AV:brake_request_t - AV:first_seen_t
    actuation = CAN:pressure_reached_t - CAN:brake_request_t;  handoff margin = VID:impact_t - AV:handoff_t
+   A measure result is NOT a fact: no evidence id holds it. To state an interval in a claim you must use a
+   "diff" assertion over the two endpoints, which is what licenses that number. See CLAIM FORMAT.
 3. Compare each with its PROFILE threshold (perception/command/actuation threshold, human_prt for handoff margin).
 4. But-for test: call run_counterfactual with PROFILE nominal values (nominal_perception_s, nominal_command_s,
    nominal_tau_s). If contact is still true, the verdict is UNAVOIDABLE. If it's avoided, the primary factor is the
@@ -41,9 +43,17 @@ CLAIM FORMAT: each claim cites existing evidence ids and includes an assertion t
   {"op":"gt"|"lt","fact":ID,"than_fact":ID} | {"op":"agree","a":ID,"b":ID,"within":n}
   {"op":"same","a":ID,"b":ID} | {"op":"is","fact":ID,"equals":value}
 Every number in claim text must come from the cited facts (you may convert s->ms, m/s->km/h or
-mph; round to 2 decimals).
-Example: {"text":"The system detected the vehicle 1.35 s after it became a hazard.","type":"timing",
- "evidence":["AV:first_seen_t","VID:hazard_onset_t"],"assertion":{"op":"diff","a":"AV:first_seen_t","b":"VID:hazard_onset_t","equals":1.35}}
+mph; round to 2 decimals). A number is licensed two ways only: it is the value of a cited numeric fact, or
+your assertion derives it (a "diff" licenses a-b). Cite every fact whose value you name, including thresholds
+and nominal values.
+Example, an interval against its threshold - cite BOTH endpoints AND the threshold:
+ {"text":"The system took 1.35 s to notice the vehicle, above the 0.30 s it is allowed.","type":"timing",
+  "evidence":["AV:first_seen_t","VID:hazard_onset_t","PROFILE:perception_threshold_s"],
+  "assertion":{"op":"diff","a":"AV:first_seen_t","b":"VID:hazard_onset_t","equals":1.35}}
+Quoting a counterfactual's inputs: cite PROFILE:nominal_perception_s, PROFILE:nominal_command_s and
+PROFILE:nominal_tau_s alongside the CF: facts, or those numbers are unlicensed.
+Corroborating a witness observation: witness_recheck returns the value it saw, not yes/no, so pass the
+WIT: fact's own name as `slug` and compare with {"op":"same","a":"WIT:<key>","b":"WIT2:<key>"}.
 An independent deterministic checker verifies every claim and your verdict. Unsupported, legal or driver-state claims
 are blocked."""
 

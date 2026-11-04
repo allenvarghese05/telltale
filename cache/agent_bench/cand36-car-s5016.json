@@ -1,10 +1,10 @@
 {
   "model": "muse-wonder-1.0",
-  "digest": "da955a6d2a8198eea0cff4213e65c9867a0d782e40b82be48c4da23244bfd4a4",
+  "digest": "2a1d4d337e97437a8424e8d1e3345713ee911ccbe7184bcd8ed98332de2b6650",
   "verdict": "UNAVOIDABLE",
   "claims": [
     {
-      "text": "The hazard onset was classified as closing within the ego lane.",
+      "text": "The struck vehicle became a hazard by closing within the ego lane.",
       "type": "observation",
       "evidence": [
         "VID:hazard_onset_reason"
@@ -16,7 +16,7 @@
       }
     },
     {
-      "text": "The system detected the vehicle 0.2029 s after it became a hazard, below the 0.3 s perception threshold.",
+      "text": "The system took 0.20 s to notice the vehicle, below the 0.30 s it is allowed.",
       "type": "timing",
       "evidence": [
         "AV:first_seen_t",
@@ -31,7 +31,7 @@
       }
     },
     {
-      "text": "The brake command followed detection by 0.0577 s, below the 0.1 s command threshold.",
+      "text": "The command interval was 0.06 s, below the 0.10 s threshold.",
       "type": "timing",
       "evidence": [
         "AV:brake_request_t",
@@ -46,7 +46,7 @@
       }
     },
     {
-      "text": "Brake pressure was reached 0.14 s after the CAN brake request, below the 0.25 s actuation threshold.",
+      "text": "Brake actuation took 0.14 s, below the 0.25 s threshold.",
       "type": "timing",
       "evidence": [
         "CAN:pressure_reached_t",
@@ -61,7 +61,7 @@
       }
     },
     {
-      "text": "Impact occurred 1.8667 s after hazard onset, at 8.0 s.",
+      "text": "Impact occurred 1.87 s after hazard onset.",
       "type": "timing",
       "evidence": [
         "VID:impact_t",
@@ -75,7 +75,7 @@
       }
     },
     {
-      "text": "The time-to-collision at hazard onset was 1.9427 s.",
+      "text": "Time-to-collision at hazard onset was 1.94 s.",
       "type": "physics",
       "evidence": [
         "VID:ttc_at_onset_s"
@@ -87,7 +87,7 @@
       }
     },
     {
-      "text": "The brake log was complete.",
+      "text": "The brake log is complete.",
       "type": "other",
       "evidence": [
         "DATA:brake_log_complete"
@@ -99,7 +99,7 @@
       }
     },
     {
-      "text": "With nominal perception 0.2 s, nominal command 0.05 s and nominal tau 0.15 s, the counterfactual still resulted in contact.",
+      "text": "With nominal perception 0.20 s, command 0.05 s and brake tau 0.15 s, contact still occurs.",
       "type": "physics",
       "evidence": [
         "CF:run1_contact",
@@ -114,7 +114,7 @@
       }
     },
     {
-      "text": "The counterfactual impact speed was 3.578 m/s.",
+      "text": "The nominal counterfactual impact speed was 3.58 m/s.",
       "type": "physics",
       "evidence": [
         "CF:run1_impact_speed_mps"
@@ -123,6 +123,21 @@
         "op": "value",
         "fact": "CF:run1_impact_speed_mps",
         "equals": 3.578
+      }
+    },
+    {
+      "text": "Because nominal timing still results in contact, the collision was unavoidable.",
+      "type": "attribution",
+      "evidence": [
+        "CF:run1_contact",
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": true
       }
     }
   ],
@@ -162,25 +177,16 @@
     {
       "name": "run_counterfactual",
       "args": {
-        "command_s": 0.05,
         "perception_s": 0.2,
+        "command_s": 0.05,
         "tau_s": 0.15
-      }
-    },
-    {
-      "name": "witness_recheck",
-      "args": {
-        "question": "Is the scene in daylight?",
-        "slug": "lighting_daylight",
-        "t0": 6.13,
-        "t1": 8.0
       }
     },
     {
       "name": "submit_findings",
       "args": {
         "verdict": "UNAVOIDABLE",
-        "n_claims": 9
+        "n_claims": 10
       }
     }
   ],
@@ -208,14 +214,6 @@
       "source": "CF",
       "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
       "kind": "derived"
-    },
-    {
-      "id": "WIT2:lighting_daylight",
-      "value": "yes",
-      "unit": "",
-      "source": "WIT2",
-      "derivation": "muse-spark-1.3 recheck on sub-clip 6.13-8.00s: Is the scene in daylight?",
-      "kind": "observation"
     }
   ]
 }

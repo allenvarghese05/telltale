@@ -31,6 +31,12 @@ Return ONLY a JSON object with exactly these keys:
  "weather": short string, "lighting": short string,
  "road_surface": "dry" | "wet" | "snow" | "unclear"}"""
 
+RECHECK_INSTRUCTION = {
+    "enum": "Answer with ONLY one word from: {allowed}.",
+    "free": "Answer with ONLY one or two words naming what you see (for example: daylight, night, clear, rain).",
+}
+UNCERTAIN = re.compile(r"\b(cannot|can't|unclear|unsure|unknown|not visible|hard to|difficult to|no idea)\b")
+FILLER = {"the", "it", "is", "a", "an", "in", "of", "scene", "this", "appears", "looks", "clip", "and", "to", "be", "i"}
 NUMERIC = {"other_vehicle_lane_change_t"}
 ENUMS = {
     "other_vehicle_turn_signal": {"yes", "no", "unclear"},
@@ -143,9 +149,36 @@ def run_witness_for_clip(clip_id: str) -> dict:
     return answers
 
 
+def recheck_instruction(key: str) -> str:
+    """How the second look should answer, so its value is comparable with the matching `WIT:` fact."""
+    allowed = ENUMS.get(key)
+    if allowed:
+        return RECHECK_INSTRUCTION["enum"].format(allowed=", ".join(sorted(allowed)))
+    return RECHECK_INSTRUCTION["free"]
+
+
+def parse_recheck_answer(text: str, key: str) -> str:
+    """The observed value, not just yes/no.
+
+    The agent corroborates a witness observation by comparing this against the matching `WIT:` fact, so
+    "daylight" has to come back as "daylight". Collapsing every answer to yes/no made that comparison
+    impossible and blocked every corroboration attempt.
+    """
+    lowered = text.lower()
+    allowed = ENUMS.get(key)
+    if allowed:
+        match = re.search(rf"\b({'|'.join(sorted(allowed))})\b", lowered)
+        return match.group(1) if match else "unclear"
+    if UNCERTAIN.search(lowered):
+        return "unclear"
+    meaningful = [w for w in re.findall(r"[a-z]+", lowered) if w not in FILLER]
+    return " ".join(meaningful[:2])[:MAX_TEXT] if meaningful else "unclear"
+
+
 def recheck(clip_id: str, question: str, t0: float, t1: float, slug: str) -> Fact:
-    """Independent second look: trimmed sub-clip, no prior context, one-word answer."""
+    """Independent second look at a short window: a fresh upload, no prior context, no earlier answer shown."""
     clip = get_clip(clip_id)
+    key = slug if slug in WIT_KEYS else ""
     with tempfile.TemporaryDirectory() as td:
         sub = Path(td) / "sub.mp4"
         subprocess.run(
@@ -166,14 +199,13 @@ def recheck(clip_id: str, question: str, t0: float, t1: float, slug: str) -> Fac
             check=True,
             capture_output=True,
         )
-        text = _ask_video(sub, f"{question}\nAnswer with ONLY one word: yes, no, or unclear.")
-    word = re.search(r"\b(yes|no|unclear)\b", text.lower())
+        text = _ask_video(sub, f"{question}\n{recheck_instruction(key)}")
     safe = re.sub(r"[^a-z0-9_]", "_", slug.lower())[:40]
     return Fact(
         f"WIT2:{safe}",
-        word.group(1) if word else "unclear",
+        parse_recheck_answer(text, key),
         "",
         "WIT2",
-        f"{WITNESS_MODEL} recheck on sub-clip {t0:.2f}-{t1:.2f}s: {question}",
+        f"{WITNESS_MODEL} second look at {t0:.2f}-{t1:.2f}s, asked without the first answer: {question}",
         "observation",
     )

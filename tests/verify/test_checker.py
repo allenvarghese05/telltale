@@ -118,3 +118,28 @@ def test_verdict_verified_and_rejected(store):
 def test_check_all_counts(store):
     res = check_all([Claim("The driver was distracted.", "other", ["VID:hazard_onset_t"])], store)
     assert res["counts"] == {"VERIFIED": 0, "UNCORROBORATED": 0, "BLOCKED": 1}
+
+
+def test_an_interval_and_its_threshold_verify_when_both_are_cited(store):
+    """The shape the agent must use: `measure` results are not facts, so a diff assertion licenses the interval.
+
+    Nine live claims were blocked for stating a correct interval without this, so it is pinned here.
+    """
+    claim = Claim(
+        "The system took 1.35 s to notice the vehicle, above the 0.3 s it is allowed.",
+        "timing",
+        ["AV:first_seen_t", "VID:hazard_onset_t", "PROFILE:perception_threshold_s"],
+        DIFF,
+    )
+    assert check_claim(claim, store).status == "VERIFIED"
+
+
+def test_stating_an_interval_without_a_diff_assertion_is_blocked(store):
+    """`measure` gives the agent the number, but nothing in the store holds it, so prose alone cannot cite it."""
+    claim = Claim(
+        "Perception took 1.35 s.",
+        "timing",
+        ["AV:first_seen_t", "VID:hazard_onset_t"],
+        None,
+    )
+    assert check_claim(claim, store).status == "BLOCKED"

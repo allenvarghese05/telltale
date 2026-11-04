@@ -1,0 +1,1161 @@
+{
+  "summary": {
+    "n": 162,
+    "skipped": 30,
+    "accuracy": 1.0,
+    "per_story": {
+      "unavoidable": 1.0,
+      "perception_late": 1.0,
+      "command_late": 1.0,
+      "brake_slow": 1.0,
+      "late_handoff": 1.0,
+      "dropout": 1.0
+    },
+    "confusion": {
+      "UNAVOIDABLE->UNAVOIDABLE": 24,
+      "PERCEPTION_LATE->PERCEPTION_LATE": 28,
+      "COMMAND_LATE->COMMAND_LATE": 26,
+      "BRAKE_ACTUATION_LATE->BRAKE_ACTUATION_LATE": 28,
+      "LATE_HANDOFF->LATE_HANDOFF": 32,
+      "INCONCLUSIVE->INCONCLUSIVE": 24
+    },
+    "abstention_correct": 1.0,
+    "false_inconclusive": 0
+  },
+  "rows": [
+    {
+      "case": "cand36-car-s1000",
+      "profile": "car",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand36-car-s1001",
+      "profile": "car",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand36-car-s1002",
+      "profile": "car",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand36-car-s1003",
+      "profile": "car",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand36-car-s2000",
+      "profile": "car",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand36-car-s2001",
+      "profile": "car",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand36-car-s2002",
+      "profile": "car",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand36-car-s2003",
+      "profile": "car",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand36-car-s3000",
+      "profile": "car",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand36-car-s3001",
+      "profile": "car",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand36-car-s3002",
+      "profile": "car",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand36-car-s3003",
+      "profile": "car",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand36-car-s4000",
+      "profile": "car",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand36-car-s4001",
+      "profile": "car",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand36-car-s4002",
+      "profile": "car",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand36-car-s4003",
+      "profile": "car",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand36-car-s5000",
+      "profile": "car",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand36-car-s5001",
+      "profile": "car",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand36-car-s5002",
+      "profile": "car",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand36-car-s5003",
+      "profile": "car",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand36-car-s6000",
+      "profile": "car",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand36-car-s6001",
+      "profile": "car",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand36-car-s6002",
+      "profile": "car",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand36-car-s6003",
+      "profile": "car",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand36-truck-s1000",
+      "profile": "truck",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand36-truck-s1001",
+      "profile": "truck",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand36-truck-s1002",
+      "profile": "truck",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand36-truck-s1003",
+      "profile": "truck",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand36-truck-s2000",
+      "profile": "truck",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand36-truck-s2001",
+      "profile": "truck",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand36-truck-s2002",
+      "profile": "truck",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand36-truck-s2003",
+      "profile": "truck",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand36-truck-s3000",
+      "profile": "truck",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand36-truck-s3001",
+      "profile": "truck",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand36-truck-s3002",
+      "profile": "truck",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand36-truck-s3003",
+      "profile": "truck",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand36-truck-s4000",
+      "profile": "truck",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand36-truck-s4001",
+      "profile": "truck",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand36-truck-s4002",
+      "profile": "truck",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand36-truck-s4003",
+      "profile": "truck",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand36-truck-s5000",
+      "profile": "truck",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand36-truck-s5001",
+      "profile": "truck",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand36-truck-s5002",
+      "profile": "truck",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand36-truck-s5003",
+      "profile": "truck",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand36-truck-s6000",
+      "profile": "truck",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand36-truck-s6001",
+      "profile": "truck",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand36-truck-s6002",
+      "profile": "truck",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand36-truck-s6003",
+      "profile": "truck",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand37-car-s1000",
+      "profile": "car",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand37-car-s1001",
+      "profile": "car",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand37-car-s1002",
+      "profile": "car",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand37-car-s1003",
+      "profile": "car",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand37-car-s2000",
+      "profile": "car",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand37-car-s2001",
+      "profile": "car",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand37-car-s2002",
+      "profile": "car",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand37-car-s2003",
+      "profile": "car",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand37-car-s3000",
+      "profile": "car",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand37-car-s3001",
+      "profile": "car",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand37-car-s3002",
+      "profile": "car",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand37-car-s3003",
+      "profile": "car",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand37-car-s4000",
+      "profile": "car",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand37-car-s4001",
+      "profile": "car",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand37-car-s4002",
+      "profile": "car",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand37-car-s4003",
+      "profile": "car",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand37-car-s5000",
+      "profile": "car",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand37-car-s5001",
+      "profile": "car",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand37-car-s5002",
+      "profile": "car",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand37-car-s5003",
+      "profile": "car",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand37-car-s6000",
+      "profile": "car",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand37-car-s6001",
+      "profile": "car",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand37-car-s6002",
+      "profile": "car",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand37-car-s6003",
+      "profile": "car",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand37-truck-s1000",
+      "profile": "truck",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand37-truck-s1001",
+      "profile": "truck",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand37-truck-s1002",
+      "profile": "truck",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand37-truck-s1003",
+      "profile": "truck",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand37-truck-s2000",
+      "profile": "truck",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand37-truck-s2001",
+      "profile": "truck",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand37-truck-s2002",
+      "profile": "truck",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand37-truck-s2003",
+      "profile": "truck",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand37-truck-s3000",
+      "profile": "truck",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand37-truck-s3001",
+      "profile": "truck",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand37-truck-s3002",
+      "profile": "truck",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand37-truck-s3003",
+      "profile": "truck",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand37-truck-s4000",
+      "profile": "truck",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand37-truck-s4001",
+      "profile": "truck",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand37-truck-s4002",
+      "profile": "truck",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand37-truck-s4003",
+      "profile": "truck",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand37-truck-s5000",
+      "profile": "truck",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand37-truck-s5001",
+      "profile": "truck",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand37-truck-s5002",
+      "profile": "truck",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand37-truck-s5003",
+      "profile": "truck",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand37-truck-s6000",
+      "profile": "truck",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand37-truck-s6001",
+      "profile": "truck",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand37-truck-s6002",
+      "profile": "truck",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand37-truck-s6003",
+      "profile": "truck",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand38-car-s1000",
+      "profile": "car",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand38-car-s1001",
+      "profile": "car",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand38-car-s1002",
+      "profile": "car",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand38-car-s1003",
+      "profile": "car",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand38-car-s2000",
+      "profile": "car",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand38-car-s2001",
+      "profile": "car",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand38-car-s2002",
+      "profile": "car",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand38-car-s2003",
+      "profile": "car",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand38-car-s3000",
+      "profile": "car",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand38-car-s3001",
+      "profile": "car",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand38-car-s3002",
+      "profile": "car",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand38-car-s3003",
+      "profile": "car",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand38-car-s4000",
+      "profile": "car",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand38-car-s4001",
+      "profile": "car",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand38-car-s4002",
+      "profile": "car",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand38-car-s4003",
+      "profile": "car",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand38-car-s5000",
+      "profile": "car",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand38-car-s5001",
+      "profile": "car",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand38-car-s5002",
+      "profile": "car",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand38-car-s5003",
+      "profile": "car",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand38-car-s6000",
+      "profile": "car",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand38-car-s6001",
+      "profile": "car",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand38-car-s6002",
+      "profile": "car",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand38-car-s6003",
+      "profile": "car",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand38-truck-s1000",
+      "profile": "truck",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand38-truck-s1001",
+      "profile": "truck",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand38-truck-s1002",
+      "profile": "truck",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand38-truck-s1003",
+      "profile": "truck",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "predicted": "UNAVOIDABLE"
+    },
+    {
+      "case": "cand38-truck-s2000",
+      "profile": "truck",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand38-truck-s2001",
+      "profile": "truck",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand38-truck-s2002",
+      "profile": "truck",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand38-truck-s2003",
+      "profile": "truck",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand38-truck-s3000",
+      "profile": "truck",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand38-truck-s3001",
+      "profile": "truck",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand38-truck-s3002",
+      "profile": "truck",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand38-truck-s3003",
+      "profile": "truck",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand38-truck-s4000",
+      "profile": "truck",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand38-truck-s4001",
+      "profile": "truck",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand38-truck-s4002",
+      "profile": "truck",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand38-truck-s4003",
+      "profile": "truck",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand38-truck-s5000",
+      "profile": "truck",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand38-truck-s5001",
+      "profile": "truck",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand38-truck-s5002",
+      "profile": "truck",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand38-truck-s5003",
+      "profile": "truck",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand38-truck-s6000",
+      "profile": "truck",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand38-truck-s6001",
+      "profile": "truck",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand38-truck-s6002",
+      "profile": "truck",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand38-truck-s6003",
+      "profile": "truck",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "predicted": "INCONCLUSIVE"
+    },
+    {
+      "case": "cand63-car-s5000",
+      "profile": "car",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand63-car-s5001",
+      "profile": "car",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand63-car-s5002",
+      "profile": "car",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand63-car-s5003",
+      "profile": "car",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand63-truck-s2000",
+      "profile": "truck",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand63-truck-s2001",
+      "profile": "truck",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand63-truck-s2002",
+      "profile": "truck",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand63-truck-s2003",
+      "profile": "truck",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "predicted": "PERCEPTION_LATE"
+    },
+    {
+      "case": "cand63-truck-s3000",
+      "profile": "truck",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand63-truck-s3001",
+      "profile": "truck",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "predicted": "COMMAND_LATE"
+    },
+    {
+      "case": "cand63-truck-s4000",
+      "profile": "truck",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand63-truck-s4001",
+      "profile": "truck",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand63-truck-s4002",
+      "profile": "truck",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand63-truck-s4003",
+      "profile": "truck",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "predicted": "BRAKE_ACTUATION_LATE"
+    },
+    {
+      "case": "cand63-truck-s5000",
+      "profile": "truck",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand63-truck-s5001",
+      "profile": "truck",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand63-truck-s5002",
+      "profile": "truck",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    },
+    {
+      "case": "cand63-truck-s5003",
+      "profile": "truck",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "predicted": "LATE_HANDOFF"
+    }
+  ]
+}
