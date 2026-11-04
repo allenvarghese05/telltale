@@ -67,7 +67,7 @@ before a person sees it.
 
 ## One investigation, step by step
 
-<p align="center"><img src="docs/images/how-one-case-runs.svg" alt="One real investigation in four steps: SAM 3.1 finds the car ahead became a danger at 6.13 s; Muse Spark sees daylight and a dry road; the Muse Wonder agent finds the driver-assist noticed too late, 1.10 s against 0.30 s allowed; plain Python reproduces all 9 claims and verifies the verdict." width="100%"></p>
+<p align="center"><img src="docs/images/how-one-case-runs.svg" alt="Timeline of one real investigation: the car ahead becomes a danger at 6.13 s, seen in the video by SAM 3.1; the driver-assist notices it at 7.24 s, 1.10 s later against 0.30 s allowed; brakes are commanded at 7.31 s and engage at 7.44 s; impact at 8.00 s and 8.4 km/h. Muse Wonder concluded the driver-assist noticed too late, and the Python checker reached the same verdict and reproduced all 9 claims." width="100%"></p>
 
 The agent reads the video facts, the witness answers, the logs and the vehicle profile. It never sees the
 checker's physics facts (`PHYS:*`) or the deterministic attribution (`ATTR:*`). It can add facts only through two
@@ -76,7 +76,7 @@ with SHA-256.
 
 ## Architecture
 
-<p align="center"><img src="docs/images/architecture.svg" alt="Architecture: perception by Meta AI feeds an immutable SHA-256 evidence store with the CAN and ADAS logs; the Muse Wonder agent sees only agent-visible facts; the checker and 1-D physics see all facts and produce the replay site and incident report." width="100%"></p>
+<p align="center"><img src="docs/images/architecture.svg" alt="Architecture: dashcam video goes to SAM 3.1 and Muse Spark; their facts and the car logs go into an immutable evidence store. The Muse Wonder agent sees only the facts it is allowed to see and sends claims and a verdict to the checker, which sees all facts including physics, recomputes everything, and either publishes a verified report or holds it for a human." width="100%"></p>
 
 ## Try it
 

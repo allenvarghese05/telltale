@@ -1,94 +1,90 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="1200" height="560" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 660" width="1200" height="660" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
   <defs>
-    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#8c959f"/>
-    </marker>
-    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#1a7f37"/>
+    <marker id="h" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8" fill="none" stroke="#1f2328" stroke-width="1.2"/>
     </marker>
   </defs>
-  <rect x="0" y="0" width="1200" height="560" rx="16" fill="#ffffff"/>
+  <rect width="1200" height="660" fill="#ffffff"/>
 
-  <!-- Lane headers -->
-  <g font-size="12.5" font-weight="700" letter-spacing="1.3">
-    <text x="40" y="50" fill="#0866FF">PERCEIVE · META AI</text>
-    <text x="330" y="50" fill="#57606a">EVIDENCE</text>
-    <text x="620" y="50" fill="#0866FF">INVESTIGATE · META AI</text>
-    <text x="910" y="50" fill="#1a7f37">VERIFY · PLAIN PYTHON</text>
-  </g>
-  <g stroke="#eaeef2" stroke-width="1.5">
-    <line x1="40" y1="64" x2="270" y2="64"/>
-    <line x1="330" y1="64" x2="560" y2="64"/>
-    <line x1="620" y1="64" x2="850" y2="64"/>
-    <line x1="910" y1="64" x2="1160" y2="64"/>
+  <!-- Tier labels -->
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#8c959f">
+    <text x="60" y="76">sources</text>
+    <text x="60" y="186">perception</text>
+    <text x="60" y="310">evidence</text>
+    <text x="60" y="446">reasoning</text>
+    <text x="60" y="586">output</text>
   </g>
 
-  <!-- Perceive -->
-  <rect x="40" y="96" width="230" height="78" rx="12" fill="#f6f8fa" stroke="#d0d7de"/>
-  <text x="60" y="128" font-size="16" font-weight="700" fill="#1f2328">Dashcam clip</text>
-  <text x="60" y="152" font-size="13" fill="#57606a">real Nexar crash footage</text>
+  <!-- Boxes: hairline, square. Accent bar: blue = Meta AI, green = plain Python -->
+  <g fill="#ffffff" stroke="#1f2328" stroke-width="1.25">
+    <rect x="220" y="44" width="380" height="56"/>
+    <rect x="800" y="44" width="340" height="56"/>
+    <rect x="220" y="150" width="180" height="64"/>
+    <rect x="420" y="150" width="180" height="64"/>
+    <rect x="220" y="272" width="920" height="62"/>
+    <rect x="220" y="408" width="380" height="68"/>
+    <rect x="760" y="408" width="380" height="68"/>
+    <rect x="760" y="556" width="180" height="48"/>
+    <rect x="960" y="556" width="180" height="48"/>
+  </g>
+  <g>
+    <rect x="220" y="150" width="4" height="64" fill="#0866FF"/>
+    <rect x="420" y="150" width="4" height="64" fill="#0866FF"/>
+    <rect x="220" y="408" width="4" height="68" fill="#0866FF"/>
+    <rect x="760" y="408" width="4" height="68" fill="#1a7f37"/>
+  </g>
 
-  <rect x="40" y="214" width="230" height="78" rx="12" fill="#eef4ff" stroke="#0866FF"/>
-  <text x="60" y="246" font-size="16" font-weight="700" fill="#1f2328">SAM 3.1</text>
-  <text x="60" y="270" font-size="13" fill="#57606a">tracks every vehicle</text>
+  <!-- Box text -->
+  <g font-size="15" font-weight="600" fill="#1f2328">
+    <text x="240" y="78">Dashcam video</text>
+    <text x="820" y="78">Car logs</text>
+    <text x="240" y="177">SAM 3.1</text>
+    <text x="440" y="177">Muse Spark 1.3</text>
+    <text x="240" y="300">Evidence store</text>
+    <text x="240" y="438">Muse Wonder agent</text>
+    <text x="780" y="438">Checker</text>
+    <text x="850" y="586" text-anchor="middle">Verified report</text>
+    <text x="1050" y="586" text-anchor="middle">Held for a human</text>
+  </g>
+  <g font-size="13" fill="#57606a">
+    <text x="372" y="78">real Nexar crash footage</text>
+    <text x="902" y="78">CAN bus and ADAS</text>
+    <text x="240" y="199">tracks every vehicle</text>
+    <text x="440" y="199">video witness</text>
+    <text x="240" y="320">every fact has an id and a source; the store is immutable and SHA-256 hashed</text>
+    <text x="240" y="460">uses tools for every number, decides the primary cause</text>
+    <text x="780" y="460">recomputes every claim and the verdict, rules R1 to R6</text>
+  </g>
 
-  <rect x="40" y="332" width="230" height="78" rx="12" fill="#eef4ff" stroke="#0866FF"/>
-  <text x="60" y="364" font-size="16" font-weight="700" fill="#1f2328">Muse Spark 1.3</text>
-  <text x="60" y="388" font-size="13" fill="#57606a">video witness</text>
+  <!-- Arrows -->
+  <g stroke="#1f2328" stroke-width="1.1" fill="none" marker-end="url(#h)">
+    <line x1="310" y1="100" x2="310" y2="146"/>
+    <line x1="510" y1="100" x2="510" y2="146"/>
+    <line x1="310" y1="214" x2="310" y2="268"/>
+    <line x1="510" y1="214" x2="510" y2="268"/>
+    <line x1="970" y1="100" x2="970" y2="268"/>
+    <line x1="410" y1="334" x2="410" y2="404"/>
+    <line x1="950" y1="334" x2="950" y2="404"/>
+    <line x1="600" y1="442" x2="756" y2="442"/>
+    <line x1="850" y1="476" x2="850" y2="552"/>
+    <line x1="1050" y1="476" x2="1050" y2="552"/>
+  </g>
 
-  <line x1="155" y1="176" x2="155" y2="210" stroke="#8c959f" stroke-width="2" marker-end="url(#a)"/>
-  <path d="M 40 135 Q 14 135 14 250 Q 14 371 36 371" fill="none" stroke="#8c959f" stroke-width="2" marker-end="url(#a)"/>
+  <!-- Arrow labels: the information boundary -->
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11.5" fill="#57606a">
+    <text x="420" y="374">only the facts the agent is allowed to see</text>
+    <text x="960" y="366">all facts, including the physics</text>
+    <text x="960" y="382">the agent never sees</text>
+    <text x="678" y="432" text-anchor="middle">claims + verdict</text>
+    <text x="860" y="524">agrees</text>
+    <text x="1060" y="524">disagrees</text>
+  </g>
 
-  <!-- Evidence -->
-  <rect x="330" y="96" width="230" height="78" rx="12" fill="#f6f8fa" stroke="#d0d7de"/>
-  <text x="350" y="128" font-size="16" font-weight="700" fill="#1f2328">Car's own logs</text>
-  <text x="350" y="152" font-size="13" fill="#57606a">CAN bus and ADAS</text>
-
-  <rect x="330" y="214" width="230" height="196" rx="12" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
-  <text x="350" y="248" font-size="16" font-weight="700" fill="#1f2328">Evidence store</text>
-  <text x="350" y="274" font-size="13" fill="#57606a">hazard timing from video</text>
-  <text x="350" y="296" font-size="13" fill="#57606a">witness answers</text>
-  <text x="350" y="318" font-size="13" fill="#57606a">brake and speed logs</text>
-  <rect x="350" y="352" width="190" height="34" rx="8" fill="#f6f8fa"/>
-  <text x="445" y="374" font-size="12.5" fill="#1f2328" text-anchor="middle">immutable · SHA-256</text>
-
-  <line x1="272" y1="253" x2="326" y2="270" stroke="#8c959f" stroke-width="2" marker-end="url(#a)"/>
-  <line x1="272" y1="371" x2="326" y2="340" stroke="#8c959f" stroke-width="2" marker-end="url(#a)"/>
-  <line x1="445" y1="176" x2="445" y2="210" stroke="#8c959f" stroke-width="2" marker-end="url(#a)"/>
-
-  <!-- Investigate -->
-  <rect x="620" y="214" width="230" height="110" rx="12" fill="#eef4ff" stroke="#0866FF"/>
-  <text x="640" y="248" font-size="16" font-weight="700" fill="#1f2328">Muse Wonder agent</text>
-  <text x="640" y="274" font-size="13" fill="#57606a">6 tools for every number</text>
-  <text x="640" y="296" font-size="13" fill="#57606a">decides the primary cause</text>
-
-  <rect x="620" y="356" width="230" height="54" rx="12" fill="#f6f8fa" stroke="#d0d7de"/>
-  <text x="640" y="389" font-size="14" fill="#1f2328">claims + verdict</text>
-
-  <line x1="562" y1="268" x2="616" y2="268" stroke="#8c959f" stroke-width="2" marker-end="url(#a)"/>
-  <line x1="735" y1="326" x2="735" y2="352" stroke="#8c959f" stroke-width="2" marker-end="url(#a)"/>
-
-  <!-- Verify -->
-  <rect x="910" y="214" width="250" height="196" rx="12" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
-  <text x="930" y="248" font-size="16" font-weight="700" fill="#1f2328">Checker</text>
-  <text x="930" y="274" font-size="13" fill="#1f2328">recomputes every claim</text>
-  <text x="930" y="296" font-size="13" fill="#1f2328">rules R1 to R6</text>
-  <text x="930" y="318" font-size="13" fill="#1f2328">recomputes the verdict itself</text>
-  <text x="930" y="340" font-size="13" fill="#1f2328">with 1-D crash physics</text>
-
-  <line x1="852" y1="383" x2="906" y2="370" stroke="#8c959f" stroke-width="2" marker-end="url(#a)"/>
-  <path d="M 445 412 Q 445 470 700 470 Q 1035 470 1035 414" fill="none" stroke="#1a7f37" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#g)"/>
-  <text x="740" y="492" font-size="12.5" fill="#1a7f37" text-anchor="middle">all facts, including the ones the agent never sees</text>
-
-  <!-- Outputs -->
-  <rect x="910" y="96" width="120" height="78" rx="12" fill="#ffffff" stroke="#1a7f37"/>
-  <text x="970" y="128" font-size="14" font-weight="700" fill="#1a7f37" text-anchor="middle">Verified</text>
-  <text x="970" y="150" font-size="12" fill="#57606a" text-anchor="middle">report published</text>
-  <rect x="1040" y="96" width="120" height="78" rx="12" fill="#ffffff" stroke="#bf8700"/>
-  <text x="1100" y="128" font-size="14" font-weight="700" fill="#9a6700" text-anchor="middle">Withheld</text>
-  <text x="1100" y="150" font-size="12" fill="#57606a" text-anchor="middle">for human review</text>
-  <line x1="1000" y1="212" x2="975" y2="178" stroke="#8c959f" stroke-width="2" marker-end="url(#a)"/>
-  <line x1="1070" y1="212" x2="1095" y2="178" stroke="#8c959f" stroke-width="2" marker-end="url(#a)"/>
-
-  <text x="40" y="532" font-size="12.5" fill="#8c959f">The agent never sees the checker's physics or attribution facts, and can add facts only through its own tools.</text>
+  <!-- Legend -->
+  <g font-size="12.5" fill="#57606a">
+    <rect x="220" y="634" width="4" height="12" fill="#0866FF"/>
+    <text x="232" y="645">Meta AI</text>
+    <rect x="310" y="634" width="4" height="12" fill="#1a7f37"/>
+    <text x="322" y="645">plain Python, no model</text>
+  </g>
 </svg>
