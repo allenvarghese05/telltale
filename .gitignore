@@ -15,6 +15,7 @@ htmlcov/
 
 # Large or regenerable data
 data/clips/uploads/
+data/uploads/
 data/nexar_raw/
 vendor/
 cache/sam_raw/

@@ -94,3 +94,25 @@ def test_an_unknown_crash_geometry_is_rejected(dirs):
     (dirs["videos"] / "cand60.json").write_text(json.dumps({**VIDEO, "geometry": "<script>"}))
     with pytest.raises(ValueError, match="unknown crash geometry"):
         build(dirs)
+
+
+def test_hosted_export_never_includes_local_uploads(dirs, tmp_path):
+    uploads = tmp_path / "uploads"
+    (uploads / "video_bundles").mkdir(parents=True)
+    (uploads / "clips").mkdir()
+    (uploads / "video_bundles" / "mine.json").write_text(
+        json.dumps({**VIDEO, "clip_id": "mine", "video_url": "media/mine.mp4"})
+    )
+    (uploads / "clips" / "mine.mp4").write_bytes(b"\x00")
+    site = build(dirs)
+    assert json.loads((site / "videos.json").read_text()) == []
+    local = export_site(
+        dirs["bundles"],
+        tmp_path / "local-site",
+        clips_dir=dirs["clips"],
+        thumbs_dir=dirs["clips"],
+        video_bundles_dir=dirs["videos"],
+        uploads_dir=uploads,
+    )
+    assert json.loads((local / "videos.json").read_text()) == [{"clip_id": "mine"}]
+    assert (local / "media" / "mine.mp4").exists()

@@ -20,15 +20,20 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from telltale.config import CLIPS
-from telltale.core.manifest import load_manifest
-from telltale.pipeline.investigate_clip import STEPS, ClipInputError, check_clip_id, investigate_clip
+from telltale.pipeline.investigate_clip import (
+    STEPS,
+    UPLOADS,
+    ClipInputError,
+    check_clip_id,
+    investigate_clip,
+    taken_clip_ids,
+)
 from telltale.web.export import SITE, publish_video_case
 
 logger = logging.getLogger(__name__)
 
 UI = Path(__file__).parent / "upload_ui"
-UPLOADS = CLIPS / "uploads"
+INCOMING = UPLOADS / "incoming"
 MAX_BYTES = 200 * 1024 * 1024
 VIDEO_TYPES = {".mp4": {"video/mp4"}, ".mov": {"video/quicktime"}}
 CONSENT = (
@@ -125,10 +130,10 @@ def make_server(
     port: int = 8001,
     *,
     site: Path = SITE,
-    uploads: Path = UPLOADS,
+    uploads: Path = INCOMING,
     investigate: Callable = investigate_clip,
-    publish: Callable[[dict, Path], None] = publish_video_case,
-    existing_clip_ids: Callable[[], set[str]] = lambda: set(load_manifest()["clips"]),
+    publish: Callable[[dict, Path], None] = lambda bundle, site: publish_video_case(bundle, site, UPLOADS / "clips"),
+    existing_clip_ids: Callable[[], set[str]] = taken_clip_ids,
     max_bytes: int = MAX_BYTES,
 ) -> ThreadingHTTPServer:
     """The local upload server, bound to 127.0.0.1. Serves the upload page, its two endpoints, and the site."""
