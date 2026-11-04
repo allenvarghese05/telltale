@@ -6,11 +6,11 @@ Every dynamic string is HTML-escaped: the claim text came from a model and is un
 from html import escape
 
 LABEL_TEXT = {
-    "PERCEPTION_LATE": "Perception / driver-assist detected the hazard late",
-    "COMMAND_LATE": "The hazard was detected in time, but braking was commanded late",
+    "PERCEPTION_LATE": "The car's driver-assist detected the hazard late",
+    "COMMAND_LATE": "The car's driver-assist detected the hazard in time, but commanded braking late",
     "BRAKE_ACTUATION_LATE": "Brakes built pressure too slowly",
-    "LATE_HANDOFF": "System handed control back too late for a human to react",
-    "UNAVOIDABLE": "Physically unavoidable: a nominal system would still have collided",
+    "LATE_HANDOFF": "The car's driver-assist handed control back too late for a human to react",
+    "UNAVOIDABLE": "Physically unavoidable: a driver-assist performing to spec would still have collided",
     "NO_FAULT_FOUND": "Avoidable, but no layer exceeded tolerance",
     "INCONCLUSIVE": "Inconclusive: evidence is incomplete",
 }

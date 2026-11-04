@@ -198,3 +198,15 @@ def test_no_user_facing_copy_says_the_system():
     static = Path(narrative.__file__).parent / "static"
     for source in (Path(narrative.__file__), static / "app.js", static / "index.html"):
         assert "the system" not in source.read_text().lower(), source.name
+
+
+def test_label_maps_name_the_driver_assist_not_a_system():
+    """The timeline, the printable report and the narrative share one vocabulary for the car's software."""
+    import re
+
+    from telltale.pipeline.analyze import EVENT_LABELS
+    from telltale.report.render import LABEL_TEXT
+    from telltale.web.narrative import CONCLUSION
+
+    labels = [*CONCLUSION.values(), *LABEL_TEXT.values(), *(label for _, label in EVENT_LABELS)]
+    assert not [label for label in labels if re.search(r"\bsystem\b", label, re.IGNORECASE)]

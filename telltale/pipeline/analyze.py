@@ -27,8 +27,8 @@ from telltale.video.witness import witness_facts
 
 EVENT_LABELS = [
     ("VID:hazard_onset_t", "Becomes a hazard"),
-    ("AV:first_seen_t", "System detects it"),
-    ("AV:brake_request_t", "System commands braking"),
+    ("AV:first_seen_t", "Driver-assist detects it"),
+    ("AV:brake_request_t", "Driver-assist commands braking"),
     ("AV:handoff_t", "Control handed to driver"),
     ("CAN:brake_request_t", "Brake request on CAN"),
     ("CAN:pressure_reached_t", "Brakes engage (60%)"),
