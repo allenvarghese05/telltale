@@ -11,8 +11,9 @@ same pool as the budget allows.
 
 ## What stays frozen
 
-- **Thresholds, ego-lane polygon and scoring code** are those of the 40-clip run (`DANGER_TTC_S = 2.0`,
-  `DANGER_TLC_S = 2.0`, the default polygon, no per-clip tuning, the same hazard tests and target selection).
+- **Thresholds and ego-lane polygon** are those of the 40-clip run (`DANGER_TTC_S = 2.0`, `DANGER_TLC_S = 2.0`,
+  the default polygon, no per-clip tuning, the same hazard tests). The scoring code is *not* identical; see the
+  correction below.
 - **Seed 7 and the same shuffle.** The run takes the first *n* clips of one seeded ordering, so the original 40
   are its prefix.
 - **The same buckets, coverage rule and failure classes** as a5-preregistration.md:
@@ -75,3 +76,38 @@ listed and excluded from coverage, with the count stated.
 Meta credit must not drop below $30. This benchmark may spend at most about **$60**, a ceiling, not a target. A
 20-clip pilot measures time and cost per clip first; the run pauses for approval after the pilot and again before
 estimated spend passes $40.
+
+## Amendment, after the 20-clip pilot and before any further clip was scored
+
+### Correction: the scoring code changed after the 40-clip run
+
+The section above originally said the scoring code was the same as the 40-clip run's. That was wrong, and the
+pilot exposed it: re-scoring the original 40 from their cached, unchanged SAM tracks gave 26 onsets instead of
+30 and a median absolute error of 1.033 s instead of 0.905 s.
+
+Identical tracks giving different results meant the code had moved. Exactly one scoring commit landed after the
+40-clip run: `bee03f6`, which makes target selection prefer the largest vehicle that spent the last second
+mostly in the ego lane, instead of the largest box at impact. It fixed a demo-clip bug (cand56, where an
+overtaking pickup in the next lane was chosen as the struck vehicle) and was measured on the demo tracks, not
+on benchmark clips. It changes the result on 10 of the original 40 clips: 7 lose their onset, 2 gain one, 1
+moves.
+
+Both scorings are kept computable, because the SAM tracks are cached and the pre-`bee03f6` code can re-score
+them at any time without an API call:
+
+- **A**: current code, including `bee03f6`, the detector that ships;
+- **B**: the code of the 40-clip run, comparable with the published numbers.
+
+Which one is the headline is decided on principle by the project owner, recorded here, and both are reported
+side by side regardless.
+
+### Stopping rule
+
+The target is **all 686 eligible clips**. The run stops early for only two reasons:
+
+1. **Budget.** This benchmark's ceiling is about $60 of Meta credit, and total credit must stay above $30. Spend
+   is released in steps, each confirmed against the billing dashboard.
+2. **Time.** The morning cutoff at about 07:00 EST.
+
+It **never** stops because of the results. Whatever n is reached when one of those two limits binds is the n
+reported, along with which limit it was. This rules out stopping once the numbers look good.
