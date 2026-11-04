@@ -60,3 +60,16 @@ def test_stability_counts_feasible_stable_and_correct(case):
 def test_ground_truth_is_never_read_by_the_checker_paths():
     """Only this study's scoring compares with the expected label; the analyze path never sees it."""
     assert "expected" not in an.CaseEvidence.__dataclass_fields__
+
+
+def test_can_skew_moves_only_timestamps(case, tmp_path):
+    """Only the clock moves: identifiers, including 29-bit truck ones, and payloads stay byte-identical."""
+    result = skewed(case, tmp_path / "work", can_s=0.25)
+    assert result["label"] == "BRAKE_ACTUATION_LATE"
+    original = (case.case_dir / "vehicle.can.log").read_text().splitlines()
+    shifted = next((tmp_path / "work").glob("*can+0.25")) / "vehicle.can.log"
+    lines = shifted.read_text().splitlines()
+    assert len(lines) == len(original)
+    assert [line.split(") ", 1)[1] for line in lines] == [line.split(") ", 1)[1] for line in original]
+    first = float(original[0][1:].split(")")[0])
+    assert float(lines[0][1:].split(")")[0]) == pytest.approx(first + 0.25, abs=1e-6)

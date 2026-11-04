@@ -10,16 +10,19 @@ from __future__ import annotations
 
 import collections
 import dataclasses
+import re
 import shutil
 from dataclasses import dataclass
 from pathlib import Path
 
 from telltale.core.schema import VideoFacts
 from telltale.evidence.build import build_store
-from telltale.logs.can_io import read_candump, write_candump
 from telltale.logs.mcap_io import read_adas_mcap, write_adas_mcap
 from telltale.physics.attribution import Measured, attribute
 from telltale.physics.profiles import VehicleProfile
+
+# Only the timestamp moves. Re-encoding frames would lose whether an identifier is 29-bit, which truck J1939 needs.
+CANDUMP_TIME = re.compile(r"^\(([0-9.]+)\)", re.MULTILINE)
 
 
 @dataclass(frozen=True)
@@ -97,8 +100,8 @@ def skewed(case: StudyCase, workdir: Path, adas_s: float = 0.0, can_s: float = 0
             [(topic, round((t + adas_s) * 1e9), payload) for topic, items in messages.items() for t, payload in items],
         )
     if can_s:
-        frames = read_candump(copy / "vehicle.can.log")
-        write_candump(copy / "vehicle.can.log", [(t + can_s, cid, data) for t, cid, data in frames])
+        log = copy / "vehicle.can.log"
+        log.write_text(CANDUMP_TIME.sub(lambda m: f"({float(m.group(1)) + can_s:.6f})", log.read_text()))
     store = build_store(copy, case.video, case.profile)
     expected_av = float(base.get("AV:clock_offset_s").value) - adas_s
     return {
