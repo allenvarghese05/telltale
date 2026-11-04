@@ -124,3 +124,21 @@ detector the benchmark describes, not on which number is better, and both scorin
 The results document shows the published 40-clip figures next to the re-scored ones and explains the
 difference. `bee03f6` picks the struck vehicle from those that spent the last second mostly in the ego lane, so
 on 10 of the original 40 clips a different vehicle is scored: 7 lose their onset, 2 gain one, 1 moves.
+
+### Amendment to the stopping rule: an overnight cap, set before scoring any of it
+
+Recorded after the n = 160 step and before any clip beyond 160 was scored.
+
+Billing can only be confirmed by reading the dashboard, and none is possible overnight. The overnight release is
+therefore sized by the **pessimistic** cost. All $15.55 spent across the three tracks by about 22:10 EST is
+attributed to this benchmark's roughly 67 clips billed by then, giving about $0.23 per clip. After the already-run
+clips that are still unbilled, a reserve for another track's work, and the $30 floor, that safely funds about 250
+more clips.
+
+- **Overnight cap: n = 410** (250 more clips). This is set by budget alone, before any of those clips is seen.
+  The run also stops itself at **07:00 EST**, whichever comes first, and stops rather than retrying if it stalls
+  or errors repeat.
+- **Possible second release:** after a morning balance reading confirms the real cost, the remaining clips may be
+  released in one further step, running until **11:00 EST** at the latest.
+- As before, the run **never** stops or continues because of the results. The reported n is whichever of these
+  limits binds, and the report names which one it was.
