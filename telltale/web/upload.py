@@ -212,8 +212,10 @@ def make_server(
                 if view is None:
                     return self._json(404, {"error": f"No upload is running for {clip_id!r}."})
                 return self._json(200, view)
-            if url.path in ("/index.html", "/clips.html"):
-                return self._site_page(url.path.lstrip("/"))
+            if url.path == "/index.html":
+                return self._site_page("index.html")
+            if url.path == "/clips.html":
+                return self._site_page("clips.html")
             return super().do_GET()
 
         def _save_body(self, path: Path, length: int) -> None:
