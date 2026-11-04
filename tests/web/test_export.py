@@ -62,7 +62,9 @@ def built(tmp_path):
     (bundles / "nx01-car-s0101.json").write_text(json.dumps(BUNDLE))
     (clips / "nx01.mp4").write_bytes(b"\x00")
     (thumbs / "nx01-car-s0101" / "hazard_onset_t.jpg").write_bytes(b"\x00")
-    return export_site(bundles, tmp_path / "site", clips_dir=clips, thumbs_dir=thumbs)
+    return export_site(
+        bundles, tmp_path / "site", clips_dir=clips, thumbs_dir=thumbs, video_bundles_dir=tmp_path / "none"
+    )
 
 
 def test_site_structure(built):

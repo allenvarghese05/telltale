@@ -14,6 +14,7 @@ import numpy as np
 from telltale.config import CACHE, CLIPS, ROOT
 from telltale.physics.counterfactual import counterfactual
 from telltale.physics.profiles import PROFILES
+from telltale.pipeline.investigate_clip import BUNDLES as VIDEO_BUNDLES
 from telltale.report.render import render_html
 from telltale.web.narrative import Section, incident_report
 
@@ -100,13 +101,43 @@ def report_with_narrative(bundle: dict, sections: list[Section]) -> str:
     return html.replace(REPORT_EVIDENCE_HEADING, f"<h2>Incident report</h2>{body}{REPORT_EVIDENCE_HEADING}", 1)
 
 
+VIDEO_KEYS = ("clip_id", "video_url", "fps", "width", "height", "lane_polygon", "tracks", "report")
+
+
+def _copy_clip(video_url: str, out: Path, clips_dir: Path) -> None:
+    clip = Path(video_url).name
+    if not (out / "media" / clip).exists():
+        shutil.copy(clips_dir / clip, out / "media" / clip)
+
+
+def video_case(bundle: dict) -> dict:
+    """A video-only case for the site, by allowlist, so a verdict or claim can never reach that page."""
+    if not SAFE_ID.match(str(bundle.get("clip_id", ""))):
+        raise ValueError(f"unsafe clip id {bundle.get('clip_id')!r} in a video-only bundle")
+    return {key: bundle[key] for key in VIDEO_KEYS}
+
+
+def publish_video_case(bundle: dict, out: Path, clips_dir: Path = CLIPS) -> None:
+    """Add or replace one video-only case in an already-built site, without rebuilding the rest."""
+    case = video_case(bundle)
+    (out / "video").mkdir(exist_ok=True)
+    (out / "video" / f"{case['clip_id']}.json").write_text(json.dumps(case))
+    _copy_clip(case["video_url"], out, clips_dir)
+    index_path = out / "videos.json"
+    index = json.loads(index_path.read_text()) if index_path.exists() else []
+    if not any(entry["clip_id"] == case["clip_id"] for entry in index):
+        index.append({"clip_id": case["clip_id"]})
+    index_path.write_text(json.dumps(sorted(index, key=lambda entry: entry["clip_id"])))
+
+
 def export_site(
     bundles_dir: Path = CACHE / "bundles",
     out: Path = SITE,
     clips_dir: Path = CLIPS,
     thumbs_dir: Path = CACHE / "thumbs",
+    video_bundles_dir: Path = VIDEO_BUNDLES,
 ) -> Path:
-    """Copy the page, then write one bundle, avoidance map, report, clip and thumbnail set per case."""
+    """Copy the pages, write every investigated case and every video-only case, plus their clips."""
     if out.exists():
         shutil.rmtree(out)
     shutil.copytree(STATIC, out)
@@ -123,12 +154,13 @@ def export_site(
         (out / "cases" / f"{case_id}.json").write_text(json.dumps(case))
         (out / "cf" / f"{case_id}.json").write_text(json.dumps(counterfactual_grid(bundle)))
         (out / "reports" / f"{case_id}.html").write_text(report_with_narrative(bundle, sections))
-        clip = Path(bundle["video_url"]).name
-        if not (out / "media" / clip).exists():
-            shutil.copy(clips_dir / clip, out / "media" / clip)
+        _copy_clip(bundle["video_url"], out, clips_dir)
         if (thumbs_dir / case_id).is_dir():
             shutil.copytree(thumbs_dir / case_id, out / "thumbs" / case_id)
         index.append({"case_id": case_id, "clip_id": bundle["clip_id"], "profile": bundle["profile"]})
     (out / "cases.json").write_text(json.dumps(index))
+    (out / "videos.json").write_text("[]")
+    for path in sorted(video_bundles_dir.glob("*.json")):
+        publish_video_case(json.loads(path.read_text()), out, clips_dir)
     (out / "README.md").write_text(SPACE_README)
     return out
