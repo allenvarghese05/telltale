@@ -16,7 +16,7 @@ import shutil
 
 from telltale.config import CACHE, DATA, ROOT
 from telltale.core.manifest import load_manifest
-from telltale.logs.generate import HARD_STORIES, GenerationError, generate_case
+from telltale.logs.generate import CONFUSABLE_STORIES, HARD_STORIES, GenerationError, generate_case
 from telltale.physics.profiles import PROFILES
 from telltale.pipeline.agent_bench import summarize
 from telltale.pipeline.analyze import agent_run, build_case_store, check_run
@@ -28,6 +28,11 @@ HARD_CACHE = CACHE / "agent_hard"
 RESULTS = ROOT / "agent_bench_hard.json"
 HARD_SEED_BASE = 7000
 PLAN_SEED = 11
+CONFUSABLE_CACHE = CACHE / "agent_confusable"
+CONFUSABLE_RESULTS = ROOT / "agent_bench_confusable.json"
+CONFUSABLE_SEED_BASE = 8000
+CONFUSABLE_PLAN_SEED = 13
+INTERVAL_MEANING = "interval meaning"
 BENCH_PROFILES = ("car", "truck")
 TURN_LIMIT_MESSAGE = "turn limit"
 
@@ -36,11 +41,13 @@ def clip_ids() -> list[str]:
     return list(load_manifest()["clips"])
 
 
-def hard_plan(clips, seed: int = PLAN_SEED) -> list[tuple[str, str, str, int]]:
+def hard_plan(
+    clips, seed: int = PLAN_SEED, stories: tuple[str, ...] = HARD_STORIES, seed_base: int = HARD_SEED_BASE
+) -> list[tuple[str, str, str, int]]:
     """Every (clip, profile, story) in one fixed shuffled order, each with its own case seed."""
-    combos = [(c, p, s) for c in clips for p in BENCH_PROFILES for s in HARD_STORIES]
+    combos = [(c, p, s) for c in clips for p in BENCH_PROFILES for s in stories]
     random.Random(seed).shuffle(combos)
-    return [(c, p, s, HARD_SEED_BASE + i) for i, (c, p, s) in enumerate(combos)]
+    return [(c, p, s, seed_base + i) for i, (c, p, s) in enumerate(combos)]
 
 
 def _breakdown(rows: list[dict], key: str) -> dict:
@@ -58,6 +65,9 @@ def summarize_hard(rows: list[dict]) -> dict:
         "no_verdict": sum(r["status"] == "NO_VERDICT" for r in rows),
         "by_profile": _breakdown(rows, "profile"),
         "by_family": _breakdown(rows, "family"),
+        "claims_blocked_interval_meaning": sum(
+            any(r.startswith(INTERVAL_MEANING) for r in b["reasons"]) for row in rows for b in row.get("blocked", [])
+        ),
     }
 
 
@@ -70,13 +80,13 @@ def _save(path, data: dict) -> None:
     path.write_text(json.dumps(data, indent=2, sort_keys=True))
 
 
-def _investigate(case_id: str, clip_id: str, case) -> dict | None:
+def _investigate(case_id: str, clip_id: str, case, cache_dir) -> dict | None:
     """The agent's run, or None when it never submitted. A run that never submitted is remembered, not retried."""
-    marker = HARD_CACHE / f"{case_id}.no_verdict.json"
+    marker = cache_dir / f"{case_id}.no_verdict.json"
     if marker.exists():
         return None
     try:
-        return agent_run(case_id, clip_id, case.store, case.profile, live=False, cache_dir=HARD_CACHE)
+        return agent_run(case_id, clip_id, case.store, case.profile, live=False, cache_dir=cache_dir)
     except RuntimeError as exc:
         if TURN_LIMIT_MESSAGE not in str(exc):
             raise
@@ -86,11 +96,22 @@ def _investigate(case_id: str, clip_id: str, case) -> dict | None:
 
 
 def run_hard_bench(n: int = 30) -> dict:
-    """Score the first `n` usable cases of the fixed plan. Agent runs are cached, so re-running resumes."""
-    skipped_path = BENCH_DIR / "hard_skipped.json"
+    """Score the first `n` usable hard cases of the fixed plan. Agent runs are cached, so re-running resumes."""
+    plan = hard_plan(clip_ids())
+    return _run_plan(plan, n, BENCH_DIR / "hard_skipped.json", HARD_CACHE, RESULTS)
+
+
+def run_confusable_bench(n: int = 20) -> dict:
+    """The confusable-timeline cases, criteria in `docs/benchmarks/confusable-preregistration.md`."""
+    plan = hard_plan(clip_ids(), CONFUSABLE_PLAN_SEED, CONFUSABLE_STORIES, CONFUSABLE_SEED_BASE)
+    return _run_plan(plan, n, BENCH_DIR / "confusable_skipped.json", CONFUSABLE_CACHE, CONFUSABLE_RESULTS)
+
+
+def _run_plan(plan, n: int, skipped_path, cache_dir, results) -> dict:
+    """Generate, screen, investigate and score plan items in order until `n` cases are scored."""
     skipped = _load(skipped_path)
     rows = []
-    for clip_id, profile, story, case_seed in hard_plan(clip_ids()):
+    for clip_id, profile, story, case_seed in plan:
         if len(rows) >= n:
             break
         case_id = f"{clip_id}-{profile}-s{case_seed:04d}"
@@ -128,9 +149,9 @@ def run_hard_bench(n: int = 30) -> dict:
             "expected": expected,
             "excess": excess,
         }
-        run = _investigate(case_id, clip_id, case)
+        run = _investigate(case_id, clip_id, case, cache_dir)
         if run is None:
-            row |= {"agent": None, "independent": measured, "status": "NO_VERDICT", "blocked": []}
+            row |= {"agent": None, "independent": measured, "status": "NO_VERDICT", "blocked": [], "claims": []}
             row["counts"] = {"VERIFIED": 0, "UNCORROBORATED": 0, "BLOCKED": 0}
         else:
             _, claims, counts, verdict = check_run(run, case.store)
@@ -142,9 +163,13 @@ def run_hard_bench(n: int = 30) -> dict:
                 "blocked": [
                     {"text": c["claim"]["text"], "reasons": c["reasons"]} for c in claims if c["status"] == "BLOCKED"
                 ],
+                "claims": [
+                    {"text": c["claim"]["text"], "evidence": c["claim"]["evidence"], "status": c["status"]}
+                    for c in claims
+                ],
             }
         rows.append(row)
         log.info("%s %s agent=%s %s %s", case_id, story, row["agent"], row["status"], row["counts"])
     result = {"summary": summarize_hard(rows), "rows": rows, "skipped": [f"{k}: {v}" for k, v in skipped.items()]}
-    RESULTS.write_text(json.dumps(result, indent=2))
+    results.write_text(json.dumps(result, indent=2))
     return result

@@ -36,6 +36,7 @@ def committed_runs() -> list[tuple[str, str, Path, Path, PlanItem | None]]:
         ("demo", CACHE / "agent", CASES),
         ("agent_bench", CACHE / "agent_bench", BENCH_CASES),
         ("hard", CACHE / "agent_hard", BENCH_CASES),
+        ("confusable", CACHE / "agent_confusable", BENCH_CASES),
     ):
         for path in sorted(cache_dir.glob("*.json")):
             if not path.name.endswith(".no_verdict.json"):

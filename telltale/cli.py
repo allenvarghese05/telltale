@@ -106,6 +106,11 @@ def _benchmark(a: argparse.Namespace) -> None:
 
 
 def _agent_bench(a: argparse.Namespace) -> None:
+    if a.confusable:
+        from telltale.pipeline.hard_bench import run_confusable_bench
+
+        _print_json(run_confusable_bench(a.n)["summary"])
+        return
     if a.hard:
         from telltale.pipeline.hard_bench import run_hard_bench
 
@@ -194,6 +199,7 @@ def build_parser() -> argparse.ArgumentParser:
     p = add("agent-bench", _agent_bench, "agent alone vs agent + checker")
     p.add_argument("--n", type=int, default=18)
     p.add_argument("--hard", action="store_true", help="hard cases (close calls, near misses, noncausal faults)")
+    p.add_argument("--confusable", action="store_true", help="confusable timelines (handoffs, lost ADAS events)")
     add("export-site", _export_site, "build the static replay site into site/")
     p = add("serve", _serve, "serve the built site locally")
     p.add_argument("--port", type=int, default=8000)
