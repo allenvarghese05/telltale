@@ -148,3 +148,31 @@ def test_csp_lets_the_hosted_space_play_its_videos():
     csp = re.search(r'Content-Security-Policy"\s+content="([^"]+)"', index).group(1)
     media = next(d for d in csp.split(";") if d.strip().startswith("media-src")).split()
     assert media[1:] == ["'self'", "https://*.hf.co"]
+
+
+def test_exported_case_carries_every_sam_track_downsampled(tmp_path):
+    bundles, sam = tmp_path / "bundles", tmp_path / "sam"
+    bundles.mkdir()
+    sam.mkdir()
+    (bundles / "nx01-car-s0101.json").write_text(json.dumps(BUNDLE))
+    dets = [{"frame": f, "box": [10.4, 20.0, 30.0, 40.6]} for f in range(5)]
+    (tmp_path / "nx01.mp4").write_bytes(b"\x00")
+    (sam / "nx01.json").write_text(json.dumps({"fps": 30.0, "objects": {"3": dets, "7": dets[:1]}}))
+    out = export_site(
+        bundles,
+        tmp_path / "site",
+        clips_dir=tmp_path,
+        thumbs_dir=tmp_path,
+        video_bundles_dir=tmp_path / "none",
+        sam_dir=sam,
+    )
+    case = json.loads((out / "cases" / "nx01-car-s0101.json").read_text())
+    assert case["tracks"] == {
+        "3": [[0, 10, 20, 30, 41], [2, 10, 20, 30, 41], [4, 10, 20, 30, 41]],
+        "7": [[0, 10, 20, 30, 41]],
+    }
+
+
+def test_a_case_without_cached_tracks_exports_none(built):
+    case = json.loads((built / "cases" / "nx01-car-s0101.json").read_text())
+    assert case["tracks"] == {}

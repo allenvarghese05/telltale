@@ -105,6 +105,27 @@ VIDEO_KEYS = ("clip_id", "video_url", "fps", "width", "height", "lane_polygon", 
 GEOMETRIES = ("forward", "cross-path")
 
 
+TRACK_STRIDE = 2
+
+
+def all_tracks(clip_id: str, sam_dir: Path) -> dict:
+    """Every SAM track of a clip for the replay overlay, as `[frame, l, t, r, b]` rows, every other frame.
+
+    Every other frame keeps the boxes smooth at playback speed and halves the bundle. A clip with no cached tracks
+    gets none, and the replay then draws no vehicle boxes.
+    """
+    path = sam_dir / f"{clip_id}.json"
+    if not path.exists():
+        return {}
+    objects = json.loads(path.read_text())["objects"]
+    return {
+        oid: [[d["frame"], *(round(v) for v in d["box"])] for d in sorted(dets, key=lambda d: d["frame"])][
+            ::TRACK_STRIDE
+        ]
+        for oid, dets in objects.items()
+    }
+
+
 def _copy_clip(video_url: str, out: Path, clips_dir: Path) -> None:
     clip = Path(video_url).name
     if not (out / "media" / clip).exists():
@@ -146,6 +167,7 @@ def export_site(
     thumbs_dir: Path = CACHE / "thumbs",
     video_bundles_dir: Path = SHOWCASE_BUNDLES,
     uploads_dir: Path | None = None,
+    sam_dir: Path = CACHE / "sam",
 ) -> Path:
     """Copy the pages, write every investigated case and every video-only case, plus their clips."""
     if out.exists():
@@ -160,7 +182,11 @@ def export_site(
         if not SAFE_ID.match(case_id):
             raise ValueError(f"unsafe case id {case_id!r} in {path.name}")
         sections = incident_report(bundle)
-        case = {**bundle, "narrative": [asdict(s) for s in sections]}
+        case = {
+            **bundle,
+            "narrative": [asdict(s) for s in sections],
+            "tracks": all_tracks(bundle["clip_id"], sam_dir),
+        }
         (out / "cases" / f"{case_id}.json").write_text(json.dumps(case))
         (out / "cf" / f"{case_id}.json").write_text(json.dumps(counterfactual_grid(bundle)))
         (out / "reports" / f"{case_id}.html").write_text(report_with_narrative(bundle, sections))
