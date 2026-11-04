@@ -131,6 +131,17 @@ def _serve(a: argparse.Namespace) -> None:
     ThreadingHTTPServer(("127.0.0.1", a.port), handler).serve_forever()
 
 
+def _upload_ui(a: argparse.Namespace) -> None:
+    from telltale.web.export import SITE
+    from telltale.web.upload import make_server
+
+    if not (SITE / "index.html").exists():
+        raise SystemExit("No site built yet: run `telltale export-site` first.")
+    server = make_server(a.port)
+    print(f"Local upload page at http://127.0.0.1:{a.port} (this machine only; never deployed)")
+    server.serve_forever()
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="telltale", description="Meta AI investigates; the checker verifies.")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -180,6 +191,8 @@ def build_parser() -> argparse.ArgumentParser:
     add("export-site", _export_site, "build the static replay site into site/")
     p = add("serve", _serve, "serve the built site locally")
     p.add_argument("--port", type=int, default=8000)
+    p = add("upload-ui", _upload_ui, "local-only page to upload your own clip and run investigate-clip")
+    p.add_argument("--port", type=int, default=8001)
     return parser
 
 

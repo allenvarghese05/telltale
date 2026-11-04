@@ -20,6 +20,7 @@ COMMANDS = [
     ["agent-bench", "--n", "3"],
     ["export-site"],
     ["serve", "--port", "9000"],
+    ["upload-ui", "--port", "9001"],
 ]
 
 
