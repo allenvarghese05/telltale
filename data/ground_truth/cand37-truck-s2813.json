@@ -1,0 +1,16 @@
+{
+  "story": "command_late",
+  "profile": "truck",
+  "v_ego0": 26.651008200832607,
+  "v_other": 21.46548544456052,
+  "d0": 6.025665146281077,
+  "first_seen": 0.1950730096113502,
+  "brake_request": 0.9030261388587715,
+  "handoff": null,
+  "tau": 0.3164974956883242,
+  "contact_t": 1.169,
+  "can_skew": -0.2775755720975558,
+  "av_skew": -0.2208865513569389,
+  "label": "COMMAND_LATE",
+  "expected_label": "COMMAND_LATE"
+}

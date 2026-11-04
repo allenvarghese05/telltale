@@ -1,0 +1,16 @@
+{
+  "story": "late_handoff",
+  "profile": "truck",
+  "v_ego0": 18.258872241112726,
+  "v_other": 14.744416617704454,
+  "d0": 4.1083986237640895,
+  "first_seen": 0.11367566779215757,
+  "brake_request": 1.7623469754684944,
+  "handoff": 0.4029381672767641,
+  "tau": 0.3691267439066398,
+  "contact_t": 1.169,
+  "can_skew": -0.2670432029093308,
+  "av_skew": -0.14933113949965265,
+  "label": "LATE_HANDOFF",
+  "expected_label": "LATE_HANDOFF"
+}

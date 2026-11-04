@@ -1,0 +1,261 @@
+{
+  "model": "muse-wonder-1.0",
+  "digest": "910395700ac7019af9d205403f7ed9631359f252fd8c827999ce882600f03a16",
+  "verdict": "BRAKE_ACTUATION_LATE",
+  "claims": [
+    {
+      "text": "The struck vehicle became a hazard by entering the ego lane.",
+      "type": "observation",
+      "evidence": [
+        "VID:hazard_onset_reason"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "VID:hazard_onset_reason",
+        "equals": "entering"
+      }
+    },
+    {
+      "text": "Perception delay was 0.1944 s, from hazard onset at 2.7213 s to first detection at 2.9157 s, below the 0.3 s perception threshold.",
+      "type": "timing",
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 0.1944
+      }
+    },
+    {
+      "text": "Command delay was 0.0401 s, from first detection at 2.9157 s to AV brake request at 2.9558 s, below the 0.1 s command threshold.",
+      "type": "timing",
+      "evidence": [
+        "AV:brake_request_t",
+        "AV:first_seen_t",
+        "PROFILE:command_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t",
+        "equals": 0.0401
+      }
+    },
+    {
+      "text": "Brake actuation delay was 1.5 s, from CAN brake request at 2.9617 s to pressure reached at 4.4617 s, above the 0.45 s actuation threshold.",
+      "type": "timing",
+      "evidence": [
+        "CAN:pressure_reached_t",
+        "CAN:brake_request_t",
+        "PROFILE:actuation_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t",
+        "equals": 1.5
+      }
+    },
+    {
+      "text": "Impact occurred at 8.0 s, 5.2787 s after hazard onset at 2.7213 s.",
+      "type": "timing",
+      "evidence": [
+        "VID:impact_t",
+        "VID:hazard_onset_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 5.2787
+      }
+    },
+    {
+      "text": "The brake log was complete.",
+      "type": "other",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": true
+      }
+    },
+    {
+      "text": "With nominal perception of 0.2 s, nominal command of 0.05 s, and nominal brake tau of 0.35 s, the counterfactual replay reported no contact and a minimum gap of 14.9414 m.",
+      "type": "physics",
+      "evidence": [
+        "CF:run1_contact",
+        "CF:run1_min_gap_m",
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": false
+      }
+    },
+    {
+      "text": "An independent recheck agreed that the other vehicle had no turn signal during the lane change.",
+      "type": "observation",
+      "evidence": [
+        "WIT:other_vehicle_turn_signal",
+        "WIT2:other_vehicle_turn_signal"
+      ],
+      "assertion": {
+        "op": "same",
+        "a": "WIT:other_vehicle_turn_signal",
+        "b": "WIT2:other_vehicle_turn_signal"
+      }
+    },
+    {
+      "text": "Brake actuation was the stage above its profile threshold, and the nominal replay avoids contact, so brake actuation delay is the primary contributing factor.",
+      "type": "attribution",
+      "evidence": [
+        "CAN:pressure_reached_t",
+        "CAN:brake_request_t",
+        "PROFILE:actuation_threshold_s",
+        "CF:run1_contact"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t",
+        "equals": 1.5
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.2,
+        "command_s": 0.05,
+        "tau_s": 0.35
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Did the other vehicle change lanes into the ego lane around 2.0 seconds?",
+        "slug": "other_vehicle_lane_change_t",
+        "t0": 1.5,
+        "t1": 3.0
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Is the other vehicle's turn signal on during its lane change?",
+        "slug": "other_vehicle_turn_signal",
+        "t0": 1.5,
+        "t1": 3.5
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Are the other vehicle's brake lights on?",
+        "slug": "other_vehicle_brake_lights",
+        "t0": 2.5,
+        "t1": 5.0
+      }
+    },
+    {
+      "name": "submit_findings",
+      "args": {
+        "verdict": "BRAKE_ACTUATION_LATE",
+        "n_claims": 9
+      }
+    }
+  ],
+  "agent_facts": [
+    {
+      "id": "CF:run1_contact",
+      "value": false,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_impact_speed_mps",
+      "value": 0.0,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_min_gap_m",
+      "value": 14.9414,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "WIT2:other_vehicle_lane_change_t",
+      "value": "yes",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 second look at 1.50-3.00s, asked without the first answer: Did the other vehicle change lanes into the ego lane around 2.0 seconds?",
+      "kind": "observation"
+    },
+    {
+      "id": "WIT2:other_vehicle_turn_signal",
+      "value": "no",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 second look at 1.50-3.50s, asked without the first answer: Is the other vehicle's turn signal on during its lane change?",
+      "kind": "observation"
+    },
+    {
+      "id": "WIT2:other_vehicle_brake_lights",
+      "value": "unclear",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 second look at 2.50-5.00s, asked without the first answer: Are the other vehicle's brake lights on?",
+      "kind": "observation"
+    }
+  ]
+}

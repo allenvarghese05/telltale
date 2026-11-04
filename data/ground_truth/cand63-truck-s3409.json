@@ -1,0 +1,16 @@
+{
+  "story": "brake_slow",
+  "profile": "truck",
+  "v_ego0": 27.825628440788627,
+  "v_other": 11.983481728886648,
+  "d0": 52.05373596985649,
+  "first_seen": 0.19322592862508037,
+  "brake_request": 0.23329266197757514,
+  "handoff": null,
+  "tau": 1.63983835863998,
+  "contact_t": 5.2780000000000005,
+  "can_skew": -0.1412361363906045,
+  "av_skew": 0.7951970931953474,
+  "label": "BRAKE_ACTUATION_LATE",
+  "expected_label": "BRAKE_ACTUATION_LATE"
+}
