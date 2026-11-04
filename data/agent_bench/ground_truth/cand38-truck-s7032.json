@@ -1,0 +1,16 @@
+{
+  "story": "marginal_actuation",
+  "profile": "truck",
+  "v_ego0": 20.577384419251487,
+  "v_other": 10.098755871534227,
+  "d0": 18.224185750230447,
+  "first_seen": 0.2936542479613494,
+  "brake_request": 0.342590698476949,
+  "handoff": null,
+  "tau": 0.5865560698033001,
+  "contact_t": 2.099,
+  "can_skew": -0.28026600151681613,
+  "av_skew": 0.6791191147441056,
+  "label": "BRAKE_ACTUATION_LATE",
+  "expected_label": "BRAKE_ACTUATION_LATE"
+}
