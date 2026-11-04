@@ -15,7 +15,6 @@ import random
 import shutil
 
 from telltale.config import CACHE, DATA, ROOT
-from telltale.core.manifest import load_manifest
 from telltale.logs.generate import CONFUSABLE_STORIES, HARD_STORIES, GenerationError, generate_case
 from telltale.physics.profiles import PROFILES
 from telltale.pipeline.agent_bench import summarize
@@ -33,12 +32,14 @@ CONFUSABLE_RESULTS = ROOT / "agent_bench_confusable.json"
 CONFUSABLE_SEED_BASE = 8000
 CONFUSABLE_PLAN_SEED = 13
 INTERVAL_MEANING = "interval meaning"
+BENCH_CLIPS = ("cand36", "cand37", "cand38", "cand63")  # the demo clips the committed hard cases used
 BENCH_PROFILES = ("car", "truck")
 TURN_LIMIT_MESSAGE = "turn limit"
 
 
 def clip_ids() -> list[str]:
-    return list(load_manifest()["clips"])
+    """The clips these benches draw on, pinned: the manifest has grown, and the plan must not move with it."""
+    return list(BENCH_CLIPS)
 
 
 def hard_plan(

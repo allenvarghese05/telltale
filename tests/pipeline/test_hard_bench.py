@@ -173,3 +173,8 @@ def test_cli_confusable_flag_runs_the_confusable_bench(monkeypatch, capsys):
     main(["agent-bench", "--confusable", "--n", "3"])
     assert calls == [3]
     assert json.loads(capsys.readouterr().out) == {"n": 3}
+
+
+def test_bench_clips_are_pinned_so_a_growing_manifest_cannot_move_the_plan():
+    """The manifest gained clips after the hard cases ran; a reshuffled plan would no longer regenerate them."""
+    assert hb.clip_ids() == ["cand36", "cand37", "cand38", "cand63"]
