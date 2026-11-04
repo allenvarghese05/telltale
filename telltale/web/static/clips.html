@@ -9,6 +9,7 @@
   <meta name="color-scheme" content="light">
   <title>Telltale. Any dashcam clip.</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="upload-button.css">
 </head>
 <body>
 
@@ -22,7 +23,19 @@
     <span>Clip</span>
     <select id="clip"></select>
   </label>
+  <button type="button" class="upload-open" id="upload-open" aria-expanded="false" aria-controls="upload-panel">Upload your own clip</button>
 </header>
+<div class="upload-panel" id="upload-panel" role="dialog" aria-labelledby="upload-panel-title" hidden>
+  <h2 id="upload-panel-title">Investigate your own clip, on your machine</h2>
+  <p>Uploading runs locally, through SAM 3.1 and Muse Spark with your own API key. This hosted site is replay-only:
+     it never uploads anything.</p>
+  <ol>
+    <li>Clone the repository, run <code>pip install -e .</code> and follow &ldquo;On any dashcam clip&rdquo; in its README.</li>
+    <li>Run <code>telltale upload-ui</code>.</li>
+    <li>Open the page it prints and drop in a dashcam clip.</li>
+  </ol>
+  <button type="button" class="text-button">Close</button>
+</div>
 
 <section class="intro">
   <h1>Any dashcam clip.<br>What the footage alone can show.</h1>
@@ -89,6 +102,9 @@
   </dl>
 </footer>
 
+<script src="mode.js"></script>
+<script src="upload-button.js"></script>
+<script src="vehicles.js"></script>
 <script src="clips.js"></script>
 </body>
 </html>

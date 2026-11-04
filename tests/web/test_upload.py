@@ -237,3 +237,15 @@ def test_suggest_applies_the_same_file_checks(server, kwargs, code):
     assert got == code
     assert body["error"]
     assert server["calls"]["suggest"] == []
+
+
+def test_the_local_server_tells_the_site_it_can_upload(server):
+    with fetch(f"{server['base']}/mode.js") as r:
+        assert r.read().decode().strip() == "const UPLOAD_LOCAL = true;"
+
+
+def test_the_hosted_site_says_it_cannot(tmp_path):
+    site = export_site(
+        tmp_path / "none", tmp_path / "site", clips_dir=tmp_path, thumbs_dir=tmp_path, video_bundles_dir=tmp_path / "v"
+    )
+    assert (site / "mode.js").read_text().strip() == "const UPLOAD_LOCAL = false;"

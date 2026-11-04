@@ -192,6 +192,8 @@ def make_server(
             url = urlparse(self.path)
             if url.path in ("/", "/upload"):
                 return self._ui("upload.html", "text/html; charset=utf-8")
+            if url.path == "/mode.js":
+                return self._ui("mode.js", "text/javascript; charset=utf-8")
             if url.path == "/upload.js":
                 return self._ui("upload.js", "text/javascript; charset=utf-8")
             if url.path == "/api/status":

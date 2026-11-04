@@ -1,0 +1,50 @@
+/* Telltale: the header's "Upload your own clip" button and the hosted site's run-it-locally panel. */
+
+.upload-open {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--ink);
+  border: 0;
+  border-radius: 980px;
+  padding: 8px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.4s var(--ease), background 0.2s;
+}
+.upload-open:hover { background: #000; transform: translateY(-1px); }
+.upload-open:active { transform: translateY(0) scale(0.98); }
+
+.upload-panel {
+  position: fixed;
+  top: 72px;
+  right: max(var(--side), calc((100vw - var(--page)) / 2));
+  z-index: 20;
+  width: min(440px, calc(100vw - 32px));
+  background: var(--bg);
+  border: 1px solid var(--line-2);
+  border-radius: 16px;
+  padding: 22px 24px 18px;
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.35);
+  animation: upload-in 0.45s var(--ease);
+}
+.upload-panel h2 { font-family: var(--display); font-size: 19px; letter-spacing: -0.015em; margin: 0 0 8px; }
+.upload-panel p { color: var(--ink-2); font-size: 14px; margin: 0; }
+.upload-panel ol { margin: 14px 0 16px; padding-left: 20px; font-size: 14px; }
+.upload-panel li { margin: 6px 0; }
+.upload-panel code { font-size: 12.5px; background: var(--bg-soft); border-radius: 5px; padding: 1px 6px; }
+
+@keyframes upload-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 720px) {
+  .bar { flex-wrap: wrap; height: auto; gap: 10px; padding-top: 12px; padding-bottom: 12px; }
+  .upload-panel { top: 12px; right: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .upload-open, .upload-panel { transition: none; animation: none; }
+}
