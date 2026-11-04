@@ -130,27 +130,28 @@
   <div class="bench-row">
     <div class="bench">
       <h3>Danger onset against human labels</h3>
-      <p class="figure-pair"><span class="num">0.905 s</span><span class="unit">median absolute error</span></p>
-      <p class="figure-pair caveat"><span class="num">1.947 s</span><span class="unit">spread of the signed error</span></p>
-      <p class="caption">40 unseen Nexar clips, fixed seed, no per-clip tuning, scored against Nexar's own
-         annotations. 30 of 40 covered. Pre-registered as partially consistent: the middle half lands between
-         0.545 s and 1.387 s and the tail is long. The median does not stand alone.</p>
+      <p class="figure-pair"><span class="num">0.91 s</span><span class="unit">median absolute error</span></p>
+      <p class="figure-pair caveat"><span class="num">2.11 s</span><span class="unit">spread of the signed error</span></p>
+      <p class="caption">400 real Nexar crash clips, fixed seed, no per-clip tuning, scored against Nexar's own
+         annotations. 260 of 400 covered, 74% within 2 s. Pre-registered grade: weak, because the spread is just
+         over 2 s. The tail comes from the start of the clip: on the 89% of clips where the onset fires after the
+         first 2 s, the median offset is 0.03 s (an exploratory split).</p>
     </div>
     <div class="bench">
       <h3>Agent alone against agent plus checker</h3>
-      <p class="figure-pair"><span class="num">19 of 19</span><span class="unit">verdicts correct, all independently verified</span></p>
-      <p class="figure-pair caveat"><span class="num">1 of 172</span><span class="unit">claims blocked, and it was true</span></p>
-      <p class="caption">19 blind cases. The blocked claim cited the witness recheck's 6 to 8 s window, a tool
-         argument rather than a fact, so it could not be proven. An earlier run blocked 12 of 165, all true; the
-         agent's instructions and the recheck tool were fixed, not the checker. The agent was never wrong, so this
-         run did not test withholding a wrong verdict.</p>
+      <p class="figure-pair"><span class="num">2 of 151</span><span class="unit">live investigations reached a wrong verdict</span></p>
+      <p class="figure-pair caveat"><span class="num">2 of 2</span><span class="unit">withheld by the checker, none verified</span></p>
+      <p class="caption">Normal, hard, manipulated and confusable cases, car and truck. The agent never invented
+         missing evidence and never obeyed an injected instruction. One wrong verdict rested on a claim with true
+         arithmetic but the wrong interval, which the checker verified; rule R6 now blocks it.</p>
     </div>
     <div class="bench">
-      <h3>Synthetic attribution consistency</h3>
-      <p class="figure-pair"><span class="num">1.000</span><span class="unit">accuracy over 162 cases</span></p>
-      <p class="caption">Six failure stories across car and truck, faults injected blind. It injects a fault and then
-         checks for that same fault, so near-perfect accuracy is close to built in. It shows the engine agrees with
-         itself, not that it is right about real crashes.</p>
+      <h3>How much the timing can move the answer</h3>
+      <p class="figure-pair"><span class="num">83 of 83</span><span class="unit">correct given the true onset</span></p>
+      <p class="figure-pair caveat"><span class="num">46%</span><span class="unit">unchanged at SAM's measured timing error</span></p>
+      <p class="caption">The checker guarantees the reasoning, not the evidence. Shifting the onset by SAM's real
+         error flips about half of verdicts, systematically: too early over-blames perception, too late reads as
+         unavoidable. The next step is a gate that labels each verdict robust or timing-sensitive.</p>
     </div>
   </div>
 </section>
