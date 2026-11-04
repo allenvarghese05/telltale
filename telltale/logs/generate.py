@@ -47,6 +47,16 @@ HARD_EXPECTED = {
     "unavoidable_with_fault": "UNAVOIDABLE",
 }
 HARD_STORIES = tuple(HARD_EXPECTED)
+# Confusable timelines: logs where the brake request that reaches CAN is easy to mistake for the system's own
+# command (a human braking after a handoff, a logged ADAS command next to a handoff, ADAS events lost).
+CONFUSABLE_EXPECTED = {
+    "handoff_quick_driver": "LATE_HANDOFF",
+    "handoff_in_time_slow_driver": "NO_FAULT_FOUND",
+    "adas_brake_then_handoff": "UNAVOIDABLE",
+    "adas_events_lost_perception": "PERCEPTION_LATE",
+    "adas_events_lost_actuation": "BRAKE_ACTUATION_LATE",
+}
+CONFUSABLE_STORIES = tuple(CONFUSABLE_EXPECTED)
 TIGHT_PRIMARY_EXCESS_S = (0.10, 0.45)
 TIGHT_WIN_MARGIN_S = (0.03, 0.09)
 MARGINAL_EXCESS_S = (0.01, 0.10)
@@ -84,6 +94,7 @@ class Truth:
     can_skew: float
     av_skew: float
     label: str = ""
+    adas_events: str = "auto"  # auto: brake_request, or handoff if any; both: brake_request and handoff; none
 
 
 def solve_d0(v_ego0: float, v_other: float, t_req: float, brake: BrakeModel, t_imp: float) -> float:
@@ -113,7 +124,7 @@ def truth_label(t: Truth, profile, T: float) -> str:
         return "INCONCLUSIVE"
     m = Measured(
         perception_latency=t.first_seen,
-        command_latency=None if t.handoff is not None else t.brake_request - t.first_seen,
+        command_latency=None if t.handoff is not None or t.adas_events == "none" else t.brake_request - t.first_seen,
         actuation_latency=pressure_reached_time(t.brake_request, t.tau) - t.brake_request,
         handoff_margin=None if t.handoff is None else T - t.handoff,
         cf_nominal_contact=counterfactual(t.v_ego0, t.v_other, t.d0, profile, t_end=T + 2.0).contact,
@@ -159,6 +170,8 @@ def sample_truth(timing: ClipTiming, profile, story: str, rng: np.random.Generat
     """Draw randomized hidden parameters until the story's expected label is the one attribution would reach."""
     if story in HARD_EXPECTED:
         return _sample_hard_truth(timing, profile, story, rng)
+    if story in CONFUSABLE_EXPECTED:
+        return _sample_confusable_truth(timing, profile, story, rng)
     if story not in EXPECTED:
         raise ValueError(story)
     T = timing.impact_t - timing.hazard_onset_t
@@ -249,6 +262,73 @@ def _sample_hard_truth(
     raise GenerationError(f"no {story} parameters found for {timing}")
 
 
+def _draw_confusable(story: str, profile, T: float, rng: np.random.Generator):
+    """(first_seen, brake_request, handoff, tau, adas_events) for a confusable story, or None to redraw."""
+    first_seen = float(rng.uniform(0.10, 0.25))
+    tau = profile.tau_nominal * float(rng.uniform(0.9, 1.1))
+    if story == "handoff_quick_driver":  # late handoff, but the driver brakes before impact
+        handoff = T - float(rng.uniform(0.6, 1.2))
+        t_req = handoff + float(rng.uniform(0.4, 0.8))
+        ok = first_seen + 0.05 < handoff and t_req < T - 0.05
+        return (first_seen, t_req, handoff, tau, "auto") if ok else None
+    if story == "handoff_in_time_slow_driver":  # timely handoff, slow driver: CAN request long after detection
+        handoff = first_seen + float(rng.uniform(0.05, 0.3))
+        ok = T - handoff >= profile.thresholds["human_prt_s"] + 0.05
+        return (first_seen, handoff + float(rng.uniform(1.6, 2.4)), handoff, tau, "auto") if ok else None
+    if story == "adas_brake_then_handoff":  # ADAS braked on time and also handed off late; both events logged
+        t_req = first_seen + float(rng.uniform(0.03, 0.08))
+        handoff = T - float(rng.uniform(0.5, 1.1))
+        return (first_seen, t_req, handoff, tau, "both") if handoff > t_req + 0.05 else None
+    if story == "adas_events_lost_perception":
+        first_seen = float(rng.uniform(1.0, 1.6))
+    else:
+        tau = profile.tau_nominal * float(rng.uniform(3.5, 5.0))
+    if first_seen >= T - 0.1:
+        return None
+    return first_seen, first_seen + float(rng.uniform(0.03, 0.08)), None, tau, "none"
+
+
+def _sample_confusable_truth(
+    timing: ClipTiming, profile, story: str, rng: np.random.Generator, max_attempts: int = 1000
+) -> Truth:
+    """Like `sample_truth`, for the confusable-timeline stories, with the ordinary clock skews."""
+    T = timing.impact_t - timing.hazard_onset_t
+    if T <= 0.3:
+        raise GenerationError("impact too soon after hazard onset")
+    for _ in range(max_attempts):
+        v_ego0 = float(rng.uniform(18.0, 30.0))
+        dv = float(rng.uniform(3.0, min(16.0, v_ego0 - 2.0)))
+        drawn = _draw_confusable(story, profile, T, rng)
+        if drawn is None:
+            continue
+        first_seen, t_req, handoff, tau, events = drawn
+        brake = BrakeModel(profile.a_max, tau)
+        try:
+            d0 = solve_d0(v_ego0, v_ego0 - dv, t_req, brake, T)
+        except GenerationError:
+            continue
+        contact = simulate(v_ego0, v_ego0 - dv, d0, t_req, brake, t_end=T + 2.0).contact_t
+        truth = Truth(
+            story,
+            profile.name,
+            v_ego0,
+            v_ego0 - dv,
+            d0,
+            first_seen,
+            t_req,
+            handoff,
+            tau,
+            float(contact),
+            float(rng.uniform(-0.5, 0.5)),
+            float(rng.uniform(-0.8, 0.8)),
+            adas_events=events,
+        )
+        truth.label = truth_label(truth, profile, T)
+        if truth.label == CONFUSABLE_EXPECTED[story]:
+            return truth
+    raise GenerationError(f"no {story} parameters found for {timing}")
+
+
 def _speed(rel: np.ndarray, sim, v0: float) -> np.ndarray:
     """Ego speed at times `rel` (seconds after hazard onset): cruise, then the simulated brake, then crash decel."""
     tc, vc = sim.contact_t, float(sim.v_ego[-1])
@@ -327,9 +407,9 @@ def write_case(case_dir: Path, timing: ClipTiming, truth: Truth, profile) -> Non
             },
         )
     )
-    if truth.handoff is None:
+    if truth.adas_events == "both" or (truth.adas_events == "auto" and truth.handoff is None):
         msgs.append(("/adas/events", _ns(onset + truth.brake_request, truth.av_skew), {"event": "brake_request"}))
-    else:
+    if truth.adas_events != "none" and truth.handoff is not None:
         msgs.append(("/adas/events", _ns(onset + truth.handoff, truth.av_skew), {"event": "handoff"}))
     write_adas_mcap(case_dir / "adas.mcap", msgs)
 

@@ -4,6 +4,7 @@ import numpy as np
 import pytest
 
 from telltale.logs.generate import (
+    CONFUSABLE_EXPECTED,
     EXPECTED,
     HARD_EXPECTED,
     ClipTiming,
@@ -108,3 +109,37 @@ def test_ground_truth_label_is_the_attribution_label(tmp_path):
     cid = generate_case(TIMING, TRUCK, "tight_command_perception", 4, tmp_path / "cases", tmp_path / "gt")
     gt = json.loads((tmp_path / "gt" / f"{cid}.json").read_text())
     assert gt["expected_label"] == gt["label"] == "COMMAND_LATE"
+
+
+@pytest.mark.parametrize("profile", [CAR, TRUCK])
+@pytest.mark.parametrize("story", list(CONFUSABLE_EXPECTED))
+def test_confusable_truth_reaches_its_label_and_hits_video_impact(profile, story):
+    t = sample_truth(TIMING, profile, story, np.random.default_rng(5))
+    assert t.label == CONFUSABLE_EXPECTED[story]
+    assert abs(t.contact_t - (TIMING.impact_t - TIMING.hazard_onset_t)) < 0.03
+
+
+def test_quick_driver_brakes_before_impact_after_a_late_handoff():
+    T = TIMING.impact_t - TIMING.hazard_onset_t
+    for seed in range(5):
+        t = sample_truth(TIMING, CAR, "handoff_quick_driver", np.random.default_rng(seed))
+        assert t.handoff < t.brake_request < T
+        assert T - t.handoff < CAR.thresholds["human_prt_s"]
+
+
+def test_slow_driver_after_a_timely_handoff_looks_like_a_long_command_delay():
+    for seed in range(5):
+        t = sample_truth(TIMING, CAR, "handoff_in_time_slow_driver", np.random.default_rng(seed))
+        assert TIMING.impact_t - TIMING.hazard_onset_t - t.handoff >= CAR.thresholds["human_prt_s"]
+        assert t.brake_request - t.first_seen > 1.0
+
+
+def test_confusable_stories_choose_which_adas_events_are_logged():
+    events = {s: sample_truth(TIMING, CAR, s, np.random.default_rng(5)).adas_events for s in CONFUSABLE_EXPECTED}
+    assert events == {
+        "handoff_quick_driver": "auto",
+        "handoff_in_time_slow_driver": "auto",
+        "adas_brake_then_handoff": "both",
+        "adas_events_lost_perception": "none",
+        "adas_events_lost_actuation": "none",
+    }
