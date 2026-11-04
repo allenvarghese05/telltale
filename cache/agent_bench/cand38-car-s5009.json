@@ -1,38 +1,24 @@
 {
   "model": "muse-wonder-1.0",
-  "digest": "db72c55c437da4dd23e5352de8fc1f01ec063580fee451261b36f77d4f74f2d5",
+  "digest": "5dc58656efb4e982787f45ccfb751774b69b947c97520ddca0aa5fc66bd4178d",
   "verdict": "PERCEPTION_LATE",
   "claims": [
     {
-      "text": "The struck vehicle became a hazard at 5.9 s by closing within the ego lane, with impact at 8.0 s.",
-      "type": "timing",
+      "text": "The struck vehicle became a hazard at 5.9 s, classed as closing within the ego lane, with time-to-collision 1.9971 s at onset.",
+      "type": "observation",
       "evidence": [
         "VID:hazard_onset_t",
         "VID:hazard_onset_reason",
-        "VID:impact_t"
+        "VID:ttc_at_onset_s"
       ],
       "assertion": {
-        "op": "is",
-        "fact": "VID:hazard_onset_reason",
-        "equals": "closing"
+        "op": "value",
+        "fact": "VID:hazard_onset_t",
+        "equals": 5.9
       }
     },
     {
-      "text": "The system detected the vehicle 1.17 s after it became a hazard.",
-      "type": "timing",
-      "evidence": [
-        "AV:first_seen_t",
-        "VID:hazard_onset_t"
-      ],
-      "assertion": {
-        "op": "diff",
-        "a": "AV:first_seen_t",
-        "b": "VID:hazard_onset_t",
-        "equals": 1.1726
-      }
-    },
-    {
-      "text": "Perception delay of 1.17 s exceeds the perception threshold of 0.30 s.",
+      "text": "Perception took 1.1726 s, from hazard onset at 5.9 s to first detection at 7.0726 s, above the 0.3 s threshold.",
       "type": "timing",
       "evidence": [
         "AV:first_seen_t",
@@ -47,7 +33,7 @@
       }
     },
     {
-      "text": "The command interval was 0.05 s from first detection to brake request, within the 0.10 s command threshold.",
+      "text": "Command took 0.0494 s, from first detection at 7.0726 s to brake request at 7.122 s, within the 0.1 s threshold.",
       "type": "timing",
       "evidence": [
         "AV:brake_request_t",
@@ -62,7 +48,7 @@
       }
     },
     {
-      "text": "The actuation interval was 0.16 s from CAN brake request to pressure reached, within the 0.25 s actuation threshold.",
+      "text": "Brake actuation took 0.16 s, from CAN brake request at 7.122 s to pressure reached at 7.282 s, within the 0.25 s threshold.",
       "type": "timing",
       "evidence": [
         "CAN:pressure_reached_t",
@@ -77,34 +63,7 @@
       }
     },
     {
-      "text": "The brake log was complete, with DATA:brake_log_complete true.",
-      "type": "other",
-      "evidence": [
-        "DATA:brake_log_complete"
-      ],
-      "assertion": {
-        "op": "is",
-        "fact": "DATA:brake_log_complete",
-        "equals": true
-      }
-    },
-    {
-      "text": "With nominal perception 0.20 s, command 0.05 s and tau 0.15 s, the counterfactual shows no contact, so the crash was avoidable.",
-      "type": "physics",
-      "evidence": [
-        "CF:run1_contact",
-        "PROFILE:nominal_perception_s",
-        "PROFILE:nominal_command_s",
-        "PROFILE:nominal_tau_s"
-      ],
-      "assertion": {
-        "op": "is",
-        "fact": "CF:run1_contact",
-        "equals": false
-      }
-    },
-    {
-      "text": "The hazard onset to impact window was 2.10 s.",
+      "text": "Impact occurred at 8.0 s, 2.1 s after hazard onset at 5.9 s.",
       "type": "timing",
       "evidence": [
         "VID:impact_t",
@@ -118,17 +77,61 @@
       }
     },
     {
-      "text": "Witness reported daylight and an independent recheck answered yes to daylight, agreeing on lighting.",
+      "text": "The brake log is complete, so the timing record is not inconclusive.",
+      "type": "other",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": true
+      }
+    },
+    {
+      "text": "Lighting was reported as daylight and independently corroborated as daylight on recheck.",
       "type": "observation",
       "evidence": [
         "WIT:lighting",
-        "WIT2:daylight_check"
+        "WIT2:lighting"
       ],
       "assertion": {
-        "op": "agree",
+        "op": "same",
         "a": "WIT:lighting",
-        "b": "WIT2:daylight_check",
-        "within": 0
+        "b": "WIT2:lighting"
+      }
+    },
+    {
+      "text": "With nominal perception 0.2 s, command 0.05 s, and tau 0.15 s, the counterfactual avoided contact, with minimum gap 9.2424 m and impact speed 0.0 m/s.",
+      "type": "physics",
+      "evidence": [
+        "CF:run1_contact",
+        "CF:run1_min_gap_m",
+        "CF:run1_impact_speed_mps",
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": false
+      }
+    },
+    {
+      "text": "Perception is the primary contributing factor: its 1.1726 s delay exceeded the 0.3 s threshold, while the nominal-timing counterfactual avoided contact.",
+      "type": "attribution",
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s",
+        "CF:run1_contact"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 1.1726
       }
     }
   ],
@@ -166,13 +169,6 @@
       }
     },
     {
-      "name": "measure",
-      "args": {
-        "a": "VID:impact_t",
-        "b": "AV:brake_request_t"
-      }
-    },
-    {
       "name": "run_counterfactual",
       "args": {
         "perception_s": 0.2,
@@ -181,28 +177,12 @@
       }
     },
     {
-      "name": "measure",
-      "args": {
-        "a": "AV:first_seen_t",
-        "b": "PROFILE:perception_threshold_s"
-      }
-    },
-    {
       "name": "witness_recheck",
       "args": {
         "question": "Is the scene in daylight?",
-        "slug": "daylight_check",
-        "t0": 5.0,
-        "t1": 7.0
-      }
-    },
-    {
-      "name": "witness_recheck",
-      "args": {
-        "question": "Is the road surface dry?",
-        "slug": "road_dry_check",
-        "t0": 5.0,
-        "t1": 7.0
+        "slug": "lighting",
+        "t0": 5.5,
+        "t1": 8.0
       }
     },
     {
@@ -239,19 +219,11 @@
       "kind": "derived"
     },
     {
-      "id": "WIT2:daylight_check",
-      "value": "yes",
+      "id": "WIT2:lighting",
+      "value": "daylight",
       "unit": "",
       "source": "WIT2",
-      "derivation": "muse-spark-1.3 recheck on sub-clip 5.00-7.00s: Is the scene in daylight?",
-      "kind": "observation"
-    },
-    {
-      "id": "WIT2:road_dry_check",
-      "value": "yes",
-      "unit": "",
-      "source": "WIT2",
-      "derivation": "muse-spark-1.3 recheck on sub-clip 5.00-7.00s: Is the road surface dry?",
+      "derivation": "muse-spark-1.3 second look at 5.50-8.00s, asked without the first answer: Is the scene in daylight?",
       "kind": "observation"
     }
   ]

@@ -1,14 +1,30 @@
 {
   "model": "muse-wonder-1.0",
-  "digest": "152d6e16151cb8cb582f3a22a949f4ed499a3dde9eb9207855e7ed35efcfbea1",
+  "digest": "8f1e85b5e7f99777894a40d7754cf69d4046d3ba6ad4c9cbeb080ff9f94c92b6",
   "verdict": "INCONCLUSIVE",
   "claims": [
     {
-      "text": "The system detected the vehicle 0.2138 s after it became a hazard.",
+      "text": "The hazard onset was at 6.83 s when the struck vehicle was closing within the ego lane, with time-to-collision at onset of 1.92 s and impact at 8.00 s.",
+      "type": "observation",
+      "evidence": [
+        "VID:hazard_onset_t",
+        "VID:hazard_onset_reason",
+        "VID:ttc_at_onset_s",
+        "VID:impact_t"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "VID:hazard_onset_reason",
+        "equals": "closing"
+      }
+    },
+    {
+      "text": "Perception took 0.21 s, below the 0.30 s threshold.",
       "type": "timing",
       "evidence": [
         "AV:first_seen_t",
-        "VID:hazard_onset_t"
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s"
       ],
       "assertion": {
         "op": "diff",
@@ -18,11 +34,12 @@
       }
     },
     {
-      "text": "Brake request followed first detection by 0.0623 s.",
+      "text": "Command took 0.06 s, below the 0.10 s threshold.",
       "type": "timing",
       "evidence": [
         "AV:brake_request_t",
-        "AV:first_seen_t"
+        "AV:first_seen_t",
+        "PROFILE:command_threshold_s"
       ],
       "assertion": {
         "op": "diff",
@@ -32,11 +49,12 @@
       }
     },
     {
-      "text": "Brake pressure was reached 0.0 s after the CAN brake request.",
+      "text": "The recorded CAN actuation interval was 0.00 s, below the 0.25 s threshold.",
       "type": "timing",
       "evidence": [
         "CAN:pressure_reached_t",
-        "CAN:brake_request_t"
+        "CAN:brake_request_t",
+        "PROFILE:actuation_threshold_s"
       ],
       "assertion": {
         "op": "diff",
@@ -46,69 +64,7 @@
       }
     },
     {
-      "text": "Impact occurred 1.1699 s after hazard onset.",
-      "type": "timing",
-      "evidence": [
-        "VID:impact_t",
-        "VID:hazard_onset_t"
-      ],
-      "assertion": {
-        "op": "diff",
-        "a": "VID:impact_t",
-        "b": "VID:hazard_onset_t",
-        "equals": 1.1699
-      }
-    },
-    {
-      "text": "The hazard onset reason was closing.",
-      "type": "observation",
-      "evidence": [
-        "VID:hazard_onset_reason"
-      ],
-      "assertion": {
-        "op": "is",
-        "fact": "VID:hazard_onset_reason",
-        "equals": "closing"
-      }
-    },
-    {
-      "text": "The brake log was not complete.",
-      "type": "other",
-      "evidence": [
-        "DATA:brake_log_complete"
-      ],
-      "assertion": {
-        "op": "is",
-        "fact": "DATA:brake_log_complete",
-        "equals": false
-      }
-    },
-    {
-      "text": "The largest brake-frame gap in the decision window was 1.078 s.",
-      "type": "other",
-      "evidence": [
-        "DATA:max_brake_gap_s"
-      ],
-      "assertion": {
-        "op": "value",
-        "fact": "DATA:max_brake_gap_s",
-        "equals": 1.078
-      }
-    },
-    {
-      "text": "With nominal timings, the counterfactual still resulted in contact.",
-      "type": "physics",
-      "evidence": [
-        "CF:run1_contact"
-      ],
-      "assertion": {
-        "op": "is",
-        "fact": "CF:run1_contact",
-        "equals": true
-      }
-    },
-    {
-      "text": "Both the original witness and the independent recheck reported the other vehicle's brake lights as yes.",
+      "text": "The witness reported the other vehicle's brake lights were on, and an independent recheck agreed.",
       "type": "observation",
       "evidence": [
         "WIT:other_vehicle_brake_lights",
@@ -118,6 +74,63 @@
         "op": "same",
         "a": "WIT:other_vehicle_brake_lights",
         "b": "WIT2:other_vehicle_brake_lights"
+      }
+    },
+    {
+      "text": "The first recorded CAN brake request was at 8.12 s, 0.12 s after the 8.00 s impact.",
+      "type": "timing",
+      "evidence": [
+        "CAN:brake_request_t",
+        "VID:impact_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:brake_request_t",
+        "b": "VID:impact_t",
+        "equals": 0.1219
+      }
+    },
+    {
+      "text": "There was a 1.02 s interval between the AV brake request at 7.11 s and the first recorded CAN brake request at 8.12 s.",
+      "type": "timing",
+      "evidence": [
+        "CAN:brake_request_t",
+        "AV:brake_request_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:brake_request_t",
+        "b": "AV:brake_request_t",
+        "equals": 1.0157
+      }
+    },
+    {
+      "text": "A replay using nominal perception of 0.20 s, nominal command of 0.05 s, and nominal brake tau of 0.15 s still resulted in contact, with an impact speed of 1.32 m/s.",
+      "type": "physics",
+      "evidence": [
+        "CF:run1_contact",
+        "CF:run1_impact_speed_mps",
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": true
+      }
+    },
+    {
+      "text": "The brake log is incomplete, with a maximum brake-frame gap of 1.08 s, so the recorded actuation timing cannot reliably establish the primary contributing factor.",
+      "type": "attribution",
+      "evidence": [
+        "DATA:brake_log_complete",
+        "DATA:max_brake_gap_s"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": false
       }
     }
   ],
@@ -155,6 +168,13 @@
       }
     },
     {
+      "name": "measure",
+      "args": {
+        "a": "CAN:brake_request_t",
+        "b": "AV:brake_request_t"
+      }
+    },
+    {
       "name": "run_counterfactual",
       "args": {
         "perception_s": 0.2,
@@ -165,7 +185,7 @@
     {
       "name": "witness_recheck",
       "args": {
-        "question": "Are the other vehicle's brake lights illuminated?",
+        "question": "Does the other vehicle have its brake lights on?",
         "slug": "other_vehicle_brake_lights",
         "t0": 6.8,
         "t1": 8.0
@@ -175,14 +195,7 @@
       "name": "measure",
       "args": {
         "a": "CAN:brake_request_t",
-        "b": "AV:brake_request_t"
-      }
-    },
-    {
-      "name": "measure",
-      "args": {
-        "a": "VID:impact_t",
-        "b": "CAN:brake_request_t"
+        "b": "VID:impact_t"
       }
     },
     {
@@ -230,7 +243,7 @@
       "value": "yes",
       "unit": "",
       "source": "WIT2",
-      "derivation": "muse-spark-1.3 recheck on sub-clip 6.80-8.00s: Are the other vehicle's brake lights illuminated?",
+      "derivation": "muse-spark-1.3 second look at 6.80-8.00s, asked without the first answer: Does the other vehicle have its brake lights on?",
       "kind": "observation"
     }
   ]

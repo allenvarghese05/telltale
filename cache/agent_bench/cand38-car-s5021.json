@@ -1,24 +1,10 @@
 {
   "model": "muse-wonder-1.0",
-  "digest": "56c94431f6f70b5c53709bd88257dd34b88c90b9c16736cb8c6f62b156694277",
+  "digest": "3bfc2d100cbb1e98c78298518c6dd3bb407c1f8f69164971a11b6206ecf46c7e",
   "verdict": "INCONCLUSIVE",
   "claims": [
     {
-      "text": "Hazard onset was at 5.90 s and impact was at 8.00 s, an interval of 2.10 s.",
-      "type": "timing",
-      "evidence": [
-        "VID:hazard_onset_t",
-        "VID:impact_t"
-      ],
-      "assertion": {
-        "op": "diff",
-        "a": "VID:impact_t",
-        "b": "VID:hazard_onset_t",
-        "equals": 2.1
-      }
-    },
-    {
-      "text": "The hazard onset reason was closing.",
+      "text": "The hazard onset was classified as closing, with the struck vehicle already in the ego lane.",
       "type": "observation",
       "evidence": [
         "VID:hazard_onset_reason"
@@ -30,11 +16,12 @@
       }
     },
     {
-      "text": "Perception interval was 0.21 s: first seen at 6.11 s after hazard onset at 5.90 s.",
+      "text": "The perception interval was 0.2141 s, from hazard onset at 5.9 s to first detection at 6.1141 s, compared with a 0.3 s threshold.",
       "type": "timing",
       "evidence": [
         "AV:first_seen_t",
-        "VID:hazard_onset_t"
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s"
       ],
       "assertion": {
         "op": "diff",
@@ -44,11 +31,12 @@
       }
     },
     {
-      "text": "Command interval was 0.07 s from first detection to AV brake request.",
+      "text": "The command interval was 0.0687 s, from first detection at 6.1141 s to the AV brake request at 6.1828 s, compared with a 0.1 s threshold.",
       "type": "timing",
       "evidence": [
         "AV:brake_request_t",
-        "AV:first_seen_t"
+        "AV:first_seen_t",
+        "PROFILE:command_threshold_s"
       ],
       "assertion": {
         "op": "diff",
@@ -58,11 +46,12 @@
       }
     },
     {
-      "text": "CAN brake pressure was reached 0.00 s after the CAN brake request timestamp.",
+      "text": "The recorded actuation interval was 0.0 s, from the CAN brake request at 7.202 s to pressure reached at 7.202 s, compared with a 0.25 s threshold.",
       "type": "timing",
       "evidence": [
         "CAN:pressure_reached_t",
-        "CAN:brake_request_t"
+        "CAN:brake_request_t",
+        "PROFILE:actuation_threshold_s"
       ],
       "assertion": {
         "op": "diff",
@@ -72,7 +61,7 @@
       }
     },
     {
-      "text": "The CAN brake request timestamp was 1.02 s after the AV brake request timestamp.",
+      "text": "There was a 1.0192 s interval between the AV brake request at 6.1828 s and the first CAN brake request at 7.202 s.",
       "type": "timing",
       "evidence": [
         "CAN:brake_request_t",
@@ -86,19 +75,7 @@
       }
     },
     {
-      "text": "The brake log is incomplete.",
-      "type": "other",
-      "evidence": [
-        "DATA:brake_log_complete"
-      ],
-      "assertion": {
-        "op": "is",
-        "fact": "DATA:brake_log_complete",
-        "equals": false
-      }
-    },
-    {
-      "text": "The largest brake-frame gap in the decision window was 1.09 s.",
+      "text": "The largest gap between brake frames in the decision window was 1.0879 s.",
       "type": "other",
       "evidence": [
         "DATA:max_brake_gap_s"
@@ -110,17 +87,41 @@
       }
     },
     {
-      "text": "Using nominal perception 0.20 s, nominal command 0.05 s, and nominal tau 0.15 s, the counterfactual replay produced no contact.",
+      "text": "Brake log completeness is false, so the recorded braking timeline is not complete.",
+      "type": "other",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": false
+      }
+    },
+    {
+      "text": "With nominal timings of 0.2 s perception, 0.05 s command and 0.15 s brake tau, the counterfactual replay reported no contact.",
       "type": "physics",
       "evidence": [
+        "CF:run1_contact",
         "PROFILE:nominal_perception_s",
         "PROFILE:nominal_command_s",
-        "PROFILE:nominal_tau_s",
-        "CF:run1_contact"
+        "PROFILE:nominal_tau_s"
       ],
       "assertion": {
         "op": "is",
         "fact": "CF:run1_contact",
+        "equals": false
+      }
+    },
+    {
+      "text": "Because the brake log is incomplete, a conclusive primary-factor determination cannot be made from the recorded braking evidence.",
+      "type": "attribution",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
         "equals": false
       }
     }
@@ -154,15 +155,15 @@
     {
       "name": "measure",
       "args": {
-        "a": "VID:impact_t",
-        "b": "VID:hazard_onset_t"
+        "a": "CAN:brake_request_t",
+        "b": "AV:brake_request_t"
       }
     },
     {
       "name": "measure",
       "args": {
-        "a": "CAN:brake_request_t",
-        "b": "AV:brake_request_t"
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t"
       }
     },
     {
@@ -171,15 +172,6 @@
         "perception_s": 0.2,
         "command_s": 0.05,
         "tau_s": 0.15
-      }
-    },
-    {
-      "name": "witness_recheck",
-      "args": {
-        "question": "Is the road surface dry?",
-        "slug": "road_surface_dry",
-        "t0": 5.9,
-        "t1": 8.0
       }
     },
     {
@@ -214,14 +206,6 @@
       "source": "CF",
       "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
       "kind": "derived"
-    },
-    {
-      "id": "WIT2:road_surface_dry",
-      "value": "yes",
-      "unit": "",
-      "source": "WIT2",
-      "derivation": "muse-spark-1.3 recheck on sub-clip 5.90-8.00s: Is the road surface dry?",
-      "kind": "observation"
     }
   ]
 }

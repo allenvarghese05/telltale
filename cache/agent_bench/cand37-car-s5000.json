@@ -1,10 +1,10 @@
 {
   "model": "muse-wonder-1.0",
-  "digest": "4bc1e6fe087afbc3f3979dd158dec9ff00bd43bd97992b38d312f32a171a7d23",
+  "digest": "a6c3345739e7ca5a481aafabbf257ac3fb81906c0ab2f2ac2a6cdc2cc7834a00",
   "verdict": "UNAVOIDABLE",
   "claims": [
     {
-      "text": "The struck vehicle became a hazard by closing within the ego lane.",
+      "text": "The hazard onset reason was closing.",
       "type": "observation",
       "evidence": [
         "VID:hazard_onset_reason"
@@ -13,51 +13,6 @@
         "op": "is",
         "fact": "VID:hazard_onset_reason",
         "equals": "closing"
-      }
-    },
-    {
-      "text": "The system detected the vehicle 0.1033 s after it became a hazard, below the perception threshold of 0.3 s.",
-      "type": "timing",
-      "evidence": [
-        "AV:first_seen_t",
-        "VID:hazard_onset_t",
-        "PROFILE:perception_threshold_s"
-      ],
-      "assertion": {
-        "op": "diff",
-        "a": "AV:first_seen_t",
-        "b": "VID:hazard_onset_t",
-        "equals": 0.1033
-      }
-    },
-    {
-      "text": "The brake command followed detection by 0.0389 s, below the command threshold of 0.1 s.",
-      "type": "timing",
-      "evidence": [
-        "AV:brake_request_t",
-        "AV:first_seen_t",
-        "PROFILE:command_threshold_s"
-      ],
-      "assertion": {
-        "op": "diff",
-        "a": "AV:brake_request_t",
-        "b": "AV:first_seen_t",
-        "equals": 0.0389
-      }
-    },
-    {
-      "text": "Brake pressure was reached 0.14 s after the CAN brake request, below the actuation threshold of 0.25 s.",
-      "type": "timing",
-      "evidence": [
-        "CAN:pressure_reached_t",
-        "CAN:brake_request_t",
-        "PROFILE:actuation_threshold_s"
-      ],
-      "assertion": {
-        "op": "diff",
-        "a": "CAN:pressure_reached_t",
-        "b": "CAN:brake_request_t",
-        "equals": 0.14
       }
     },
     {
@@ -75,18 +30,48 @@
       }
     },
     {
-      "text": "With nominal perception 0.2 s, nominal command 0.05 s and nominal tau 0.15 s, contact was still true.",
-      "type": "physics",
+      "text": "The perception interval was 0.1033 s, below the 0.30 s perception threshold.",
+      "type": "timing",
       "evidence": [
-        "CF:run1_contact",
-        "PROFILE:nominal_perception_s",
-        "PROFILE:nominal_command_s",
-        "PROFILE:nominal_tau_s"
+        "AV:first_seen_t",
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s"
       ],
       "assertion": {
-        "op": "is",
-        "fact": "CF:run1_contact",
-        "equals": true
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 0.1033
+      }
+    },
+    {
+      "text": "The command interval was 0.0389 s, below the 0.10 s command threshold.",
+      "type": "timing",
+      "evidence": [
+        "AV:brake_request_t",
+        "AV:first_seen_t",
+        "PROFILE:command_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t",
+        "equals": 0.0389
+      }
+    },
+    {
+      "text": "The brake actuation interval was 0.14 s, below the 0.25 s actuation threshold.",
+      "type": "timing",
+      "evidence": [
+        "CAN:pressure_reached_t",
+        "CAN:brake_request_t",
+        "PROFILE:actuation_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t",
+        "equals": 0.14
       }
     },
     {
@@ -102,16 +87,43 @@
       }
     },
     {
-      "text": "The witness and independent recheck both reported the other vehicle's brake lights as yes.",
+      "text": "With nominal perception 0.20 s, nominal command 0.05 s, and nominal brake tau 0.15 s, the counterfactual still resulted in contact.",
+      "type": "attribution",
+      "evidence": [
+        "CF:run1_contact",
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": true
+      }
+    },
+    {
+      "text": "The counterfactual impact speed was 3.546 m/s.",
+      "type": "physics",
+      "evidence": [
+        "CF:run1_impact_speed_mps"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "CF:run1_impact_speed_mps",
+        "equals": 3.546
+      }
+    },
+    {
+      "text": "The witness and independent recheck both reported the other vehicle's brake lights were illuminated.",
       "type": "observation",
       "evidence": [
         "WIT:other_vehicle_brake_lights",
-        "WIT2:brake_lights"
+        "WIT2:other_vehicle_brake_lights"
       ],
       "assertion": {
         "op": "same",
         "a": "WIT:other_vehicle_brake_lights",
-        "b": "WIT2:brake_lights"
+        "b": "WIT2:other_vehicle_brake_lights"
       }
     }
   ],
@@ -145,7 +157,7 @@
       "name": "measure",
       "args": {
         "a": "VID:impact_t",
-        "b": "VID:hazard_onset_t"
+        "b": "AV:brake_request_t"
       }
     },
     {
@@ -159,17 +171,40 @@
     {
       "name": "witness_recheck",
       "args": {
-        "question": "Are the brake lights of the vehicle ahead illuminated?",
-        "slug": "brake_lights",
-        "t0": 6.83,
+        "question": "Are the other vehicle's brake lights illuminated?",
+        "slug": "other_vehicle_brake_lights",
+        "t0": 6.8,
         "t1": 8.0
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Is it night?",
+        "slug": "lighting",
+        "t0": 6.8,
+        "t1": 8.0
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:brake_request_t",
+        "b": "AV:brake_request_t"
       }
     },
     {
       "name": "submit_findings",
       "args": {
         "verdict": "UNAVOIDABLE",
-        "n_claims": 8
+        "n_claims": 9
       }
     }
   ],
@@ -199,11 +234,19 @@
       "kind": "derived"
     },
     {
-      "id": "WIT2:brake_lights",
+      "id": "WIT2:other_vehicle_brake_lights",
       "value": "yes",
       "unit": "",
       "source": "WIT2",
-      "derivation": "muse-spark-1.3 recheck on sub-clip 6.83-8.00s: Are the brake lights of the vehicle ahead illuminated?",
+      "derivation": "muse-spark-1.3 second look at 6.80-8.00s, asked without the first answer: Are the other vehicle's brake lights illuminated?",
+      "kind": "observation"
+    },
+    {
+      "id": "WIT2:lighting",
+      "value": "night",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 second look at 6.80-8.00s, asked without the first answer: Is it night?",
       "kind": "observation"
     }
   ]

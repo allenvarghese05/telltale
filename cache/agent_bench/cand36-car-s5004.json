@@ -1,10 +1,10 @@
 {
   "model": "muse-wonder-1.0",
-  "digest": "bc67b4d9b5adb8606456215786aa160970d71632aa883615dad49099188d11b5",
+  "digest": "eac1ba776a8ef8f04476dce34cc0754c08fb03f41954c36f0d4f44b63aee79bf",
   "verdict": "PERCEPTION_LATE",
   "claims": [
     {
-      "text": "Hazard onset was at 6.13 s, when the struck vehicle was closing within the ego lane with time-to-collision 1.94 s.",
+      "text": "The struck vehicle became a hazard at 6.13 s while closing within the ego lane, with a time-to-collision of 1.94 s.",
       "type": "observation",
       "evidence": [
         "VID:hazard_onset_t",
@@ -12,13 +12,13 @@
         "VID:ttc_at_onset_s"
       ],
       "assertion": {
-        "op": "is",
-        "fact": "VID:hazard_onset_reason",
-        "equals": "closing"
+        "op": "value",
+        "fact": "VID:hazard_onset_t",
+        "equals": 6.1333
       }
     },
     {
-      "text": "Perception took 1.38 s, exceeding the 0.30 s threshold: detection was at 7.52 s after hazard onset at 6.13 s.",
+      "text": "The system took 1.38 s to notice the vehicle, above the 0.30 s it is allowed.",
       "type": "timing",
       "evidence": [
         "AV:first_seen_t",
@@ -33,7 +33,7 @@
       }
     },
     {
-      "text": "Command took 0.03 s, below the 0.10 s command threshold.",
+      "text": "Command took 0.03 s from first detection to brake request, within the 0.10 s threshold.",
       "type": "timing",
       "evidence": [
         "AV:brake_request_t",
@@ -48,7 +48,7 @@
       }
     },
     {
-      "text": "Brake actuation took 0.12 s, below the 0.25 s actuation threshold.",
+      "text": "Brake actuation took 0.12 s from CAN brake request to pressure reached, within the 0.25 s threshold.",
       "type": "timing",
       "evidence": [
         "CAN:pressure_reached_t",
@@ -63,40 +63,40 @@
       }
     },
     {
-      "text": "At first detection, range was 3.986 m and closing speed was 9.185 m/s.",
-      "type": "physics",
+      "text": "Impact occurred at 8.00 s, 1.87 s after hazard onset.",
+      "type": "timing",
       "evidence": [
-        "AV:range_at_first_seen_m",
-        "AV:rel_speed_mps"
+        "VID:impact_t",
+        "VID:hazard_onset_t"
       ],
       "assertion": {
-        "op": "value",
-        "fact": "AV:range_at_first_seen_m",
-        "equals": 3.986
+        "op": "diff",
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 1.8667
       }
     },
     {
-      "text": "The brake log was complete, with a maximum brake-frame gap of 0.02 s.",
-      "type": "other",
+      "text": "The road surface was dry, corroborated on an independent recheck.",
+      "type": "observation",
       "evidence": [
-        "DATA:brake_log_complete",
-        "DATA:max_brake_gap_s"
+        "WIT:road_surface",
+        "WIT2:road_surface"
       ],
       "assertion": {
-        "op": "is",
-        "fact": "DATA:brake_log_complete",
-        "equals": true
+        "op": "same",
+        "a": "WIT:road_surface",
+        "b": "WIT2:road_surface"
       }
     },
     {
-      "text": "The nominal counterfactual with perception 0.20 s, command 0.05 s and brake time constant 0.15 s avoided contact, with a minimum gap of 7.83 m.",
+      "text": "Using nominal perception 0.20 s, nominal command 0.05 s, and nominal tau 0.15 s, the replay avoided contact.",
       "type": "physics",
       "evidence": [
         "PROFILE:nominal_perception_s",
         "PROFILE:nominal_command_s",
         "PROFILE:nominal_tau_s",
-        "CF:run1_contact",
-        "CF:run1_min_gap_m"
+        "CF:run1_contact"
       ],
       "assertion": {
         "op": "is",
@@ -105,18 +105,27 @@
       }
     },
     {
-      "text": "Perception was the primary contributing factor, as the other measured layers were within their thresholds and nominal timing avoided contact.",
-      "type": "attribution",
+      "text": "The nominal-timing replay kept a minimum gap of 7.83 m.",
+      "type": "physics",
       "evidence": [
-        "AV:first_seen_t",
-        "VID:hazard_onset_t",
-        "CF:run1_contact"
+        "CF:run1_min_gap_m"
       ],
       "assertion": {
-        "op": "diff",
-        "a": "AV:first_seen_t",
-        "b": "VID:hazard_onset_t",
-        "equals": 1.3836
+        "op": "value",
+        "fact": "CF:run1_min_gap_m",
+        "equals": 7.8283
+      }
+    },
+    {
+      "text": "The brake log was complete.",
+      "type": "other",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": true
       }
     }
   ],
@@ -154,6 +163,13 @@
       }
     },
     {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "AV:brake_request_t"
+      }
+    },
+    {
       "name": "run_counterfactual",
       "args": {
         "perception_s": 0.2,
@@ -164,21 +180,17 @@
     {
       "name": "witness_recheck",
       "args": {
-        "question": "Is the scene in daylight?",
-        "slug": "lighting_daylight",
-        "t0": 6.13,
+        "question": "Is the road surface dry?",
+        "slug": "road_surface",
+        "t0": 6.0,
         "t1": 8.0
       }
-    },
-    {
-      "name": "list_evidence",
-      "args": {}
     },
     {
       "name": "submit_findings",
       "args": {
         "verdict": "PERCEPTION_LATE",
-        "n_claims": 8
+        "n_claims": 9
       }
     }
   ],
@@ -208,11 +220,11 @@
       "kind": "derived"
     },
     {
-      "id": "WIT2:lighting_daylight",
-      "value": "yes",
+      "id": "WIT2:road_surface",
+      "value": "dry",
       "unit": "",
       "source": "WIT2",
-      "derivation": "muse-spark-1.3 recheck on sub-clip 6.13-8.00s: Is the scene in daylight?",
+      "derivation": "muse-spark-1.3 second look at 6.00-8.00s, asked without the first answer: Is the road surface dry?",
       "kind": "observation"
     }
   ]
