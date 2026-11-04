@@ -19,7 +19,14 @@
     <a href="index.html" aria-current="page">Investigated crashes</a>
     <a href="clips.html">Any dashcam clip</a>
   </nav>
+  <button id="upload-own" class="bar-button" aria-expanded="false" aria-controls="upload-panel">Upload your own clip</button>
 </header>
+<div id="upload-panel" class="upload-panel" hidden>
+  <p><strong>This runs on your machine, never on this site.</strong> Clone the repository, run
+     <code>pip install -e .</code> and then <code>telltale upload-ui</code>, and drop in a dashcam clip. It is tracked
+     by SAM 3.1 and described by Muse Spark on your own API key.</p>
+  <button id="upload-close" class="text-button">Close</button>
+</div>
 
 <section class="intro">
   <h1>Meta AI investigates the crash.<br>Plain code checks every word.</h1>
@@ -187,6 +194,7 @@
   <p id="run-provenance" class="caption"></p>
 </footer>
 
+<script src="site.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

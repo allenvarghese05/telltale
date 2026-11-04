@@ -619,3 +619,17 @@ details.fold[open] > summary .section-title::after { content: "  \2212"; }
   .picker { width: 100%; }
   .picker select { flex: 1; max-width: none; min-width: 0; }
 }
+
+.bar-button {
+  background: none; border: 1px solid var(--line-2); border-radius: 999px; padding: 6px 14px; font-size: 13px;
+  font-weight: 500; color: var(--ink); cursor: pointer; margin-left: auto; white-space: nowrap; flex: none;
+}
+.bar-button:hover { border-color: var(--ink); }
+.bar .bar-button + .picker { margin-left: 16px; }
+.upload-panel { max-width: calc(var(--page) + 2 * var(--side)); margin: 0 auto; padding-left: var(--side); padding-right: var(--side); display: flex; gap: 24px; align-items: baseline; justify-content: space-between; padding-top: 14px; padding-bottom: 16px; border-bottom: 1px solid var(--line-2); }
+.upload-panel[hidden] { display: none; }
+.upload-panel p { font-size: 14px; color: var(--ink-2); max-width: 80ch; line-height: 1.55; }
+.upload-panel code { font-size: 12.5px; background: var(--bg-soft); padding: 1px 6px; border-radius: 4px; }
+@media (max-width: 640px) {
+  .upload-panel { flex-direction: column; gap: 8px; }
+}
