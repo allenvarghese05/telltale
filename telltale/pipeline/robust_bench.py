@@ -349,7 +349,7 @@ def natural_pool() -> tuple[dict[str, str], dict]:
     return labels, dirs
 
 
-def _tampered(item: PlanItem, store: EvidenceStore, profile) -> tuple[EvidenceStore, list[str]]:
+def tampered_store(item: PlanItem, store: EvidenceStore, profile) -> tuple[EvidenceStore, list[str]]:
     if item.condition == "missing_evidence":
         return without_evidence(store, profile, item.variant)
     if item.condition == "lying_witness":
@@ -379,7 +379,7 @@ def run_robust_bench(
             continue
         case = build_case_store(dirs[item.case])
         try:
-            store, touched = _tampered(item, case.store, case.profile)
+            store, touched = tampered_store(item, case.store, case.profile)
         except ValueError as exc:
             skipped.append(f"{item.cache_key}: {exc}")
             continue
