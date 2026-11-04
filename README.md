@@ -67,7 +67,7 @@ before a person sees it.
 
 ## One investigation, step by step
 
-<p align="center"><img src="docs/images/how-one-case-runs.svg" alt="Sequence of one investigation: SAM 3.1 and Muse Spark write video and witness facts to the evidence store, the Muse Wonder agent queries it and submits claims, and the checker recomputes every claim and the verdict before a reviewer sees them." width="100%"></p>
+<p align="center"><img src="docs/images/how-one-case-runs.svg" alt="One real investigation in four steps: SAM 3.1 finds the car ahead became a danger at 6.13 s; Muse Spark sees daylight and a dry road; the Muse Wonder agent finds the driver-assist noticed too late, 1.10 s against 0.30 s allowed; plain Python reproduces all 9 claims and verifies the verdict." width="100%"></p>
 
 The agent reads the video facts, the witness answers, the logs and the vehicle profile. It never sees the
 checker's physics facts (`PHYS:*`) or the deterministic attribution (`ATTR:*`). It can add facts only through two
@@ -76,7 +76,7 @@ with SHA-256.
 
 ## Architecture
 
-<p align="center"><img src="docs/images/architecture.svg" alt="Architecture: perception by Meta AI feeds an immutable SHA-256 evidence store with the CAN and ADAS logs; the Muse Wonder agent sees only agent-visible facts; the checker and 1-D physics see all facts and produce the replay site and incident report." width="720"></p>
+<p align="center"><img src="docs/images/architecture.svg" alt="Architecture: perception by Meta AI feeds an immutable SHA-256 evidence store with the CAN and ADAS logs; the Muse Wonder agent sees only agent-visible facts; the checker and 1-D physics see all facts and produce the replay site and incident report." width="100%"></p>
 
 ## Try it
 
@@ -105,7 +105,7 @@ proprietary; swap in real logs and nothing else changes. Details under *Data hon
 ## Technical details
 
 Everything below is for engineers who want to check the work: the math, the checker's rules, every benchmark with
-its caveats, and how to reproduce it. Each section opens on click.
+its caveats, and how to reproduce it. The physics and the checker are shown in full; the other sections open on click.
 
 <details>
 <summary><b>The problem, in full</b></summary>
@@ -142,8 +142,7 @@ reproduce every statement before it reaches a person.
 
 </details>
 
-<details>
-<summary><b>The physics and the math</b></summary>
+## The physics and the math
 
 Everything in this section is deterministic code. No model computes any of it.
 
@@ -401,10 +400,8 @@ which for `cand37` is about 4.4 m/s² at $\Delta v_0 = 4$ m/s: a firm stop by th
 plausible. Because $\mathrm{TTC}_0$ is itself an estimate, v2 should carry it as an interval rather than a point.
 v2 is documented only: changing the generator regenerates every case, and the committed live runs were made on v1.
 
-</details>
 
-<details>
-<summary><b>The checker: rules R1 to R6 and the verdict</b></summary>
+## The checker
 
 Each claim carries its evidence IDs and a machine-checkable assertion, for example
 `{"op": "diff", "a": "AV:first_seen_t", "b": "VID:hazard_onset_t", "equals": 1.36}`. Supported operations are
@@ -460,7 +457,6 @@ the checker unchanged, it blocked the claim ("recomputed 1.102, claimed 0.25") a
 ("independent recomputation from the same evidence gives PERCEPTION_LATE; report withheld pending human review").
 The red-team case always replays its edited run, even with `--live`.
 
-</details>
 
 <details>
 <summary><b>Results, with every caveat</b></summary>
