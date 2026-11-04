@@ -111,3 +111,16 @@ The target is **all 686 eligible clips**. The run stops early for only two reaso
 
 It **never** stops because of the results. Whatever n is reached when one of those two limits binds is the n
 reported, along with which limit it was. This rules out stopping once the numbers look good.
+
+### Decision: scoring A is the headline
+
+Recorded during the n = 160 step, before the full results exist. The project owner chose **scoring A**, the
+current code including `bee03f6`, because the benchmark should measure the detector that ships, with every fix
+made since. In his words: "it should be A right because that is better and new with all the updates."
+
+For the record, the owner had seen the 20-clip pilot under scoring A when he chose. The choice rests on which
+detector the benchmark describes, not on which number is better, and both scorings stay reported side by side.
+
+The results document shows the published 40-clip figures next to the re-scored ones and explains the
+difference. `bee03f6` picks the struck vehicle from those that spent the last second mostly in the ego lane, so
+on 10 of the original 40 clips a different vehicle is scored: 7 lose their onset, 2 gain one, 1 moves.
