@@ -21,14 +21,6 @@ const HEADLINE = {
   INCONCLUSIVE: 'Inconclusive. The evidence is incomplete.',
 };
 
-const PLAIN = {
-  PERCEPTION_LATE: 'Noticed too late',
-  COMMAND_LATE: 'Braked too late',
-  BRAKE_ACTUATION_LATE: 'Slow brakes',
-  LATE_HANDOFF: 'Late handoff',
-  UNAVOIDABLE: 'Unavoidable',
-};
-
 const SHORT = {
   PERCEPTION_LATE: 'Noticed too late',
   COMMAND_LATE: 'Braking commanded late',
@@ -90,9 +82,15 @@ async function init() {
     $('run-note').textContent = 'No cases have been exported. Run telltale analyze-all, then telltale export-site.';
     return;
   }
-  const clips = [...new Set(cases.map((c) => c.clip_id))];
-  $('clip').innerHTML = clips.map((c) => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
-  $('clip').onchange = selectClip;
+  renderChooser();
+  $('case').onchange = async () => {
+    await load($('case').value);
+    start();
+  };
+  $('watch').onclick = () => {
+    document.querySelector('.chooser').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    start();
+  };
   $('run').onclick = start;
   $('replay').onclick = start;
   $('skip').onclick = skipToVerdict;
@@ -102,74 +100,27 @@ async function init() {
   });
   $('video').addEventListener('ended', land);
   requestAnimationFrame(frame);
-  await selectClip();
+  await load($('case').value);
 }
 
-async function selectClip() {
-  const list = cases.filter((c) => c.clip_id === $('clip').value);
-  await load(list[0].case_id);
-  await renderVariants(list);
-}
-
-/* Every log variant's verdict for this clip, side by side: one video, several possible causes. */
-let scenarios = [];
-let profileShown = 'car';
-
-/* "Try another scenario": one clip, several sets of car logs. A Car / Truck toggle, one plain choice per case
-   (named by what the checker found), and the red-team case on its own, marked as altered by hand. */
-async function renderVariants(list) {
-  $('variants-panel').hidden = list.length < 2;
-  if (list.length < 2) return;
-  scenarios = await Promise.all(
-    list.map(async (c) => {
-      try {
-        const full = await getJSON(`cases/${encodeURIComponent(c.case_id)}.json`);
-        return { ...c, verdict: full.verdict, redTeam: full.red_team };
-      } catch {
-        return { ...c, verdict: null, redTeam: null };
-      }
-    }),
-  );
-  const profiles = [...new Set(scenarios.filter((c) => !c.redTeam).map((c) => c.profile))];
-  if (!profiles.includes(profileShown)) profileShown = profiles[0];
-  $('profile-toggle').innerHTML = profiles
-    .map((p) => `<button data-profile="${esc(p)}" class="${p === profileShown ? 'on' : ''}">${esc(p[0].toUpperCase() + p.slice(1))}</button>`)
+/* One chooser, in plain words: each crash is a group, each set of car logs an investigation titled by what the
+   checker found. The titles are written by Python at export; the red-team case is grouped on its own. */
+function renderChooser() {
+  const groups = [];
+  for (const c of cases) {
+    const name = c.title.startsWith('Someone edits') ? 'Test the checker' : c.crash;
+    let g = groups.find((x) => x.name === name);
+    if (!g) groups.push((g = { name, items: [] }));
+    g.items.push(c);
+  }
+  groups.sort((x, y) => (x.name === 'Test the checker') - (y.name === 'Test the checker'));
+  $('case').innerHTML = groups
+    .map(
+      (g) => `<optgroup label="${esc(g.name)}">${g.items
+        .map((c) => `<option value="${esc(c.case_id)}"${c.default ? ' selected' : ''}>${esc(c.title)}</option>`)
+        .join('')}</optgroup>`,
+    )
     .join('');
-  $('profile-toggle')
-    .querySelectorAll('button')
-    .forEach((b) => {
-      b.onclick = () => {
-        profileShown = b.dataset.profile;
-        renderVariants(list);
-      };
-    });
-  const choice = (c) => {
-    const v = c.verdict;
-    const label = v ? PLAIN[v.independent_label] || SHORT[v.independent_label] || v.independent_label : 'Unavailable';
-    return `<button class="variant" data-id="${esc(c.case_id)}"><span class="variant-v">${esc(label)}</span></button>`;
-  };
-  $('variants').innerHTML = scenarios.filter((c) => !c.redTeam && c.profile === profileShown).map(choice).join('');
-  const red = scenarios.find((c) => c.redTeam);
-  $('red-team-slot').innerHTML = red
-    ? `<button class="variant red-team" data-id="${esc(red.case_id)}"><span class="variant-v">Try to fool the checker</span>
-        <span class="variant-s">Altered by hand: the investigator's verdict and one claim were changed to test the checker.</span></button>`
-    : '';
-  $('variants-panel')
-    .querySelectorAll('.variant')
-    .forEach((b) => {
-      b.onclick = async () => {
-        await load(b.dataset.id);
-        markActive();
-        start();
-      };
-    });
-  markActive();
-}
-
-function markActive() {
-  $('variants-panel')
-    .querySelectorAll('.variant')
-    .forEach((b) => b.classList.toggle('active', b.dataset.id === bundle.case_id));
 }
 
 /* ---------- one case ---------- */
@@ -195,6 +146,7 @@ async function load(id) {
   $('report-link').href = `reports/${encodeURIComponent(id)}.html`;
   $('digest').textContent = bundle.digest || '-';
   renderSceneCaption();
+  renderKeyFacts();
   renderRunProvenance();
 }
 
@@ -321,6 +273,25 @@ function appendFact(fact) {
 function appendRemainingEvidence() {
   const shown = new Set(events.map((e) => e.key));
   (bundle.facts || []).filter((f) => !shown.has(f.id)).forEach(appendFact);
+}
+
+function renderKeyFacts() {
+  const s = bundle.scene || {};
+  const c = s.conditions || {};
+  const row = (k, v, sub = '') => `<dt>${esc(k)}</dt><dd>${v}${sub ? `<span class="sub">${esc(sub)}</span>` : ''}</dd>`;
+  const rows = [row('Vehicle', esc(bundle.profile === 'truck' ? 'Loaded truck' : 'Car'))];
+  if (s.tracked_vehicles) rows.push(row('Vehicles tracked', esc(s.tracked_vehicles)));
+  if (s.target_object_id !== undefined && s.target_object_id !== null) {
+    rows.push(row("Telltale's pick", `vehicle ${esc(s.target_object_id)}`, 'the vehicle that was struck'));
+  }
+  if (s.danger_onset_t !== undefined && s.danger_onset_t !== null) {
+    rows.push(row('Became a hazard', `${esc(num(s.danger_onset_t))} s`, ONSET_HOW[s.danger_onset_reason] || ''));
+  }
+  const impact = factValue('VID:impact_t');
+  if (impact !== undefined) rows.push(row('Impact', `${esc(num(impact))} s`));
+  const seen = [c.lighting, c.weather, c.road_surface && `${c.road_surface} road`].filter((x) => x && x !== 'unclear');
+  if (seen.length) rows.push(row('Witness saw', esc(seen.join(', '))));
+  $('key-facts').innerHTML = rows.join('');
 }
 
 function renderSceneCaption() {

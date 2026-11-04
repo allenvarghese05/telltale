@@ -19,14 +19,13 @@
     <a href="index.html" aria-current="page">Investigated crashes</a>
     <a href="clips.html">Any dashcam clip</a>
   </nav>
-  <label class="picker">
-    <span>Clip</span>
-    <select id="clip"></select>
-  </label>
 </header>
 
 <section class="intro">
   <h1>Meta AI investigates the crash.<br>Plain code checks every word.</h1>
+  <p class="hero-line">Watch Meta AI work out why a real dashcam crash happened, and watch plain code check every
+     claim before you read it.</p>
+  <button id="watch" class="primary hero-cta">Watch an investigation</button>
   <ol class="stages">
     <li>
       <h2>Perceive</h2>
@@ -48,6 +47,14 @@
   </ol>
 </section>
 
+<section class="chooser" aria-label="Choose an investigation">
+  <label class="chooser-field">
+    <span>Investigation</span>
+    <select id="case"></select>
+  </label>
+  <p class="caption">Each crash comes with several sets of car logs: the same video, a different cause each time.</p>
+</section>
+
 <section class="replay" aria-label="Replay">
   <div class="stage">
     <figure class="screen">
@@ -65,15 +72,9 @@
     </div>
   </div>
 
-  <aside class="ledger live" aria-label="Incident report, written as the replay plays">
-    <div class="ledger-head">
-      <h2>Incident report</h2>
-      <button id="sources" class="text-button" aria-pressed="false">Show sources</button>
-    </div>
-    <p id="report-wait" class="caption report-wait">The report writes itself as the replay reaches each moment.</p>
-    <div id="narrative" class="narrative live-narrative" aria-live="polite"></div>
-    <p class="caption live-note">Written by deterministic code from the evidence, never by a model.
-      <a id="report-link" target="_blank" rel="noopener">Printable report</a></p>
+  <aside class="ledger" aria-label="What the evidence shows">
+    <div class="ledger-head"><h2>What the evidence shows</h2></div>
+    <dl id="key-facts" class="facts"></dl>
     <details class="raw">
       <summary>Show raw evidence <span id="ledger-count" class="meta"></span></summary>
       <ol id="evidence"></ol>
@@ -87,19 +88,21 @@
   </div>
 </section>
 
+<section class="live-report" aria-labelledby="report-title">
+  <div class="report-head">
+    <h2 id="report-title">Incident report</h2>
+    <button id="sources" class="text-button" aria-pressed="false">Show sources</button>
+  </div>
+  <p id="report-wait" class="caption report-wait">The report writes itself as the replay reaches each moment.</p>
+  <div id="narrative" class="narrative live-narrative" aria-live="polite"></div>
+  <p class="caption live-note">Written by deterministic code from the evidence, never by a model.
+    <a id="report-link" target="_blank" rel="noopener">Printable report</a></p>
+</section>
+
 <section id="verdict" class="verdict" aria-live="polite">
   <p class="verdict-wait">The verdict appears when the replay ends.</p>
 </section>
 
-<section id="variants-panel" class="variants" hidden>
-  <h2>Try another scenario</h2>
-  <p class="lede">Same crash video, different car logs. Pick a story and watch Telltale find a different cause.</p>
-  <div class="scenario-bar">
-    <div id="profile-toggle" class="segmented" role="group" aria-label="Vehicle"></div>
-  </div>
-  <div id="variants" class="variant-row"></div>
-  <div id="red-team-slot" class="red-team-slot"></div>
-</section>
 
 <section class="investigation">
   <details id="full-investigation" class="fold">

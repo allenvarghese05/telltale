@@ -36,7 +36,9 @@ async function init() {
       'No video-only clips have been exported. Run telltale investigate-clip, then telltale export-site.';
     return;
   }
-  $('clip').innerHTML = index.map((c) => `<option value="${esc(c.clip_id)}">${esc(c.clip_id)}</option>`).join('');
+  $('clip').innerHTML = index
+    .map((c) => `<option value="${esc(c.clip_id)}">${esc(c.title || c.clip_id)}</option>`)
+    .join('');
   $('clip').onchange = () => load($('clip').value);
   $('play').onclick = start;
   $('replay').onclick = start;
