@@ -204,13 +204,23 @@ function drawOverlay(now) {
   const r = clip.report || {};
   const struck = r.struck_vehicle;
   const hazard = r.hazard_onset && now >= r.hazard_onset.t;
+  /* Other vehicles turn amber when they became hazards, at the times the report gives. */
+  const otherOnsets = Object.fromEntries((r.other_hazards || []).map((h) => [String(h.object_id), h.t]));
   for (const [oid, dets] of Object.entries(clip.tracks || {})) {
     const d = nearest(dets, f);
     if (!d) continue;
     const [, l, t, rr, b] = d;
     const isStruck = oid === struck;
     ctx.lineWidth = isStruck ? 2 : 1;
-    ctx.strokeStyle = isStruck ? (hazard ? '#ff453a' : 'rgba(255,255,255,0.95)') : 'rgba(255,255,255,0.4)';
+    const otherHazard = !isStruck && oid in otherOnsets && now >= otherOnsets[oid];
+    if (otherHazard) ctx.lineWidth = 1.5;
+    ctx.strokeStyle = isStruck
+      ? hazard
+        ? '#ff453a'
+        : 'rgba(255,255,255,0.95)'
+      : otherHazard
+        ? '#ffb340'
+        : 'rgba(255,255,255,0.4)';
     ctx.strokeRect(l * sx, t * sy, (rr - l) * sx, (b - t) * sy);
     if (isStruck) {
       ctx.fillStyle = ctx.strokeStyle;
