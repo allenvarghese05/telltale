@@ -1,0 +1,16 @@
+{
+  "story": "unavoidable_with_fault",
+  "profile": "truck",
+  "v_ego0": 23.514600315798422,
+  "v_other": 12.169721966795441,
+  "d0": 20.71622454504243,
+  "first_seen": 0.5535149087217046,
+  "brake_request": 0.6070850625511448,
+  "handoff": null,
+  "tau": 0.37776163801454715,
+  "contact_t": 2.099,
+  "can_skew": -6.52162788789871,
+  "av_skew": -6.582791912524041,
+  "label": "UNAVOIDABLE",
+  "expected_label": "UNAVOIDABLE"
+}

@@ -1,0 +1,16 @@
+{
+  "story": "marginal_actuation",
+  "profile": "car",
+  "v_ego0": 27.55984371937189,
+  "v_other": 17.74872108182896,
+  "d0": 12.370911774791884,
+  "first_seen": 0.26407266552842024,
+  "brake_request": 0.3321439884590688,
+  "handoff": null,
+  "tau": 0.37037756765127144,
+  "contact_t": 1.866,
+  "can_skew": 1.5465364148736125,
+  "av_skew": 2.087178162568973,
+  "label": "BRAKE_ACTUATION_LATE",
+  "expected_label": "BRAKE_ACTUATION_LATE"
+}

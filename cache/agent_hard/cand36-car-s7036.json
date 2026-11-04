@@ -1,0 +1,199 @@
+{
+  "model": "muse-wonder-1.0",
+  "digest": "5c8784a137fb3d812364a35cc66a8ffbe3d5afe911ae42befc6d9151e50c5d03",
+  "verdict": "COMMAND_LATE",
+  "claims": [
+    {
+      "text": "Hazard onset was at 6.1333 s when the struck vehicle was closing within the ego lane.",
+      "type": "observation",
+      "evidence": [
+        "VID:hazard_onset_t",
+        "VID:hazard_onset_reason"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "VID:hazard_onset_reason",
+        "equals": "closing"
+      }
+    },
+    {
+      "text": "The perception interval was 0.4768 s, above the 0.3 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 0.4768
+      }
+    },
+    {
+      "text": "The command interval was 0.3436 s, above the 0.1 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "AV:brake_request_t",
+        "AV:first_seen_t",
+        "PROFILE:command_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t",
+        "equals": 0.3436
+      }
+    },
+    {
+      "text": "The brake actuation interval was 0.14 s, below the 0.25 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "CAN:pressure_reached_t",
+        "CAN:brake_request_t",
+        "PROFILE:actuation_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t",
+        "equals": 0.14
+      }
+    },
+    {
+      "text": "Impact occurred at 8.0 s.",
+      "type": "timing",
+      "evidence": [
+        "VID:impact_t"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "VID:impact_t",
+        "equals": 8.0
+      }
+    },
+    {
+      "text": "The brake log was complete.",
+      "type": "other",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": true
+      }
+    },
+    {
+      "text": "With nominal perception 0.2 s, nominal command 0.05 s, and nominal tau 0.15 s, the counterfactual avoided contact with a minimum gap of 4.915 m.",
+      "type": "physics",
+      "evidence": [
+        "CF:run1_contact",
+        "CF:run1_min_gap_m",
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": false
+      }
+    },
+    {
+      "text": "Because the nominal-timing counterfactual avoided contact and the command interval showed the largest threshold exceedance, the primary contributing factor was late command.",
+      "type": "attribution",
+      "evidence": [
+        "CF:run1_contact"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": false
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.2,
+        "command_s": 0.05,
+        "tau_s": 0.15
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:brake_request_t",
+        "b": "AV:brake_request_t"
+      }
+    },
+    {
+      "name": "submit_findings",
+      "args": {
+        "verdict": "COMMAND_LATE",
+        "n_claims": 8
+      }
+    }
+  ],
+  "agent_facts": [
+    {
+      "id": "CF:run1_contact",
+      "value": false,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_impact_speed_mps",
+      "value": 0.0,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_min_gap_m",
+      "value": 4.915,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    }
+  ]
+}

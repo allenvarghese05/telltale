@@ -1,0 +1,12 @@
+{
+  "cand37-car-s7018": "tight_handoff_perception: no tight_handoff_perception parameters found for ClipTiming(clip_id='cand37', hazard_onset_t=6.830065359477124, impact_t=8.0)",
+  "cand37-truck-s7024": "tight_handoff_perception: no tight_handoff_perception parameters found for ClipTiming(clip_id='cand37', hazard_onset_t=6.830065359477124, impact_t=8.0)",
+  "cand63-car-s7000": "tight_perception_command: no tight_perception_command parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)",
+  "cand63-car-s7010": "unavoidable_with_fault: no unavoidable_with_fault parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)",
+  "cand63-car-s7019": "tight_actuation_perception: no tight_actuation_perception parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)",
+  "cand63-car-s7025": "tight_command_perception: no tight_command_perception parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)",
+  "cand63-truck-s7001": "tight_command_perception: no tight_command_perception parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)",
+  "cand63-truck-s7007": "tight_perception_command: no tight_perception_command parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)",
+  "cand63-truck-s7029": "marginal_actuation: no marginal_actuation parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)",
+  "cand63-truck-s7030": "marginal_command: no marginal_command parameters found for ClipTiming(clip_id='cand63', hazard_onset_t=2.721311475409836, impact_t=8.0)"
+}

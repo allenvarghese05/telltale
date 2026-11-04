@@ -1,0 +1,16 @@
+{
+  "story": "tight_actuation_perception",
+  "profile": "car",
+  "v_ego0": 24.355846396533074,
+  "v_other": 17.153888066459338,
+  "d0": 8.102307139807905,
+  "first_seen": 0.5380544243431437,
+  "brake_request": 0.5987627711747625,
+  "handoff": null,
+  "tau": 0.6280722550657252,
+  "contact_t": 1.169,
+  "can_skew": 1.673526835743008,
+  "av_skew": 2.0410065194401765,
+  "label": "BRAKE_ACTUATION_LATE",
+  "expected_label": "BRAKE_ACTUATION_LATE"
+}

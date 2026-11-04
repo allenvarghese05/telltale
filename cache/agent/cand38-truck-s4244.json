@@ -1,0 +1,246 @@
+{
+  "model": "muse-wonder-1.0",
+  "digest": "216e30d9128d049b1ad774af36d6e14357709ef3daf64848dc8c375e79db3463",
+  "verdict": "LATE_HANDOFF",
+  "claims": [
+    {
+      "text": "Hazard onset was at 5.9 s and first detection was at 6.072 s, giving a perception interval of 0.172 s, below the 0.3 s perception threshold.",
+      "type": "timing",
+      "evidence": [
+        "VID:hazard_onset_t",
+        "AV:first_seen_t",
+        "PROFILE:perception_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 0.172
+      }
+    },
+    {
+      "text": "The hazard onset reason was recorded as closing.",
+      "type": "observation",
+      "evidence": [
+        "VID:hazard_onset_reason"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "VID:hazard_onset_reason",
+        "equals": "closing"
+      }
+    },
+    {
+      "text": "The handoff occurred at 6.9216 s, 0.8496 s after first detection at 6.072 s.",
+      "type": "timing",
+      "evidence": [
+        "AV:handoff_t",
+        "AV:first_seen_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:handoff_t",
+        "b": "AV:first_seen_t",
+        "equals": 0.8496
+      }
+    },
+    {
+      "text": "Impact occurred at 8.0 s, only 1.0784 s after the handoff at 6.9216 s, below the 1.5 s human response time.",
+      "type": "timing",
+      "evidence": [
+        "VID:impact_t",
+        "AV:handoff_t",
+        "PROFILE:human_prt_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "VID:impact_t",
+        "b": "AV:handoff_t",
+        "equals": 1.0784
+      }
+    },
+    {
+      "text": "The brake request was recorded at 8.382 s, 0.382 s after impact at 8.0 s.",
+      "type": "timing",
+      "evidence": [
+        "CAN:brake_request_t",
+        "VID:impact_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:brake_request_t",
+        "b": "VID:impact_t",
+        "equals": 0.382
+      }
+    },
+    {
+      "text": "Brake pressure was recorded as reached at 8.682 s, 0.3 s after the brake request at 8.382 s, below the 0.45 s actuation threshold.",
+      "type": "timing",
+      "evidence": [
+        "CAN:pressure_reached_t",
+        "CAN:brake_request_t",
+        "PROFILE:actuation_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t",
+        "equals": 0.3
+      }
+    },
+    {
+      "text": "In the counterfactual using nominal perception of 0.2 s, nominal command of 0.05 s, and nominal brake time constant of 0.35 s, contact was avoided and the minimum gap was 5.2773 m.",
+      "type": "physics",
+      "evidence": [
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s",
+        "CF:run1_contact",
+        "CF:run1_min_gap_m"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": false
+      }
+    },
+    {
+      "text": "The brake log was recorded as complete.",
+      "type": "other",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": true
+      }
+    },
+    {
+      "text": "The witness recorded daylight, and an independent recheck also recorded daylight.",
+      "type": "observation",
+      "evidence": [
+        "WIT:lighting",
+        "WIT2:lighting"
+      ],
+      "assertion": {
+        "op": "same",
+        "a": "WIT:lighting",
+        "b": "WIT2:lighting"
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "AV:handoff_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:handoff_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:brake_request_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:brake_request_t",
+        "b": "AV:handoff_t"
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.2,
+        "command_s": 0.05,
+        "tau_s": 0.35
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Is the scene in daylight?",
+        "slug": "lighting",
+        "t0": 5.9,
+        "t1": 8.0
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:brake_request_t",
+        "b": "VID:impact_t"
+      }
+    },
+    {
+      "name": "submit_findings",
+      "args": {
+        "verdict": "LATE_HANDOFF",
+        "n_claims": 9
+      }
+    }
+  ],
+  "agent_facts": [
+    {
+      "id": "CF:run1_contact",
+      "value": false,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_impact_speed_mps",
+      "value": 0.0,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_min_gap_m",
+      "value": 5.2773,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "WIT2:lighting",
+      "value": "daylight",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 second look at 5.90-8.00s, asked without the first answer: Is the scene in daylight?",
+      "kind": "observation"
+    }
+  ]
+}

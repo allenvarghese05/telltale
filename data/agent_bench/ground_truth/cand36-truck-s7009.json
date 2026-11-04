@@ -1,0 +1,16 @@
+{
+  "story": "tight_actuation_perception",
+  "profile": "truck",
+  "v_ego0": 23.604673066794522,
+  "v_other": 15.10073123954635,
+  "d0": 14.166887005839616,
+  "first_seen": 0.4708059997354748,
+  "brake_request": 0.5025838426889688,
+  "handoff": null,
+  "tau": 0.7476211699931791,
+  "contact_t": 1.866,
+  "can_skew": 6.177150858334905,
+  "av_skew": 5.966525395427505,
+  "label": "BRAKE_ACTUATION_LATE",
+  "expected_label": "BRAKE_ACTUATION_LATE"
+}

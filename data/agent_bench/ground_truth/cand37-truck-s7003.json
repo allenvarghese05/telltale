@@ -1,0 +1,16 @@
+{
+  "story": "marginal_perception",
+  "profile": "truck",
+  "v_ego0": 22.941441417974367,
+  "v_other": 18.50814159534262,
+  "d0": 4.693172210537959,
+  "first_seen": 0.38228654424260344,
+  "brake_request": 0.47107068084477377,
+  "handoff": null,
+  "tau": 0.3292309005502714,
+  "contact_t": 1.169,
+  "can_skew": -2.809423655892525,
+  "av_skew": -2.320826105648418,
+  "label": "PERCEPTION_LATE",
+  "expected_label": "PERCEPTION_LATE"
+}

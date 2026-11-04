@@ -1,0 +1,233 @@
+{
+  "model": "muse-wonder-1.0",
+  "digest": "015200e3556cc8e2df8e3e67efdddfc34621a8ddd42c1fe17df18663ecfcbbb3",
+  "verdict": "LATE_HANDOFF",
+  "claims": [
+    {
+      "text": "At 2.72 s the struck vehicle entered the ego lane, creating the hazard.",
+      "type": "observation",
+      "evidence": [
+        "VID:hazard_onset_t",
+        "VID:hazard_onset_reason"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "VID:hazard_onset_reason",
+        "equals": "entering"
+      }
+    },
+    {
+      "text": "Perception took 0.22 s from hazard onset to first detection, below the 0.30 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 0.2249
+      }
+    },
+    {
+      "text": "The system handed off 4.05 s after first detection, at 7.00 s.",
+      "type": "timing",
+      "evidence": [
+        "AV:handoff_t",
+        "AV:first_seen_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:handoff_t",
+        "b": "AV:first_seen_t",
+        "equals": 4.05
+      }
+    },
+    {
+      "text": "Only 1.00 s remained from handoff to impact, below the 1.50 s human response allowance.",
+      "type": "timing",
+      "evidence": [
+        "VID:impact_t",
+        "AV:handoff_t",
+        "PROFILE:human_prt_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "VID:impact_t",
+        "b": "AV:handoff_t",
+        "equals": 1.0038
+      }
+    },
+    {
+      "text": "The first CAN brake request was at 8.30 s, 0.30 s after the 8.00 s impact.",
+      "type": "timing",
+      "evidence": [
+        "CAN:brake_request_t",
+        "VID:impact_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:brake_request_t",
+        "b": "VID:impact_t",
+        "equals": 0.3017
+      }
+    },
+    {
+      "text": "Brake actuation took 0.32 s from request to pressure, below the 0.45 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "CAN:pressure_reached_t",
+        "CAN:brake_request_t",
+        "PROFILE:actuation_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t",
+        "equals": 0.32
+      }
+    },
+    {
+      "text": "The brake log is complete.",
+      "type": "other",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": true
+      }
+    },
+    {
+      "text": "With nominal perception 0.20 s, command 0.05 s and brake tau 0.35 s, the counterfactual avoided contact with a 43.305 m minimum gap.",
+      "type": "physics",
+      "evidence": [
+        "CF:run1_contact",
+        "CF:run1_min_gap_m",
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": false
+      }
+    },
+    {
+      "text": "The witness said the other vehicle had no turn signal during its lane change, and an independent recheck confirmed the same observation.",
+      "type": "observation",
+      "evidence": [
+        "WIT:other_vehicle_turn_signal",
+        "WIT2:other_vehicle_turn_signal"
+      ],
+      "assertion": {
+        "op": "same",
+        "a": "WIT:other_vehicle_turn_signal",
+        "b": "WIT2:other_vehicle_turn_signal"
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "AV:handoff_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:handoff_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:brake_request_t",
+        "b": "VID:impact_t"
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.2,
+        "command_s": 0.05,
+        "tau_s": 0.35
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Does the other vehicle have its turn signal on as it changes into the ego lane?",
+        "slug": "other_vehicle_turn_signal",
+        "t0": 1.8,
+        "t1": 3.5
+      }
+    },
+    {
+      "name": "submit_findings",
+      "args": {
+        "verdict": "LATE_HANDOFF",
+        "n_claims": 9
+      }
+    }
+  ],
+  "agent_facts": [
+    {
+      "id": "CF:run1_contact",
+      "value": false,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_impact_speed_mps",
+      "value": 0.0,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_min_gap_m",
+      "value": 43.305,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "WIT2:other_vehicle_turn_signal",
+      "value": "no",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 second look at 1.80-3.50s, asked without the first answer: Does the other vehicle have its turn signal on as it changes into the ego lane?",
+      "kind": "observation"
+    }
+  ]
+}

@@ -1,0 +1,211 @@
+{
+  "model": "muse-wonder-1.0",
+  "digest": "a79f56b7ec1d861dedf7bba2aa631be9d10097377c7b3f896f2ff67963e8d702",
+  "verdict": "COMMAND_LATE",
+  "claims": [
+    {
+      "text": "Hazard became closing at 5.9 s, and impact occurred at 8.0 s, 2.1 s later.",
+      "type": "timing",
+      "evidence": [
+        "VID:hazard_onset_t",
+        "VID:impact_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 2.1
+      }
+    },
+    {
+      "text": "The hazard onset reason was closing, so the struck vehicle was already in the ego lane closing.",
+      "type": "observation",
+      "evidence": [
+        "VID:hazard_onset_reason"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "VID:hazard_onset_reason",
+        "equals": "closing"
+      }
+    },
+    {
+      "text": "Perception took 0.1313 s, below the 0.3 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 0.1313
+      }
+    },
+    {
+      "text": "Command took 0.6329 s, above the 0.1 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "AV:brake_request_t",
+        "AV:first_seen_t",
+        "PROFILE:command_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t",
+        "equals": 0.6329
+      }
+    },
+    {
+      "text": "Actuation took 0.3 s, below the 0.45 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "CAN:pressure_reached_t",
+        "CAN:brake_request_t",
+        "PROFILE:actuation_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t",
+        "equals": 0.3
+      }
+    },
+    {
+      "text": "With nominal timings of 0.2 s perception, 0.05 s command and 0.35 s tau, contact is avoided with a 2.8297 m minimum gap.",
+      "type": "physics",
+      "evidence": [
+        "CF:run1_contact",
+        "CF:run1_min_gap_m",
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": false
+      }
+    },
+    {
+      "text": "The road surface was dry, corroborated by the independent recheck observation.",
+      "type": "observation",
+      "evidence": [
+        "WIT:road_surface",
+        "WIT2:road_surface"
+      ],
+      "assertion": {
+        "op": "same",
+        "a": "WIT:road_surface",
+        "b": "WIT2:road_surface"
+      }
+    },
+    {
+      "text": "Brake log is complete, so the timing results are reliable.",
+      "type": "other",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": true
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.2,
+        "command_s": 0.05,
+        "tau_s": 0.35
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Is the road surface dry?",
+        "slug": "road_surface",
+        "t0": 5.0,
+        "t1": 7.0
+      }
+    },
+    {
+      "name": "submit_findings",
+      "args": {
+        "verdict": "COMMAND_LATE",
+        "n_claims": 8
+      }
+    }
+  ],
+  "agent_facts": [
+    {
+      "id": "CF:run1_contact",
+      "value": false,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_impact_speed_mps",
+      "value": 0.0,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_min_gap_m",
+      "value": 2.8297,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "WIT2:road_surface",
+      "value": "dry",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 second look at 5.00-7.00s, asked without the first answer: Is the road surface dry?",
+      "kind": "observation"
+    }
+  ]
+}

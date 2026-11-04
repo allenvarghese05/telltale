@@ -1,0 +1,241 @@
+{
+  "model": "muse-wonder-1.0",
+  "digest": "184e84a8dc32d9dfa8bffc97aad3f071a7a22f1d2149451ca713d287e9be81db",
+  "verdict": "PERCEPTION_LATE",
+  "claims": [
+    {
+      "text": "Hazard onset was at 6.13 s, when the struck vehicle was already in the ego lane with time-to-collision 1.94 s.",
+      "type": "timing",
+      "evidence": [
+        "VID:hazard_onset_t",
+        "VID:ttc_at_onset_s"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "VID:hazard_onset_t",
+        "equals": 6.1333
+      }
+    },
+    {
+      "text": "The hazard onset reason was closing.",
+      "type": "observation",
+      "evidence": [
+        "VID:hazard_onset_reason"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "VID:hazard_onset_reason",
+        "equals": "closing"
+      }
+    },
+    {
+      "text": "The system took 1.58 s to notice the vehicle, above the 0.30 s it is allowed.",
+      "type": "timing",
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 1.5795
+      }
+    },
+    {
+      "text": "Command took 0.07 s from first detection to brake request, within the 0.10 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "AV:brake_request_t",
+        "AV:first_seen_t",
+        "PROFILE:command_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t",
+        "equals": 0.0719
+      }
+    },
+    {
+      "text": "Brake actuation took 0.30 s from CAN brake request to pressure reached, within the 0.45 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "CAN:pressure_reached_t",
+        "CAN:brake_request_t",
+        "PROFILE:actuation_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t",
+        "equals": 0.3
+      }
+    },
+    {
+      "text": "Impact occurred 1.87 s after hazard onset.",
+      "type": "timing",
+      "evidence": [
+        "VID:impact_t",
+        "VID:hazard_onset_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 1.8667
+      }
+    },
+    {
+      "text": "At first detection the range was 3.08 m with closing speed 10.76 m/s.",
+      "type": "physics",
+      "evidence": [
+        "AV:range_at_first_seen_m",
+        "AV:rel_speed_mps"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "AV:range_at_first_seen_m",
+        "equals": 3.081
+      }
+    },
+    {
+      "text": "With nominal perception 0.20 s, nominal command 0.05 s and nominal tau 0.35 s, the counterfactual avoided contact, with a minimum gap of 1.02 m.",
+      "type": "attribution",
+      "evidence": [
+        "CF:run1_contact",
+        "CF:run1_min_gap_m",
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": false
+      }
+    },
+    {
+      "text": "The brake log was complete.",
+      "type": "other",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": true
+      }
+    },
+    {
+      "text": "Witness lighting was daylight, corroborated by an independent recheck.",
+      "type": "observation",
+      "evidence": [
+        "WIT:lighting",
+        "WIT2:lighting"
+      ],
+      "assertion": {
+        "op": "same",
+        "a": "WIT:lighting",
+        "b": "WIT2:lighting"
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.2,
+        "command_s": 0.05,
+        "tau_s": 0.35
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Is the scene in daylight?",
+        "slug": "lighting",
+        "t0": 6.13,
+        "t1": 7.13
+      }
+    },
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "submit_findings",
+      "args": {
+        "verdict": "PERCEPTION_LATE",
+        "n_claims": 10
+      }
+    }
+  ],
+  "agent_facts": [
+    {
+      "id": "CF:run1_contact",
+      "value": false,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_impact_speed_mps",
+      "value": 0.0,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_min_gap_m",
+      "value": 1.018,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "WIT2:lighting",
+      "value": "daylight",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 second look at 6.13-7.13s, asked without the first answer: Is the scene in daylight?",
+      "kind": "observation"
+    }
+  ]
+}

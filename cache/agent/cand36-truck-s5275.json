@@ -1,0 +1,250 @@
+{
+  "model": "muse-wonder-1.0",
+  "digest": "98ce1dc69889cf2192c03bc59ef1a2a9261b093d6fd1b78ac76737335e0443f1",
+  "verdict": "UNAVOIDABLE",
+  "claims": [
+    {
+      "text": "The system took 0.1335 s to notice the vehicle, below the 0.30 s it is allowed.",
+      "type": "timing",
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 0.1335
+      }
+    },
+    {
+      "text": "The command interval was 0.0719 s, below the 0.1 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "AV:brake_request_t",
+        "AV:first_seen_t",
+        "PROFILE:command_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t",
+        "equals": 0.0719
+      }
+    },
+    {
+      "text": "The brake actuation interval was 0.32 s, below the 0.45 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "CAN:pressure_reached_t",
+        "CAN:brake_request_t",
+        "PROFILE:actuation_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t",
+        "equals": 0.32
+      }
+    },
+    {
+      "text": "The hazard onset was by closing within the lane.",
+      "type": "observation",
+      "evidence": [
+        "VID:hazard_onset_reason"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "VID:hazard_onset_reason",
+        "equals": "closing"
+      }
+    },
+    {
+      "text": "At hazard onset the time-to-collision was 1.9427 s.",
+      "type": "physics",
+      "evidence": [
+        "VID:ttc_at_onset_s"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "VID:ttc_at_onset_s",
+        "equals": 1.9427
+      }
+    },
+    {
+      "text": "With nominal timing of 0.2 s perception, 0.05 s command and 0.35 s brake tau, contact still occurred.",
+      "type": "attribution",
+      "evidence": [
+        "CF:run1_contact",
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": true
+      }
+    },
+    {
+      "text": "The nominal-timing replay still produced an impact speed of 4.7188 m/s.",
+      "type": "physics",
+      "evidence": [
+        "CF:run1_impact_speed_mps"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "CF:run1_impact_speed_mps",
+        "equals": 4.7188
+      }
+    },
+    {
+      "text": "The brake log was complete.",
+      "type": "other",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": true
+      }
+    },
+    {
+      "text": "Independent recheck agreed the lighting was daylight.",
+      "type": "observation",
+      "evidence": [
+        "WIT:lighting",
+        "WIT2:lighting"
+      ],
+      "assertion": {
+        "op": "same",
+        "a": "WIT:lighting",
+        "b": "WIT2:lighting"
+      }
+    },
+    {
+      "text": "Independent recheck agreed the road surface was dry.",
+      "type": "observation",
+      "evidence": [
+        "WIT:road_surface",
+        "WIT2:road_surface"
+      ],
+      "assertion": {
+        "op": "same",
+        "a": "WIT:road_surface",
+        "b": "WIT2:road_surface"
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.2,
+        "command_s": 0.05,
+        "tau_s": 0.35
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Is the lighting daylight?",
+        "slug": "lighting",
+        "t0": 6.13,
+        "t1": 8.0
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Is the road surface dry?",
+        "slug": "road_surface",
+        "t0": 6.13,
+        "t1": 8.0
+      }
+    },
+    {
+      "name": "submit_findings",
+      "args": {
+        "verdict": "UNAVOIDABLE",
+        "n_claims": 10
+      }
+    }
+  ],
+  "agent_facts": [
+    {
+      "id": "CF:run1_contact",
+      "value": true,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_impact_speed_mps",
+      "value": 4.7188,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_min_gap_m",
+      "value": -0.0025,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "WIT2:lighting",
+      "value": "daylight",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 second look at 6.13-8.00s, asked without the first answer: Is the lighting daylight?",
+      "kind": "observation"
+    },
+    {
+      "id": "WIT2:road_surface",
+      "value": "dry",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 second look at 6.13-8.00s, asked without the first answer: Is the road surface dry?",
+      "kind": "observation"
+    }
+  ]
+}
