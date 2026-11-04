@@ -187,7 +187,7 @@ def analyze(case_id: str, live: bool = False) -> dict:
         "claims": claims,
         "counts": counts,
         "digest": full.digest,
-        "stale_agent_run": run.get("digest") != store.digest,
+        "stale_agent_run": run.get("digest") != full.digest,
         "agent": {"model": run["model"], "tool_calls": run["tool_calls"]},
         "counterfactual_inputs": {
             "v_ego0": facts["CAN:speed_at_onset_mps"],
