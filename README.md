@@ -182,12 +182,12 @@ least-squares slope with a significance test ([`telltale/video/trend.py`](tellta
 3. Estimate the noise from the raw residuals $r_i$ with the median absolute deviation, so one outlier cannot inflate it:
 
 ```math
-\hat\sigma = 1.4826 \cdot \operatorname{median}\big(\lvert r_i - \operatorname{median}(r)\rvert\big),
+\hat\sigma = 1.4826 \cdot \mathrm{median}\big(\lvert r_i - \mathrm{median}(r)\rvert\big),
 \qquad
-\operatorname{SE}(\hat\beta) = \frac{\hat\sigma}{\sqrt{\sum_i (t_i - \bar t)^2}}
+\mathrm{SE}(\hat\beta) = \frac{\hat\sigma}{\sqrt{\sum_i (t_i - \bar t)^2}}
 ```
 
-4. Report the slope as real only if $\lvert\hat\beta\rvert > 3 \cdot \operatorname{SE}(\hat\beta)$.
+4. Report the slope as real only if $\lvert\hat\beta\rvert > 3 \cdot \mathrm{SE}(\hat\beta)$.
 
 ### 3. Time to collision from a single camera
 
