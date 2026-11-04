@@ -12,6 +12,7 @@ import json
 import logging
 import math
 import threading
+import uuid
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from functools import partial
@@ -107,6 +108,19 @@ def check_upload(
     return clip_id, impact_t, suffix
 
 
+def upload_path(uploads: Path, suffix: str) -> Path:
+    """Where to save one upload: a server-generated name inside the uploads folder.
+
+    Nothing from the request becomes part of the path. The clip id is only a label and the manifest key, and the
+    extension is one of two constants chosen by comparison, not copied from the file name.
+    """
+    extension = ".mov" if suffix == ".mov" else ".mp4"
+    path = uploads / f"{uuid.uuid4().hex}{extension}"
+    if not path.resolve().is_relative_to(uploads.resolve()):
+        raise UploadRejected(400, "Could not choose a safe place to save the upload. Try again.")
+    return path
+
+
 def make_server(
     port: int = 8001,
     *,
@@ -192,6 +206,8 @@ def make_server(
                     existing_clip_ids(),
                     max_bytes,
                 )
+                uploads.mkdir(parents=True, exist_ok=True)
+                path = upload_path(uploads, suffix)
                 with lock:
                     if clip_id in jobs and jobs[clip_id].state == "running":
                         raise UploadRejected(409, f"An upload for {clip_id!r} is already running.")
@@ -199,8 +215,6 @@ def make_server(
             except UploadRejected as exc:
                 self.close_connection = True
                 return self._json(exc.status, {"error": str(exc)})
-            uploads.mkdir(parents=True, exist_ok=True)
-            path = uploads / f"{clip_id}{suffix}"
             with path.open("wb") as out:
                 remaining = length
                 while remaining:

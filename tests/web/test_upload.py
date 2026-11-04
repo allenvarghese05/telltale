@@ -1,4 +1,5 @@
 import json
+import re
 import threading
 import time
 import urllib.error
@@ -101,16 +102,36 @@ def test_valid_upload_runs_the_job_to_done(server):
     assert done["link"] == "clips.html?clip=mine"
     assert [s["label"] for s in done["steps"]] == [label for _, label in STEPS]
     assert all(s["state"] == "done" for s in done["steps"])
-    saved = server["tmp"] / "uploads" / "mine.mp4"
+    (saved,) = (server["tmp"] / "uploads").iterdir()
     assert saved.read_bytes() == b"\x00" * 16
     assert server["calls"]["investigate"] == [(saved, "mine", 7.4)]
     assert server["calls"]["publish"] == [("mine", server["tmp"] / "site")]
 
 
+@pytest.mark.parametrize(
+    ("name", "ctype", "suffix"), [("dash.mp4", "video/mp4", ".mp4"), ("dash.MOV", "video/quicktime", ".mov")]
+)
+def test_saved_file_gets_a_server_generated_name_never_the_clip_id(server, name, ctype, suffix):
+    post(server["base"], clip_id="mine", name=name, ctype=ctype)
+    wait_until_finished(server["base"])
+    (saved,) = (server["tmp"] / "uploads").iterdir()
+    assert re.fullmatch(r"[0-9a-f]{32}" + re.escape(suffix), saved.name)
+    assert "mine" not in saved.name
+
+
 def test_server_chooses_the_path_whatever_the_client_names_the_file(server):
     post(server["base"], name="../../etc/passwd.mp4")
     wait_until_finished(server["base"])
-    assert [p.name for p in (server["tmp"] / "uploads").iterdir()] == ["mine.mp4"]
+    (saved,) = (server["tmp"] / "uploads").iterdir()
+    assert re.fullmatch(r"[0-9a-f]{32}\.mp4", saved.name)
+
+
+def test_traversal_clip_id_is_rejected_before_anything_is_written(server):
+    code, body = post(server["base"], clip_id="../../outside")
+    assert code == 400
+    assert "letters, digits, hyphens and underscores" in body["error"]
+    assert not (server["tmp"] / "uploads").exists()
+    assert not (server["tmp"] / "outside").exists()
 
 
 @pytest.mark.parametrize(
