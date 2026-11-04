@@ -81,3 +81,38 @@ def test_publishing_one_new_video_case_adds_it_without_rebuilding(dirs):
 
 def test_video_page_uses_the_same_csp_as_the_replay_page():
     assert _csp("clips.html") == _csp("index.html")
+
+
+@pytest.mark.parametrize("geometry", ["forward", "cross-path"])
+def test_a_clip_can_carry_its_crash_geometry(dirs, geometry):
+    (dirs["videos"] / "cand60.json").write_text(json.dumps({**VIDEO, "geometry": geometry}))
+    exported = json.loads((build(dirs) / "video" / "cand60.json").read_text())
+    assert exported == {**VIDEO, "geometry": geometry}
+
+
+def test_an_unknown_crash_geometry_is_rejected(dirs):
+    (dirs["videos"] / "cand60.json").write_text(json.dumps({**VIDEO, "geometry": "<script>"}))
+    with pytest.raises(ValueError, match="unknown crash geometry"):
+        build(dirs)
+
+
+def test_hosted_export_never_includes_local_uploads(dirs, tmp_path):
+    uploads = tmp_path / "uploads"
+    (uploads / "video_bundles").mkdir(parents=True)
+    (uploads / "clips").mkdir()
+    (uploads / "video_bundles" / "mine.json").write_text(
+        json.dumps({**VIDEO, "clip_id": "mine", "video_url": "media/mine.mp4"})
+    )
+    (uploads / "clips" / "mine.mp4").write_bytes(b"\x00")
+    site = build(dirs)
+    assert json.loads((site / "videos.json").read_text()) == []
+    local = export_site(
+        dirs["bundles"],
+        tmp_path / "local-site",
+        clips_dir=dirs["clips"],
+        thumbs_dir=dirs["clips"],
+        video_bundles_dir=dirs["videos"],
+        uploads_dir=uploads,
+    )
+    assert json.loads((local / "videos.json").read_text()) == [{"clip_id": "mine"}]
+    assert (local / "media" / "mine.mp4").exists()

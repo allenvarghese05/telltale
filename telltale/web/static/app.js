@@ -367,6 +367,96 @@ function drawOverlay() {
 
 /* ---------- verdict ---------- */
 
+/* What each verdict points at, for the at-a-glance numbers. Labels only: every value shown comes from the
+   bundle's facts, the verdict's overruns, or the avoidance map's Python-computed outcomes. */
+const STEP = {
+  PERCEPTION_LATE: { name: 'Noticing the hazard', layer: 'perception', measured: 'PHYS:perception_latency_s', limit: 'PROFILE:perception_threshold_s', took: 'Took to notice', allowed: 'Allowed' },
+  COMMAND_LATE: { name: 'Commanding the brakes', layer: 'command', measured: 'PHYS:command_latency_s', limit: 'PROFILE:command_threshold_s', took: 'Took to command', allowed: 'Allowed' },
+  BRAKE_ACTUATION_LATE: { name: 'Building brake pressure', layer: 'actuation', measured: 'PHYS:actuation_latency_s', limit: 'PROFILE:actuation_threshold_s', took: 'Took to engage', allowed: 'Allowed' },
+  LATE_HANDOFF: { name: 'Handing control back', layer: 'handoff', measured: 'PHYS:handoff_margin_s', limit: 'PROFILE:human_prt_s', took: 'Driver was given', allowed: 'A person needs' },
+};
+
+const ONSET_HOW = {
+  entering: 'moved into the lane',
+  predicted: 'about to cross into the lane',
+  closing: 'already in the lane, closing',
+};
+
+const factValue = (id) => {
+  const f = (bundle.facts || []).find((x) => x.id === id);
+  return f ? f.value : undefined;
+};
+
+function stat(k, v, cls = '') {
+  return `<div class="glance-item ${cls}"><div class="glance-k">${esc(k)}</div><div class="glance-v">${v}</div></div>`;
+}
+
+function glance(v) {
+  const items = [];
+  const step = STEP[v.independent_label];
+  if (step) {
+    items.push(stat('Failing step', esc(step.name)));
+    const measured = factValue(step.measured);
+    const limit = factValue(step.limit);
+    if (measured !== undefined) items.push(stat(step.took, `${esc(num(measured))} s`));
+    if (limit !== undefined) items.push(stat(step.allowed, `${esc(num(limit))} s`));
+    const over = (v.excess_s || {})[step.layer];
+    if (over !== undefined && over > 0) items.push(stat('Over by', `${esc(num(over))} s`, 'bad'));
+  } else {
+    items.push(stat('Failing step', 'None over its limit'));
+  }
+  const out = (grid && grid.outcome_kmh) || {};
+  const say = (x) => (x > 0 ? `collides at ${esc(num(x, 1))} km/h` : 'avoids it');
+  if (out.measured !== undefined && out.measured !== null) items.push(stat('As it happened', say(out.measured), out.measured > 0 ? 'bad' : 'good'));
+  if (out.nominal !== undefined && out.nominal !== null) items.push(stat('Performing to spec', say(out.nominal), out.nominal > 0 ? 'bad' : 'good'));
+  return `<div class="glance">${items.join('')}</div>`;
+}
+
+function card(actor, role, rows, cls = '') {
+  const body = rows
+    .filter(Boolean)
+    .map(([k, val]) => `<div class="actor-row"><span class="actor-k">${esc(k)}</span><span class="actor-v">${val}</span></div>`)
+    .join('');
+  return `<article class="actor ${cls}"><h3>${esc(actor)}</h3><p class="actor-role">${esc(role)}</p>${body}</article>`;
+}
+
+function actors(v, ok) {
+  const s = bundle.scene || {};
+  const c = s.conditions || {};
+  const counts = bundle.counts || {};
+  const agent = bundle.agent || {};
+  const seen = [c.lighting, c.weather, c.road_surface && `${c.road_surface} road`].filter((x) => x && x !== 'unclear');
+  const rechecks = (bundle.facts || []).filter((f) => f.id.startsWith('WIT2:'));
+  const onset = s.danger_onset_t !== undefined && s.danger_onset_t !== null
+    ? `${esc(num(s.danger_onset_t))} s, ${esc(ONSET_HOW[s.danger_onset_reason] || s.danger_onset_reason || '')}`
+    : 'not registered';
+  const sam = card('SAM 3.1', 'Tracked every vehicle in the footage', [
+    ['Vehicles tracked', esc(s.tracked_vehicles ?? '-')],
+    s.target_object_id !== undefined && s.target_object_id !== null && ["Telltale's pick", `vehicle ${esc(s.target_object_id)}`],
+    ['Became a hazard', onset],
+  ]);
+  const spark = card('Muse Spark 1.3', 'Watched the clip as an independent witness', [
+    ['Conditions', seen.length ? esc(seen.join(', ')) : 'none reported'],
+    ...rechecks.map((f) => [`Recheck: ${f.id.slice(5).replace(/_/g, ' ')}`, esc(f.value)]),
+  ]);
+  const wonder = card('Muse Wonder', 'Investigated the logs and decided the cause', [
+    ['Its verdict', `<span class="label">${esc(SHORT[v.agent_label] || v.agent_label || '-')}</span>`],
+    ['Tool calls', esc((agent.tool_calls || []).length)],
+    ['Claims made', esc((bundle.claims || []).length)],
+  ], ok ? 'agree' : 'disagree');
+  const checker = card('Python checker', 'Recomputed every claim and the verdict, no model involved', [
+    ['Its verdict', `<span class="label">${esc(SHORT[v.independent_label] || v.independent_label || '-')}</span>`],
+    ['Claims', `${esc(counts.VERIFIED || 0)} verified, ${esc(counts.UNCORROBORATED || 0)} single-source, ${esc(counts.BLOCKED || 0)} blocked`],
+    ['Outcome', ok ? '<span class="good">Verified, report released</span>' : '<span class="no">Withheld for human review</span>'],
+  ], ok ? 'agree' : 'disagree');
+  const link = ok
+    ? 'Muse Wonder and the Python checker reached the same verdict independently.'
+    : `They disagree: Muse Wonder said ${SHORT[v.agent_label] || v.agent_label}, the checker recomputed ${SHORT[v.independent_label] || v.independent_label}. The verdict is withheld.`;
+  return `<h3 class="actors-title">Who said what</h3>
+    <div class="actors">${sam}${spark}${wonder}${checker}</div>
+    <p class="agreement-line ${ok ? 'good' : 'no'}">${esc(link)}</p>`;
+}
+
 function land() {
   if (landed || !bundle) return;
   landed = true;
@@ -375,8 +465,6 @@ function land() {
   appendRemainingEvidence();
   const v = bundle.verdict || {};
   const ok = v.status === 'VERIFIED';
-  const worst = Object.entries(v.excess_s || {}).sort((a, b) => b[1] - a[1])[0];
-  const over = ok && worst && worst[1] > 0 ? `<p class="verdict-over">${num(worst[1])} s past its limit</p>` : '';
   const others = (v.noncausal_faults || []).length
     ? `<p class="verdict-note">Also outside its limit, but it would not have changed the outcome: ${esc(v.noncausal_faults.join(', '))}.</p>`
     : '';
@@ -388,12 +476,9 @@ function land() {
     ${redTeam}
     <p class="verdict-state ${ok ? 'ok' : 'no'}">${ok ? 'Independently verified' : 'Withheld for human review'}</p>
     <h2 class="verdict-headline">${esc(headline || 'No verdict in this case.')}</h2>
-    ${over}
-    <div class="readings">
-      <div><div class="reading-k">Muse Wonder concluded</div><div class="reading-v">${esc(v.agent_label || '-')}</div></div>
-      <div><div class="reading-k">Python recomputed</div><div class="reading-v">${esc(v.independent_label || '-')}</div></div>
-    </div>
-    ${others}</div>`;
+    ${glance(v)}
+    ${others}
+    ${actors(v, ok)}</div>`;
 }
 
 /* ---------- charts ---------- */

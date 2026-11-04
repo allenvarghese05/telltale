@@ -7,7 +7,7 @@
         content="default-src 'self'; script-src 'self' https://cdn.plot.ly; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; media-src 'self' https://*.hf.co; connect-src 'self'; object-src 'none'; base-uri 'none'">
   <meta name="referrer" content="no-referrer">
   <meta name="color-scheme" content="light">
-  <title>Telltale. Any dashcam clip, video only.</title>
+  <title>Telltale. Any dashcam clip.</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,7 +16,7 @@
   <a class="wordmark" href="index.html">Telltale</a>
   <nav class="modes" aria-label="Pages">
     <a href="index.html">Investigated crashes</a>
-    <a href="clips.html" aria-current="page">Video only</a>
+    <a href="clips.html" aria-current="page">Any dashcam clip</a>
   </nav>
   <label class="picker">
     <span>Clip</span>
@@ -26,10 +26,13 @@
 
 <section class="intro">
   <h1>Any dashcam clip.<br>What the footage alone can show.</h1>
-  <p class="lede">SAM 3.1 tracks every vehicle and marks when the struck one became a hazard. Muse Spark describes the
-     conditions. Neither needs anything but the video.</p>
+  <p class="lede">These are real crash clips with no vehicle logs, so Telltale shows only what the footage itself
+     establishes. SAM 3.1 tracks every vehicle and marks when Telltale's pick, the vehicle that was struck, became a
+     hazard. Muse Spark describes the conditions.</p>
   <p class="notice"><strong>Cause not determined from video alone:</strong> needs the vehicle's CAN and ADAS logs.
-     These clips have no vehicle logs, so this page shows no verdict and checks no cause.</p>
+     This page shows no verdict and checks no cause.</p>
+  <p class="caption run-own">Run your own clip on your computer with <code>telltale upload-ui</code>. This hosted
+     site never uploads anything.</p>
 </section>
 
 <section class="replay" aria-label="Video-only replay">
@@ -52,6 +55,7 @@
     <div class="ledger-head">
       <h2>What the footage shows</h2>
     </div>
+    <p id="geometry" class="geometry-note" hidden></p>
     <dl id="facts" class="facts"></dl>
   </aside>
 

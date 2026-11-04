@@ -14,7 +14,7 @@ import numpy as np
 from telltale.config import CACHE, CLIPS, ROOT
 from telltale.physics.counterfactual import counterfactual
 from telltale.physics.profiles import PROFILES
-from telltale.pipeline.investigate_clip import BUNDLES as VIDEO_BUNDLES
+from telltale.pipeline.investigate_clip import SHOWCASE_BUNDLES
 from telltale.report.render import render_html
 from telltale.web.narrative import Section, incident_report
 
@@ -102,6 +102,7 @@ def report_with_narrative(bundle: dict, sections: list[Section]) -> str:
 
 
 VIDEO_KEYS = ("clip_id", "video_url", "fps", "width", "height", "lane_polygon", "tracks", "report")
+GEOMETRIES = ("forward", "cross-path")
 
 
 def _copy_clip(video_url: str, out: Path, clips_dir: Path) -> None:
@@ -111,10 +112,18 @@ def _copy_clip(video_url: str, out: Path, clips_dir: Path) -> None:
 
 
 def video_case(bundle: dict) -> dict:
-    """A video-only case for the site, by allowlist, so a verdict or claim can never reach that page."""
+    """A video-only case for the site, by allowlist, so a verdict or claim can never reach that page.
+
+    `geometry` is optional and annotated by a person: "cross-path" marks a crash the 1-D physics cannot attribute.
+    """
     if not SAFE_ID.match(str(bundle.get("clip_id", ""))):
         raise ValueError(f"unsafe clip id {bundle.get('clip_id')!r} in a video-only bundle")
-    return {key: bundle[key] for key in VIDEO_KEYS}
+    case = {key: bundle[key] for key in VIDEO_KEYS}
+    if "geometry" in bundle:
+        if bundle["geometry"] not in GEOMETRIES:
+            raise ValueError(f"unknown crash geometry {bundle['geometry']!r} for {case['clip_id']}")
+        case["geometry"] = bundle["geometry"]
+    return case
 
 
 def publish_video_case(bundle: dict, out: Path, clips_dir: Path = CLIPS) -> None:
@@ -135,7 +144,8 @@ def export_site(
     out: Path = SITE,
     clips_dir: Path = CLIPS,
     thumbs_dir: Path = CACHE / "thumbs",
-    video_bundles_dir: Path = VIDEO_BUNDLES,
+    video_bundles_dir: Path = SHOWCASE_BUNDLES,
+    uploads_dir: Path | None = None,
 ) -> Path:
     """Copy the pages, write every investigated case and every video-only case, plus their clips."""
     if out.exists():
@@ -162,5 +172,9 @@ def export_site(
     (out / "videos.json").write_text("[]")
     for path in sorted(video_bundles_dir.glob("*.json")):
         publish_video_case(json.loads(path.read_text()), out, clips_dir)
+    # A person's own uploads are local only: included when asked for, never in the hosted export.
+    if uploads_dir is not None:
+        for path in sorted((uploads_dir / "video_bundles").glob("*.json")):
+            publish_video_case(json.loads(path.read_text()), out, uploads_dir / "clips")
     (out / "README.md").write_text(SPACE_README)
     return out

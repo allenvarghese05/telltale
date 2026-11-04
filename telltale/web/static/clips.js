@@ -39,7 +39,10 @@ async function init() {
     $('replay').hidden = false;
   });
   requestAnimationFrame(frame);
-  const wanted = new URLSearchParams(location.search).get('clip');
+  const params = new URLSearchParams(location.search);
+  /* The local upload page shows a finished clip inline by embedding this page without its own chrome. */
+  document.body.classList.toggle('embed', params.get('embed') === '1');
+  const wanted = params.get('clip');
   const first = index.some((c) => c.clip_id === wanted) ? wanted : index[0].clip_id;
   $('clip').value = first;
   await load(first);
@@ -55,6 +58,13 @@ async function load(id) {
   const r = clip.report || {};
   $('scrim-note').textContent = `${r.tracked_vehicles ?? 0} vehicles tracked`;
   renderFacts(r);
+  const cross = clip.geometry === 'cross-path';
+  $('geometry').hidden = !cross;
+  $('geometry').textContent = cross
+    ? "Cross-path crash: the vehicles' paths cross rather than follow one lane. Telltale's crash physics is " +
+      'one-dimensional and covers forward conflicts only, so even with vehicle logs this clip could not be ' +
+      'attributed. What the footage shows below still holds.'
+    : '';
   renderTimeline(r);
   renderSummary(r);
 }
@@ -78,13 +88,16 @@ function row(term, detail) {
 
 function renderFacts(r) {
   const rows = [row('Vehicles tracked', esc(r.tracked_vehicles ?? 0))];
+  if (r.struck_vehicle !== null && r.struck_vehicle !== undefined) {
+    rows.push(row("Telltale's pick", `vehicle ${esc(r.struck_vehicle)}<span class="sub">the vehicle that was struck</span>`));
+  }
   const onset = r.hazard_onset;
   rows.push(
     row(
       'Became a hazard',
       onset
         ? `${esc(num(onset.t))} s, ${esc(num(onset.warning_s))} s before impact<span class="sub">${esc(onset.how)}</span>`
-        : 'The struck vehicle never registered as a hazard.',
+        : "Telltale's pick never registered as a hazard.",
     ),
   );
   rows.push(row('Impact', `${esc(num(r.impact_t))} s<span class="sub">time given with the clip</span>`));
@@ -96,7 +109,7 @@ function renderFacts(r) {
         ? changes
             .map((c) => `${esc(c.direction)}, ${esc(num(c.start_t))} to ${esc(num(c.end_t))} s`)
             .join('<br>')
-        : 'None detected for the struck vehicle.',
+        : "None detected for Telltale's pick.",
     ),
   );
   const others = r.other_hazards || [];
@@ -195,7 +208,7 @@ function drawOverlay(now) {
     if (isStruck) {
       ctx.fillStyle = ctx.strokeStyle;
       ctx.font = '600 12px -apple-system, BlinkMacSystemFont, Helvetica Neue, sans-serif';
-      ctx.fillText(hazard ? 'Hazard' : 'Struck vehicle', l * sx, Math.max(t * sy - 7, 13));
+      ctx.fillText(hazard ? "Telltale's pick: hazard" : "Telltale's pick", l * sx, Math.max(t * sy - 7, 13));
     }
   }
 }

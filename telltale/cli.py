@@ -121,10 +121,11 @@ def _agent_bench(a: argparse.Namespace) -> None:
     _print_json(run_agent_bench(a.n)["summary"])
 
 
-def _export_site(_: argparse.Namespace) -> None:
+def _export_site(a: argparse.Namespace) -> None:
+    from telltale.pipeline.investigate_clip import UPLOADS
     from telltale.web.export import export_site
 
-    print(export_site())
+    print(export_site(uploads_dir=UPLOADS if a.with_local_uploads else None))
 
 
 def _serve(a: argparse.Namespace) -> None:
@@ -200,7 +201,8 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--n", type=int, default=18)
     p.add_argument("--hard", action="store_true", help="hard cases (close calls, near misses, noncausal faults)")
     p.add_argument("--confusable", action="store_true", help="confusable timelines (handoffs, lost ADAS events)")
-    add("export-site", _export_site, "build the static replay site into site/")
+    p = add("export-site", _export_site, "build the static replay site into site/")
+    p.add_argument("--with-local-uploads", action="store_true", help="also include your own uploads (local only)")
     p = add("serve", _serve, "serve the built site locally")
     p.add_argument("--port", type=int, default=8000)
     p = add("upload-ui", _upload_ui, "local-only page to upload your own clip and run investigate-clip")

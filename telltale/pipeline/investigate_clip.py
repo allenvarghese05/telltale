@@ -6,6 +6,9 @@ logs, which a dashcam clip does not have. The impact time is always given by the
 
 Every step is injectable, so the CLI and the local upload page share this one function and tests run without
 the network.
+
+A person's own clips never touch tracked files. They are registered under `data/uploads/` (git-ignored) with their
+own manifest, tracks, witness answers and bundles, and the hosted site's export never reads that folder.
 """
 
 from __future__ import annotations
@@ -17,12 +20,13 @@ from pathlib import Path
 
 import cv2
 
-from telltale.config import CACHE
-from telltale.data.fetch import add_clip
+from telltale.config import CACHE, DATA
+from telltale.core.manifest import DEFAULT_POLYGON, load_manifest, save_manifest
+from telltale.data.fetch import transcode
 from telltale.video.report import build_video_report
 from telltale.video.sam import SCRIPT as SAM_SCRIPT
-from telltale.video.sam import run_sam_for_clip
-from telltale.video.witness import run_witness_for_clip
+from telltale.video.sam import run_sam
+from telltale.video.witness import PROMPT, _ask_video, parse_witness_json
 
 SAFE_ID = re.compile(r"^[A-Za-z0-9_-]+$")
 VIDEO_SUFFIXES = (".mp4", ".mov")
@@ -32,7 +36,8 @@ STEPS = (
     ("witness", "Asking the Muse Spark witness"),
     ("report", "Building the report"),
 )
-BUNDLES = CACHE / "video_bundles"
+UPLOADS = DATA / "uploads"
+SHOWCASE_BUNDLES = CACHE / "video_bundles"
 
 
 class ClipInputError(ValueError):
@@ -47,6 +52,67 @@ def clip_duration(path: Path) -> float:
     if not fps or not frames:
         raise ClipInputError(f"Could not read {path.name} as a video. Re-export it as H.264 .mp4 and try again.")
     return float(frames) / float(fps)
+
+
+def _probe(path: Path) -> dict:
+    cap = cv2.VideoCapture(str(path))
+    probed = {
+        "fps": float(cap.get(cv2.CAP_PROP_FPS)),
+        "width": int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
+        "height": int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
+    }
+    cap.release()
+    return probed
+
+
+def upload_entry(clip_id: str, root: Path = UPLOADS) -> dict:
+    """One uploaded clip's manifest entry, from the uploads manifest only."""
+    clips = load_manifest(root / "manifest.json")["clips"]
+    if clip_id not in clips:
+        raise ClipInputError(f"No uploaded clip named {clip_id!r}. Upload it first.")
+    return clips[clip_id]
+
+
+def taken_clip_ids(root: Path = UPLOADS) -> set[str]:
+    """Ids already used by the committed demo clips or by earlier uploads."""
+    return set(load_manifest()["clips"]) | set(load_manifest(root / "manifest.json")["clips"])
+
+
+def register_upload(path: Path, clip_id: str, event_time: float, root: Path = UPLOADS) -> dict:
+    """Re-encode a person's clip to H.264 and register it in the uploads manifest, never the committed one."""
+    dst = root / "clips" / f"{clip_id}.mp4"
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    transcode(Path(path), dst)
+    entry = {
+        "clip_id": clip_id,
+        "nexar_id": None,
+        "file": dst.name,
+        **_probe(dst),
+        "time_of_event": event_time,
+        "time_of_alert": None,
+        "ego_lane_polygon": DEFAULT_POLYGON,
+    }
+    manifest = load_manifest(root / "manifest.json")
+    manifest["clips"][clip_id] = entry
+    save_manifest(manifest, root / "manifest.json")
+    return entry
+
+
+def track_upload(clip_id: str, root: Path = UPLOADS) -> str:
+    """SAM 3.1 tracks for an uploaded clip, written under the uploads folder."""
+    clip = upload_entry(clip_id, root)
+    out = root / "sam" / f"{clip_id}.json"
+    return str(run_sam(root / "clips" / clip["file"], out, clip["fps"], clip["width"], clip["height"]))
+
+
+def witness_upload(clip_id: str, root: Path = UPLOADS) -> dict:
+    """The Muse Spark witness on an uploaded clip, its answers kept under the uploads folder."""
+    clip = upload_entry(clip_id, root)
+    answers = parse_witness_json(_ask_video(root / "clips" / clip["file"], PROMPT))
+    out = root / "witness" / f"{clip_id}.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps({"answers": answers}, indent=2))
+    return answers
 
 
 def check_clip_id(clip_id: str) -> None:
@@ -100,11 +166,11 @@ def investigate_clip(
     progress: Callable[[str], None] | None = None,
     *,
     duration: Callable[[Path], float] = clip_duration,
-    register: Callable[[str, str, float], dict] = add_clip,
-    track: Callable[[str], str] = run_sam_for_clip,
-    ask_witness: Callable[[str], dict] = run_witness_for_clip,
+    register: Callable[[str, str, float], dict] = register_upload,
+    track: Callable[[str], str] = track_upload,
+    ask_witness: Callable[[str], dict] = witness_upload,
     cookbook: Path = SAM_SCRIPT,
-    bundle_dir: Path = BUNDLES,
+    bundle_dir: Path = UPLOADS / "video_bundles",
 ) -> dict:
     """Run one clip end to end and write `<bundle_dir>/<clip_id>.json`. Returns the bundle."""
     path = Path(path)
