@@ -26,6 +26,7 @@ SHIFTS = (-2.0, -1.0, -0.5, -0.25, 0.25, 0.5, 1.0, 2.0)
 ADAS_SKEWS = (0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0)
 CAN_SKEWS = (-5.0, -1.0, 1.0, 5.0)
 TAIL_ONSET_S = 2.0
+HARD_STORIES = ("tight", "marginal", "with_fault")
 
 
 def load_cases() -> list[StudyCase]:
@@ -45,6 +46,13 @@ def load_cases() -> list[StudyCase]:
                 StudyCase(case_dir.name, case_dir, built.video, built.profile, truth["story"], truth["expected_label"])
             )
     return cases
+
+
+def origin(case: StudyCase) -> str:
+    """Where a case came from, known before any result: the demo set, the original agent benchmark or the hard set."""
+    if case.case_dir.parent == CASES:
+        return "demo"
+    return "hard" if any(k in case.story for k in HARD_STORIES) else "agent_bench_original"
 
 
 def measured_errors() -> tuple[list[float], list[float]]:
@@ -89,6 +97,13 @@ def main() -> None:
         "measured_errors": {"all": len(errors), "without_tail": len(trimmed), "median_all": statistics.median(errors)},
         "stability_all_errors": stability(cases, errors),
         "stability_without_tail": stability(cases, trimmed),
+        "stability_by_origin": {
+            o: {
+                "all": stability([c for c in cases if origin(c) == o], errors),
+                "without_tail": stability([c for c in cases if origin(c) == o], trimmed),
+            }
+            for o in ("demo", "agent_bench_original", "hard")
+        },
         "stability_by_story": {
             s: {
                 "all": stability([c for c in cases if c.story == s], errors),

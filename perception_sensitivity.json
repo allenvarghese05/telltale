@@ -6414,5 +6414,42 @@
         }
       }
     }
-  ]
+  ],
+  "stability_by_origin": {
+    "all": {
+      "demo": {
+        "cases": 34,
+        "feasible": 8236,
+        "stable": 3786
+      },
+      "agent_bench_original": {
+        "cases": 19,
+        "feasible": 4649,
+        "stable": 2691
+      },
+      "hard": {
+        "cases": 30,
+        "feasible": 7329,
+        "stable": 2887
+      }
+    },
+    "without_tail": {
+      "demo": {
+        "cases": 34,
+        "feasible": 7566,
+        "stable": 3652
+      },
+      "agent_bench_original": {
+        "cases": 19,
+        "feasible": 4247,
+        "stable": 2557
+      },
+      "hard": {
+        "cases": 30,
+        "feasible": 6704,
+        "stable": 2658
+      }
+    },
+    "method": "agent_bench_original computed directly with stability(); hard summed from its stories, which no other set uses; demo = overall minus the two, exact because the counts are additive"
+  }
 }

@@ -24,6 +24,38 @@ Every case was re-attributed at each of the 260 signed onset errors measured on 
 The start-of-clip tail split is exploratory and post hoc, as in the benchmark results. Removing it barely helps:
 the instability comes from the bulk of SAM's error, not its tail.
 
+### Breakdown by case origin
+
+The 83 cases come from three sets built for different purposes. Because a case's origin is fixed before any
+result exists, this split is not post hoc. The 30 hard cases were built on purpose to sit within 0.04–0.1 s of a
+threshold, so they are expected to be less stable.
+
+| origin | cases | verdict unchanged, all errors | without the tail |
+|---|---|---|---|
+| demo | 34 | **3,786 / 8,236 (46.0%)** | 3,652 / 7,566 (48.3%) |
+| original agent benchmark | 19 | **2,691 / 4,649 (57.9%)** | 2,557 / 4,247 (60.2%) |
+| hard | 30 | **2,887 / 7,329 (39.4%)** | 2,658 / 6,704 (39.6%) |
+| **all** | **83** | **9,364 / 20,214 (46.3%)** | 8,867 / 18,517 (47.9%) |
+
+**The hard cases are not what holds the headline down.** The 34 demo cases alone come out at 46.0%, the same as all
+83. The original agent benchmark scores higher partly because its 3 dropout cases are stable by construction
+(`INCONCLUSIVE` whatever the timing). Without them it is 1,951 / 3,909, or 49.9%.
+
+How each figure was obtained: the agent-benchmark row was computed directly; the hard row is the sum of the hard
+stories, which no other set uses; the demo row is the overall total minus the two, which is exact because the
+counts add. `scripts/perception_sensitivity.py` now computes all three directly on a full run.
+
+By story and origin, all errors (the hard stories are in the story table below):
+
+| story | demo | original agent benchmark |
+|---|---|---|
+| perception_late | 76% (7 cases) | 81% (3) |
+| unavoidable | 48% (6) | 45% (3) |
+| late_handoff | 45% (8) | 57% (4) |
+| command_late | 30% (6) | 44% (3) |
+| brake_slow | 29% (7) | 20% (3) |
+| dropout | — | 100% (3) |
+
 The reason is in the margins. For each case, the smallest onset shift that changes the label:
 
 | side | cases that flip | median margin | flip within 0.5 s | flip within 1 s |
@@ -142,8 +174,23 @@ window is centred on the CAN anchor, so shifting CAN moves the window away from 
 | +1 s | 66/83 | 71/83 |
 | +5 s | 0/83 | 17/83 |
 
-What matters is the **relative** CAN–ADAS skew. Beyond the window the grid search still returns its best offset
-inside the window, so the failure is silent: the store carries a wrong `AV:clock_offset_s` and nothing flags it.
+What matters is the **relative** CAN–ADAS skew.
+
+**This is a real defect in `align_by_speed`.** The function grid-searches offsets in
+`[guess − 1.5 s, guess + 1.5 s]`, with `guess` set to the CAN anchor, and returns the lowest-error offset in that
+range. When the true offset lies outside the range, it still returns an offset from inside it, with no error and no
+flag. The data shows this pinning directly. In the ADAS sweep the worst offset error is exactly the extra skew minus
+0.24 s at every step (0.26, 0.76, 1.26, 1.76, 2.26, 2.76 s): the recovered offset has stopped moving at the window
+edge while the true one moves past it. The case that hits the edge first, `cand36-car-s7022` (hard, unavoidable with fault), already carries a
+relative ADAS skew of 1.264 s: with 0.5 s more, the true offset is 1.764 s from the anchor and the error is
+exactly the 0.264 s overshoot. The evidence store then carries a wrong `AV:clock_offset_s`, every ADAS timestamp is misaligned by
+the difference, and nothing downstream knows.
+
+The fix is **described here, not implemented**. The search would report whether its best offset sits on the window
+edge, or the window would be widened and centred independently of the CAN anchor, and an unreliable alignment
+would become a fact in the evidence (for example a `DATA:` alignment-confidence fact) so the verdict could be
+withheld. That adds a fact to every evidence store and so changes every evidence digest, the cached agent runs'
+digest checks and the published bundles. It is left for after the freeze rather than changed under it.
 
 ## Findings in plain English
 
@@ -155,7 +202,8 @@ inside the window, so the failure is silent: the store carries a wrong `AV:clock
 3. **Perception-late findings are the most trustworthy; near-threshold non-perception findings the least.**
 4. **Refusing to run without an onset is essential.** Running on would have cleared the car in every
    perception-late case that changed.
-5. **Clock alignment fails silently** once the relative CAN–ADAS skew leaves the search window.
+5. **Clock alignment fails silently** once the relative CAN–ADAS skew leaves the search window. This is a real
+   defect in `align_by_speed`; the fix is described above and not implemented.
 
 ## Proposed design improvement (described, not implemented)
 
