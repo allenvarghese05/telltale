@@ -1,0 +1,219 @@
+{
+  "model": "muse-wonder-1.0",
+  "digest": "cc2c2a1ce59ca8934395ee33e2f87dfc5b28e186f190ad0dedaf46fe7f151f36",
+  "verdict": "PERCEPTION_LATE",
+  "claims": [
+    {
+      "text": "The hazard vehicle became a hazard at 6.1333 s and was first seen at 7.5169 s, a perception delay of 1.3836 s above the 0.3 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "VID:hazard_onset_t",
+        "AV:first_seen_t",
+        "PROFILE:perception_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 1.3836
+      }
+    },
+    {
+      "text": "A brake request appeared 0.0448 s after first detection, within the 0.1 s command threshold.",
+      "type": "timing",
+      "evidence": [
+        "CAN:brake_request_t",
+        "AV:first_seen_t",
+        "PROFILE:command_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:brake_request_t",
+        "b": "AV:first_seen_t",
+        "equals": 0.0448
+      }
+    },
+    {
+      "text": "Brake pressure reached its target 0.12 s after the brake request, within the 0.25 s actuation threshold.",
+      "type": "timing",
+      "evidence": [
+        "CAN:pressure_reached_t",
+        "CAN:brake_request_t",
+        "PROFILE:actuation_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t",
+        "equals": 0.12
+      }
+    },
+    {
+      "text": "Hazard onset was classified as closing, with a time-to-collision at onset of 1.9427 s.",
+      "type": "observation",
+      "evidence": [
+        "VID:hazard_onset_reason",
+        "VID:ttc_at_onset_s"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "VID:hazard_onset_reason",
+        "equals": "closing"
+      }
+    },
+    {
+      "text": "Impact occurred at 8.0 s, 1.8667 s after hazard onset.",
+      "type": "timing",
+      "evidence": [
+        "VID:impact_t",
+        "VID:hazard_onset_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 1.8667
+      }
+    },
+    {
+      "text": "The brake log was complete, with a maximum brake-frame gap of 0.02 s, so the timing record is usable.",
+      "type": "other",
+      "evidence": [
+        "DATA:brake_log_complete",
+        "DATA:max_brake_gap_s"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": true
+      }
+    },
+    {
+      "text": "At first detection the range was 3.986 m at a closing speed of 9.185 m/s.",
+      "type": "physics",
+      "evidence": [
+        "AV:range_at_first_seen_m",
+        "AV:rel_speed_mps"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "AV:range_at_first_seen_m",
+        "equals": 3.986
+      }
+    },
+    {
+      "text": "With nominal perception 0.2 s, command 0.05 s and brake tau 0.15 s, the replay avoided contact with a minimum gap of 7.8283 m.",
+      "type": "physics",
+      "evidence": [
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s",
+        "CF:run1_contact",
+        "CF:run1_min_gap_m"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": false
+      }
+    },
+    {
+      "text": "Perception is the primary contributing factor because its 1.3836 s delay exceeded the 0.3 s threshold while the other measured stages remained within their thresholds, and nominal timing avoided contact.",
+      "type": "attribution",
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s",
+        "CAN:brake_request_t",
+        "CAN:pressure_reached_t",
+        "CF:run1_contact"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 1.3836
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:brake_request_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.2,
+        "command_s": 0.05,
+        "tau_s": 0.15
+      }
+    },
+    {
+      "name": "submit_findings",
+      "args": {
+        "verdict": "PERCEPTION_LATE",
+        "n_claims": 9
+      }
+    }
+  ],
+  "agent_facts": [
+    {
+      "id": "CF:run1_contact",
+      "value": false,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_impact_speed_mps",
+      "value": 0.0,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_min_gap_m",
+      "value": 7.8283,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    }
+  ],
+  "usage": {
+    "calls": 4,
+    "prompt_tokens": 14068,
+    "completion_tokens": 5759
+  }
+}
