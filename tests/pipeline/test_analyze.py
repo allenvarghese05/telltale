@@ -4,6 +4,7 @@ import pytest
 
 import telltale.pipeline.analyze as an
 from telltale.core.manifest import DEFAULT_POLYGON
+from telltale.core.schema import Fact
 from telltale.logs.generate import ClipTiming, generate_case
 from telltale.physics.profiles import CAR
 from telltale.video.facts import compute_video_facts
@@ -108,3 +109,34 @@ def test_a_red_team_case_is_labelled_and_never_rerun_live(case, monkeypatch):
     bundle = an.analyze(case_id, live=True)
     assert bundle["red_team"] == RED_TEAM_NOTE
     assert bundle["verdict"]["status"] == "REJECTED"
+
+
+TOOL_FACT = {"id": "CF:run1_contact", "value": False, "unit": "", "source": "CF", "derivation": "simulate()"}
+
+
+def _cache_run_with_tool_fact(cache, case_id, digest):
+    """A run whose agent appended one counterfactual fact, recording `digest` as the store it finished on."""
+    run = {
+        "model": "fake",
+        "digest": digest,
+        "verdict": "BRAKE_ACTUATION_LATE",
+        "tool_calls": [],
+        "agent_facts": [TOOL_FACT],
+        "claims": CLAIMS,
+    }
+    (cache / "agent").mkdir(exist_ok=True)
+    (cache / "agent" / f"{case_id}.json").write_text(json.dumps(run))
+
+
+def test_a_run_that_used_tools_on_unchanged_evidence_is_not_stale(case):
+    """The agent records the digest after its own tool facts are appended, so compare like with like."""
+    case_id, cache = case
+    store = an.build_case_store(an.CASES / case_id).store
+    _cache_run_with_tool_fact(cache, case_id, store.extended([Fact(**TOOL_FACT)]).digest)
+    assert an.analyze(case_id)["stale_agent_run"] is False
+
+
+def test_a_run_made_on_different_evidence_is_stale(case):
+    case_id, cache = case
+    _cache_run_with_tool_fact(cache, case_id, "0" * 64)
+    assert an.analyze(case_id)["stale_agent_run"] is True
