@@ -142,3 +142,10 @@ more clips.
   released in one further step, running until **11:00 EST** at the latest.
 - As before, the run **never** stops or continues because of the results. The reported n is whichever of these
   limits binds, and the report names which one it was.
+
+### Decision: stop at n = 400
+
+Recorded on 4 November, before any clip beyond position 400 was seen. The project owner stopped the benchmark at
+n = 400 and cancelled positions 401–686. The reason is time: the 13:00 EST code freeze, and the overnight stall,
+which left too little runway for a further release to finish and be written up. It was not the results. The
+reported n is therefore 400, set by the time limit.
