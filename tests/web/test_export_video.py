@@ -20,6 +20,12 @@ VIDEO = {
 STATIC = Path(export_module.__file__).parent / "static"
 
 
+@pytest.fixture(autouse=True)
+def no_clip_titles(monkeypatch):
+    """Only the title tests set titles; every other test exports clips as they are."""
+    monkeypatch.setattr(export_module, "CLIP_TITLES", {})
+
+
 def _csp(page: str) -> str:
     return re.search(r'Content-Security-Policy"\s+content="([^"]+)"', (STATIC / page).read_text()).group(1)
 
@@ -139,3 +145,19 @@ def test_build_id_changes_when_a_bundle_changes(dirs):
     assert _build_id((build(dirs) / "index.html").read_text()) == first
     (dirs["videos"] / "cand60.json").write_text(json.dumps({**VIDEO, "fps": 29.97}))
     assert _build_id((build(dirs) / "index.html").read_text()) != first
+
+
+def test_a_showcase_clip_gets_its_plain_title(dirs, monkeypatch):
+    monkeypatch.setattr(export_module, "CLIP_TITLES", {"cand60": "A U-turn across our path"})
+    (dirs["videos"] / "cand60.json").write_text(json.dumps(VIDEO))
+    site = build(dirs)
+    assert json.loads((site / "videos.json").read_text()) == [
+        {"clip_id": "cand60", "title": "A U-turn across our path"}
+    ]
+    assert json.loads((site / "video" / "cand60.json").read_text())["title"] == "A U-turn across our path"
+
+
+def test_the_clip_titles_file_covers_the_committed_showcase():
+    titles = json.loads((STATIC.parent / "clip_titles.json").read_text())
+    committed = {p.stem for p in (Path(export_module.__file__).parents[2] / "cache" / "video_bundles").glob("*.json")}
+    assert committed <= set(titles)

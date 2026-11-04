@@ -70,7 +70,14 @@ def built(tmp_path):
 def test_site_structure(built):
     assert (built / "index.html").exists()
     assert json.loads((built / "cases.json").read_text()) == [
-        {"case_id": "nx01-car-s0101", "clip_id": "nx01", "profile": "car"}
+        {
+            "case_id": "nx01-car-s0101",
+            "clip_id": "nx01",
+            "profile": "car",
+            "crash": "Lane cut-in on an overcast day",
+            "title": "Car: noticed the hazard too late",
+            "default": True,
+        }
     ]
     assert (built / "cases" / "nx01-car-s0101.json").exists()
     assert (built / "media" / "nx01.mp4").exists()

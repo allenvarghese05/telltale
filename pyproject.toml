@@ -37,7 +37,7 @@ telltale = "telltale.cli:main"
 include = ["telltale*"]
 
 [tool.setuptools.package-data]
-telltale = ["logs/dbc/*.dbc", "web/static/*", "web/upload_ui/*"]
+telltale = ["logs/dbc/*.dbc", "web/static/*", "web/upload_ui/*", "web/clip_titles.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

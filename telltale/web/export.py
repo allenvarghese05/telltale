@@ -18,8 +18,12 @@ from telltale.physics.profiles import PROFILES
 from telltale.pipeline.investigate_clip import SHOWCASE_BUNDLES
 from telltale.report.render import render_html
 from telltale.web.narrative import Section, incident_report
+from telltale.web.titles import crash_title, investigation_title, pick_default
 
 STATIC = Path(__file__).parent / "static"
+# Factual, hand-written titles for the showcase clips on the Any dashcam clip page: what the footage shows, which
+# the data alone cannot name ("taxi", "U-turn"). Uploads have none and keep the person's own clip id.
+CLIP_TITLES = json.loads((Path(__file__).parent / "clip_titles.json").read_text())
 SITE = ROOT / "site"
 SAFE_ID = re.compile(r"^[A-Za-z0-9_-]+$")
 PERCEPTION_GRID = np.round(np.arange(0.0, 2.5001, 0.05), 2)
@@ -120,6 +124,8 @@ def video_case(bundle: dict) -> dict:
     if not SAFE_ID.match(str(bundle.get("clip_id", ""))):
         raise ValueError(f"unsafe clip id {bundle.get('clip_id')!r} in a video-only bundle")
     case = {key: bundle[key] for key in VIDEO_KEYS}
+    if case["clip_id"] in CLIP_TITLES:
+        case["title"] = CLIP_TITLES[case["clip_id"]]
     if "geometry" in bundle:
         if bundle["geometry"] not in GEOMETRIES:
             raise ValueError(f"unknown crash geometry {bundle['geometry']!r} for {case['clip_id']}")
@@ -136,7 +142,7 @@ def publish_video_case(bundle: dict, out: Path, clips_dir: Path = CLIPS) -> None
     index_path = out / "videos.json"
     index = json.loads(index_path.read_text()) if index_path.exists() else []
     if not any(entry["clip_id"] == case["clip_id"] for entry in index):
-        index.append({"clip_id": case["clip_id"]})
+        index.append({"clip_id": case["clip_id"], **({"title": case["title"]} if "title" in case else {})})
     index_path.write_text(json.dumps(sorted(index, key=lambda entry: entry["clip_id"])))
 
 
@@ -191,7 +197,21 @@ def export_site(
         _copy_clip(bundle["video_url"], out, clips_dir)
         if (thumbs_dir / case_id).is_dir():
             shutil.copytree(thumbs_dir / case_id, out / "thumbs" / case_id)
-        index.append({"case_id": case_id, "clip_id": bundle["clip_id"], "profile": bundle["profile"]})
+        index.append(
+            {
+                "case_id": case_id,
+                "clip_id": bundle["clip_id"],
+                "profile": bundle["profile"],
+                "crash": crash_title(bundle),
+                "title": investigation_title(bundle),
+                "label": (bundle.get("verdict") or {}).get("independent_label"),
+                "red_team": bool(bundle.get("red_team")),
+            }
+        )
+    default = pick_default(index) if index else None
+    for entry in index:
+        del entry["label"], entry["red_team"]
+        entry["default"] = entry["case_id"] == default
     (out / "cases.json").write_text(json.dumps(index))
     (out / "videos.json").write_text("[]")
     for path in sorted(video_bundles_dir.glob("*.json")):
