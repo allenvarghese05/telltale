@@ -1,4 +1,5 @@
 import re
+from pathlib import Path
 
 from telltale.web.narrative import incident_report
 
@@ -59,14 +60,14 @@ def test_full_report_reads_in_order():
             "A second model watching the same footage described the conditions as daylight, overcast and a dry road.",
         ],
         "What the vehicle's systems did": [
-            "At 5.55 seconds, the driver-assist system first noticed the vehicle.",
+            "At 5.55 seconds, the car's driver-assist first noticed the vehicle.",
             "At 5.62 seconds, it commanded the brakes.",
             "At 5.84 seconds, the brakes engaged.",
             "The collision happened at 7.10 seconds.",
         ],
         "Where the chain broke": [
-            "The system took 1.35 seconds to notice the vehicle.",
-            "A system performing to specification would notice within 0.30 seconds.",
+            "The car's driver-assist took 1.35 seconds to notice the vehicle.",
+            "A driver-assist performing to specification would notice within 0.30 seconds.",
             "It then took 0.07 seconds to command the brakes.",
             "The specification allows 0.10 seconds.",
             "The brakes took 0.18 seconds to engage once commanded.",
@@ -79,7 +80,7 @@ def test_full_report_reads_in_order():
             "The vehicles come no closer than 2.10 metres.",
         ],
         "How this was verified": [
-            "The AI investigator concluded that the system noticed the hazard too late.",
+            "The AI investigator concluded that the car's driver-assist noticed the hazard too late.",
             "Separate code, with no AI involved, recomputed the conclusion from the same evidence and agreed.",
             "Of the investigator's 5 claims, 3 were confirmed by recomputation, 1 rests on a single source "
             "and 1 was blocked.",
@@ -107,7 +108,7 @@ def test_sections_come_in_the_reading_order():
 
 def test_every_sentence_names_the_evidence_it_came_from():
     lines = {line.text: line.sources for s in incident_report(bundle()) for line in s.sentences}
-    assert lines["The system took 1.35 seconds to notice the vehicle."] == ("PHYS:perception_latency_s",)
+    assert lines["The car's driver-assist took 1.35 seconds to notice the vehicle."] == ("PHYS:perception_latency_s",)
     assert lines["At 4.20 seconds, the other vehicle became a hazard: it moved into the camera car's lane."] == (
         "VID:hazard_onset_t",
         "VID:hazard_onset_reason",
@@ -124,7 +125,7 @@ def test_rejected_verdict_shows_both_conclusions_and_is_withheld():
         verdict={"agent_label": "PERCEPTION_LATE", "independent_label": "UNAVOIDABLE", "status": "REJECTED"},
     )
     assert texts(incident_report(rejected))["How this was verified"][:3] == [
-        "The AI investigator concluded that the system noticed the hazard too late.",
+        "The AI investigator concluded that the car's driver-assist noticed the hazard too late.",
         "Separate code, with no AI involved, recomputed the conclusion from the same evidence and found instead "
         "that the collision could not have been avoided even with normal timing.",
         "Because the two disagree, this conclusion is withheld until a human reviewer decides.",
@@ -151,7 +152,8 @@ def test_handoff_replaces_the_brake_command():
     facts = {k: v for k, v in FACTS.items() if k != "AV:brake_request_t"}
     facts |= {"AV:handoff_t": 5.9, "PHYS:handoff_margin_s": 1.2, "PROFILE:human_prt_s": 1.5}
     report = texts(incident_report(bundle(facts=facts)))
-    assert "At 5.90 seconds, the system handed control back to the driver." in report["What the vehicle's systems did"]
+    handback = "At 5.90 seconds, the car's driver-assist handed control back to the driver."
+    assert handback in report["What the vehicle's systems did"]
     assert report["Where the chain broke"][-3:-1] == [
         "The driver then had 1.20 seconds before the collision.",
         "A person typically needs 1.50 seconds to react.",
@@ -187,3 +189,36 @@ def test_no_words_the_checker_would_block():
         for section in incident_report(b):
             for line in section.sentences:
                 assert not banned.search(line.text), line.text
+
+
+def test_no_user_facing_copy_says_the_system():
+    """Judges read "the system" as Telltale itself, so the actor is always named as the car's driver-assist."""
+    import telltale.web.narrative as narrative
+
+    static = Path(narrative.__file__).parent / "static"
+    for source in (Path(narrative.__file__), static / "app.js", static / "index.html"):
+        assert "the system" not in source.read_text().lower(), source.name
+
+
+def test_label_maps_name_the_driver_assist_not_a_system():
+    """The timeline, the printable report and the narrative share one vocabulary for the car's software."""
+    import re
+
+    from telltale.pipeline.analyze import EVENT_LABELS
+    from telltale.report.render import LABEL_TEXT
+    from telltale.web.narrative import CONCLUSION
+
+    labels = [*CONCLUSION.values(), *LABEL_TEXT.values(), *(label for _, label in EVENT_LABELS)]
+    assert not [label for label in labels if re.search(r"\bsystem\b", label, re.IGNORECASE)]
+
+
+def test_a_red_team_case_says_so_before_anything_else():
+    """An altered run must never read as a natural agent output, in the page or the printable report."""
+    note = "Red-team: one claim's number and the investigator's verdict were altered by hand."
+    report = incident_report(bundle(red_team=note))
+    assert report[0].title == "This is a red-team case"
+    assert [line.text for line in report[0].sentences] == [note]
+
+
+def test_a_natural_case_has_no_red_team_section():
+    assert all(s.title != "This is a red-team case" for s in incident_report(bundle(red_team=None)))

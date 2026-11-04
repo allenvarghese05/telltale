@@ -336,6 +336,16 @@ select {
 .variant-s { display: block; font-size: 13px; margin-top: 4px; }
 .variant-s.ok { color: var(--ok); }
 .variant-s.no { color: var(--single); }
+.variant.red-team .variant-k { color: var(--blocked); font-weight: 600; }
+.red-team-note {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--blocked);
+  background: var(--blocked-bg);
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
 
 /* ---------- investigation ---------- */
 

@@ -17,10 +17,10 @@ HAZARD_HOW = {
 }
 
 CONCLUSION = {
-    "PERCEPTION_LATE": "the system noticed the hazard too late",
-    "COMMAND_LATE": "the system noticed the hazard in time but commanded the brakes too late",
+    "PERCEPTION_LATE": "the car's driver-assist noticed the hazard too late",
+    "COMMAND_LATE": "the car's driver-assist noticed the hazard in time but commanded the brakes too late",
     "BRAKE_ACTUATION_LATE": "the brakes engaged too slowly",
-    "LATE_HANDOFF": "control was handed to the driver too late for a person to react",
+    "LATE_HANDOFF": "the car's driver-assist handed control to the driver too late for a person to react",
     "UNAVOIDABLE": "the collision could not have been avoided even with normal timing",
     "NO_FAULT_FOUND": "the collision was avoidable, but no step exceeded its limit",
     "INCONCLUSIVE": "the evidence is not complete enough to decide",
@@ -115,14 +115,14 @@ def _systems(facts: dict) -> list[Sentence]:
     if "AV:first_seen_t" in facts:
         out.append(
             Sentence(
-                f"At {_s(facts['AV:first_seen_t'])} seconds, the driver-assist system first noticed the vehicle.",
+                f"At {_s(facts['AV:first_seen_t'])} seconds, the car's driver-assist first noticed the vehicle.",
                 ("AV:first_seen_t",),
             )
         )
     if "AV:handoff_t" in facts:
         out.append(
             Sentence(
-                f"At {_s(facts['AV:handoff_t'])} seconds, the system handed control back to the driver.",
+                f"At {_s(facts['AV:handoff_t'])} seconds, the car's driver-assist handed control back to the driver.",
                 ("AV:handoff_t",),
             )
         )
@@ -164,8 +164,8 @@ def _chain(facts: dict) -> list[Sentence]:
         facts,
         "PHYS:perception_latency_s",
         "PROFILE:perception_threshold_s",
-        "The system took {} seconds to notice the vehicle.",
-        "A system performing to specification would notice within {} seconds.",
+        "The car's driver-assist took {} seconds to notice the vehicle.",
+        "A driver-assist performing to specification would notice within {} seconds.",
     )
     out += _interval(
         facts,
@@ -283,9 +283,14 @@ LIMITS = (
 
 
 def incident_report(bundle: dict) -> list[Section]:
-    """The six sections of the plain-English report, in reading order, leaving out any that have nothing to say."""
+    """The plain-English report's sections, in reading order, leaving out any that have nothing to say.
+
+    A red-team case opens with its label, so an altered run can never be read as a natural agent output.
+    """
     facts = {f["id"]: f["value"] for f in bundle.get("facts", [])}
+    red_team = bundle.get("red_team")
     sections = [
+        ("This is a red-team case", [Sentence(red_team, ())] if red_team else []),
         ("What the camera saw", _camera(facts, bundle.get("scene") or {})),
         ("What the vehicle's systems did", _systems(facts)),
         ("Where the chain broke", _chain(facts)),

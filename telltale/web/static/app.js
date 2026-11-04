@@ -7,11 +7,11 @@
 const $ = (id) => document.getElementById(id);
 
 const HEADLINE = {
-  PERCEPTION_LATE: 'The system noticed the hazard too late.',
-  COMMAND_LATE: 'The hazard was noticed in time. Braking was commanded too late.',
+  PERCEPTION_LATE: "The car's driver-assist noticed the hazard too late.",
+  COMMAND_LATE: "The car's driver-assist noticed the hazard in time but commanded braking too late.",
   BRAKE_ACTUATION_LATE: 'The brakes built pressure too slowly.',
-  LATE_HANDOFF: 'Control was handed back too late for a person to react.',
-  UNAVOIDABLE: 'Physically unavoidable. A system performing to spec would still have collided.',
+  LATE_HANDOFF: "The car's driver-assist handed control back too late for a person to react.",
+  UNAVOIDABLE: 'Physically unavoidable. A driver-assist performing to spec would still have collided.',
   NO_FAULT_FOUND: 'Avoidable, but no step exceeded its limit.',
   INCONCLUSIVE: 'Inconclusive. The evidence is incomplete.',
 };
@@ -102,20 +102,23 @@ async function renderVariants(list) {
   const loaded = await Promise.all(
     list.map(async (c) => {
       try {
-        return { ...c, verdict: (await getJSON(`cases/${encodeURIComponent(c.case_id)}.json`)).verdict };
+        const full = await getJSON(`cases/${encodeURIComponent(c.case_id)}.json`);
+        return { ...c, verdict: full.verdict, redTeam: full.red_team };
       } catch {
-        return { ...c, verdict: null };
+        return { ...c, verdict: null, redTeam: null };
       }
     }),
   );
+  let letter = 0;
   $('variants').innerHTML = loaded
-    .map((c, i) => {
+    .map((c) => {
       const v = c.verdict;
       const ok = v && v.status === 'VERIFIED';
       const label = v ? SHORT[v.agent_label] || v.agent_label : 'Unavailable';
       const state = v ? (ok ? 'Verified by recomputation' : 'Withheld. The checker disagrees.') : '';
-      return `<button class="variant" data-id="${esc(c.case_id)}">
-        <span class="variant-k">Log ${String.fromCharCode(65 + i)}, ${esc(c.profile)}</span>
+      const name = c.redTeam ? 'Red-team, altered by hand' : `Log ${String.fromCharCode(65 + letter++)}`;
+      return `<button class="variant${c.redTeam ? ' red-team' : ''}" data-id="${esc(c.case_id)}">
+        <span class="variant-k">${esc(name)}, ${esc(c.profile)}</span>
         <span class="variant-v">${esc(label)}</span>
         <span class="variant-s ${ok ? 'ok' : 'no'}">${esc(state)}</span></button>`;
     })
@@ -175,9 +178,11 @@ function reset() {
   $('replay').hidden = true;
   $('skip').hidden = true;
   $('clock').textContent = '0.00 s';
-  $('run-note').textContent = events.length
-    ? `${events.length} moments, ${(bundle.facts || []).length} pieces of evidence`
-    : 'This case has no timeline.';
+  $('run-note').textContent = bundle.red_team
+    ? bundle.red_team
+    : events.length
+      ? `${events.length} moments, ${(bundle.facts || []).length} pieces of evidence`
+      : 'This case has no timeline.';
   $('chain')
     .querySelectorAll('.reached')
     .forEach((n) => n.classList.remove('reached'));
@@ -378,7 +383,9 @@ function land() {
   const headline = ok
     ? HEADLINE[v.agent_label] || v.agent_label
     : 'The investigator and the independent recomputation disagree.';
+  const redTeam = bundle.red_team ? `<p class="red-team-note">${esc(bundle.red_team)}</p>` : '';
   $('verdict').innerHTML = `<div class="verdict-body">
+    ${redTeam}
     <p class="verdict-state ${ok ? 'ok' : 'no'}">${ok ? 'Independently verified' : 'Withheld for human review'}</p>
     <h2 class="verdict-headline">${esc(headline || 'No verdict in this case.')}</h2>
     ${over}
