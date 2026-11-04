@@ -133,15 +133,19 @@
          0.545 s and 1.387 s and the tail is long. The median does not stand alone.</p>
     </div>
     <div class="bench">
-      <h3>Attribution on blind fault injection</h3>
-      <p class="figure-pair"><span class="num">1.00</span><span class="unit">accuracy over 136 cases</span></p>
-      <p class="caption">Six failure stories across car and truck, four seeds each, faults injected blind. Measures
-         the deterministic attribution, not the agent. 8 cases too short to generate are counted, not dropped.</p>
+      <h3>Agent alone against agent plus checker</h3>
+      <p class="figure-pair"><span class="num">19 of 19</span><span class="unit">verdicts correct, all independently verified</span></p>
+      <p class="figure-pair caveat"><span class="num">12 of 165</span><span class="unit">claims blocked, none of them false</span></p>
+      <p class="caption">19 blind cases. Every blocked claim was true, but could not be proven from what it
+         cited: 7 cited too little, 4 tried a witness recheck our tool cannot answer, 1 wrote its check wrongly.
+         The agent was never wrong, so this run did not test withholding a wrong verdict.</p>
     </div>
     <div class="bench">
-      <h3>Agent alone against agent plus checker</h3>
-      <p class="figure-pair pending"><span class="num">Not yet run</span></p>
-      <p class="caption">The number the whole argument rests on. It will be reported whatever it says.</p>
+      <h3>Synthetic attribution consistency</h3>
+      <p class="figure-pair"><span class="num">1.000</span><span class="unit">accuracy over 162 cases</span></p>
+      <p class="caption">Six failure stories across car and truck, faults injected blind. It injects a fault and then
+         checks for that same fault, so near-perfect accuracy is close to built in. It shows the engine agrees with
+         itself, not that it is right about real crashes.</p>
     </div>
   </div>
 </section>

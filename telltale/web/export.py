@@ -36,6 +36,25 @@ Source: https://github.com/allenvarghese05/telltale
 """
 
 
+def _kmh(mps: float) -> float:
+    return round(float(mps) * 3.6, 1)
+
+
+def exact_outcomes(facts: dict) -> dict:
+    """The checker's own impact speeds (km/h, 0.0 = avoided), so the page's sentence matches the incident report.
+
+    The grid below is sampled, so its nearest cell can differ slightly from the exact replay at the measured timings.
+    """
+    measured = facts.get("PHYS:actual_impact_speed_mps")
+    contact = facts.get("PHYS:cf_nominal_contact")
+    nominal = None
+    if contact is False:
+        nominal = 0.0
+    elif contact is True and "PHYS:cf_nominal_impact_speed_mps" in facts:
+        nominal = _kmh(facts["PHYS:cf_nominal_impact_speed_mps"])
+    return {"measured": None if measured is None else _kmh(measured), "nominal": nominal}
+
+
 def counterfactual_grid(bundle: dict) -> dict:
     """Impact speed (km/h, 0.0 = avoided) for every detection delay x brake time constant."""
     inputs = bundle["counterfactual_inputs"]
@@ -63,6 +82,7 @@ def counterfactual_grid(bundle: dict) -> dict:
         "impact_kmh": impact,
         "measured": inputs["measured"],
         "nominal": {"perception_s": profile.nominal["perception_s"], "tau_s": profile.tau_nominal},
+        "outcome_kmh": exact_outcomes({f["id"]: f["value"] for f in bundle.get("facts", [])}),
     }
 
 
