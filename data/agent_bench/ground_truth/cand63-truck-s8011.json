@@ -1,0 +1,17 @@
+{
+  "story": "adas_events_lost_perception",
+  "profile": "truck",
+  "v_ego0": 27.34030516912037,
+  "v_other": 12.0300066493791,
+  "d0": 55.907563269612616,
+  "first_seen": 1.5699494671411853,
+  "brake_request": 1.6210922358878201,
+  "handoff": null,
+  "tau": 0.34742544794297364,
+  "contact_t": 5.2780000000000005,
+  "can_skew": -0.46768212671705656,
+  "av_skew": 0.382500760595916,
+  "label": "PERCEPTION_LATE",
+  "adas_events": "none",
+  "expected_label": "PERCEPTION_LATE"
+}

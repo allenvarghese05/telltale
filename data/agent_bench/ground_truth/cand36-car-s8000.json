@@ -1,0 +1,17 @@
+{
+  "story": "handoff_in_time_slow_driver",
+  "profile": "car",
+  "v_ego0": 27.43965240821589,
+  "v_other": 13.234907375421606,
+  "d0": 26.506054231183743,
+  "first_seen": 0.11773862867377789,
+  "brake_request": 2.161946165883838,
+  "handoff": 0.23750649182744984,
+  "tau": 0.13524572629862622,
+  "contact_t": 1.866,
+  "can_skew": 0.42905008867374095,
+  "av_skew": -0.05856606788585559,
+  "label": "NO_FAULT_FOUND",
+  "adas_events": "auto",
+  "expected_label": "NO_FAULT_FOUND"
+}

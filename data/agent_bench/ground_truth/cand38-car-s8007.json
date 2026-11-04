@@ -1,0 +1,17 @@
+{
+  "story": "adas_events_lost_actuation",
+  "profile": "car",
+  "v_ego0": 21.56080368063493,
+  "v_other": 7.450152316895306,
+  "d0": 22.84924919257666,
+  "first_seen": 0.22271091070184898,
+  "brake_request": 0.27647893110770755,
+  "handoff": null,
+  "tau": 0.6871924211195156,
+  "contact_t": 2.099,
+  "can_skew": 0.1656452070749529,
+  "av_skew": 0.746865387156214,
+  "label": "BRAKE_ACTUATION_LATE",
+  "adas_events": "none",
+  "expected_label": "BRAKE_ACTUATION_LATE"
+}
