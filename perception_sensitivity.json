@@ -1,0 +1,6418 @@
+{
+  "n_cases": 83,
+  "measured_errors": {
+    "all": 260,
+    "without_tail": 233,
+    "median_all": -0.2877908496732031
+  },
+  "stability_all_errors": {
+    "cases": 83,
+    "draws": 21580,
+    "feasible": 20214,
+    "stable": 9364,
+    "correct": 9364,
+    "infeasible": 1366,
+    "flips": {
+      "PERCEPTION_LATE->UNAVOIDABLE": 1332,
+      "PERCEPTION_LATE->NO_FAULT_FOUND": 14,
+      "COMMAND_LATE->UNAVOIDABLE": 836,
+      "COMMAND_LATE->PERCEPTION_LATE": 1588,
+      "BRAKE_ACTUATION_LATE->UNAVOIDABLE": 1374,
+      "BRAKE_ACTUATION_LATE->PERCEPTION_LATE": 1950,
+      "LATE_HANDOFF->UNAVOIDABLE": 386,
+      "LATE_HANDOFF->PERCEPTION_LATE": 1424,
+      "UNAVOIDABLE->PERCEPTION_LATE": 1756,
+      "UNAVOIDABLE->NO_FAULT_FOUND": 24,
+      "UNAVOIDABLE->BRAKE_ACTUATION_LATE": 39,
+      "PERCEPTION_LATE->BRAKE_ACTUATION_LATE": 60,
+      "PERCEPTION_LATE->COMMAND_LATE": 67
+    }
+  },
+  "stability_without_tail": {
+    "cases": 83,
+    "draws": 19339,
+    "feasible": 18517,
+    "stable": 8867,
+    "correct": 8867,
+    "infeasible": 822,
+    "flips": {
+      "PERCEPTION_LATE->UNAVOIDABLE": 1332,
+      "PERCEPTION_LATE->NO_FAULT_FOUND": 14,
+      "COMMAND_LATE->UNAVOIDABLE": 836,
+      "COMMAND_LATE->PERCEPTION_LATE": 1283,
+      "BRAKE_ACTUATION_LATE->UNAVOIDABLE": 1374,
+      "BRAKE_ACTUATION_LATE->PERCEPTION_LATE": 1593,
+      "LATE_HANDOFF->UNAVOIDABLE": 386,
+      "LATE_HANDOFF->PERCEPTION_LATE": 1201,
+      "UNAVOIDABLE->PERCEPTION_LATE": 1441,
+      "UNAVOIDABLE->NO_FAULT_FOUND": 24,
+      "UNAVOIDABLE->BRAKE_ACTUATION_LATE": 39,
+      "PERCEPTION_LATE->BRAKE_ACTUATION_LATE": 60,
+      "PERCEPTION_LATE->COMMAND_LATE": 67
+    }
+  },
+  "stability_by_story": {
+    "brake_slow": {
+      "all": {
+        "cases": 10,
+        "draws": 2600,
+        "feasible": 2429,
+        "stable": 642,
+        "correct": 642,
+        "infeasible": 171,
+        "flips": {
+          "BRAKE_ACTUATION_LATE->UNAVOIDABLE": 796,
+          "BRAKE_ACTUATION_LATE->PERCEPTION_LATE": 991
+        }
+      },
+      "without_tail": {
+        "cases": 10,
+        "draws": 2330,
+        "feasible": 2228,
+        "stable": 642,
+        "correct": 642,
+        "infeasible": 102,
+        "flips": {
+          "BRAKE_ACTUATION_LATE->UNAVOIDABLE": 796,
+          "BRAKE_ACTUATION_LATE->PERCEPTION_LATE": 790
+        }
+      }
+    },
+    "command_late": {
+      "all": {
+        "cases": 9,
+        "draws": 2340,
+        "feasible": 2220,
+        "stable": 774,
+        "correct": 774,
+        "infeasible": 120,
+        "flips": {
+          "COMMAND_LATE->UNAVOIDABLE": 540,
+          "COMMAND_LATE->PERCEPTION_LATE": 906
+        }
+      },
+      "without_tail": {
+        "cases": 9,
+        "draws": 2097,
+        "feasible": 2019,
+        "stable": 774,
+        "correct": 774,
+        "infeasible": 78,
+        "flips": {
+          "COMMAND_LATE->UNAVOIDABLE": 540,
+          "COMMAND_LATE->PERCEPTION_LATE": 705
+        }
+      }
+    },
+    "dropout": {
+      "all": {
+        "cases": 3,
+        "draws": 780,
+        "feasible": 740,
+        "stable": 740,
+        "correct": 740,
+        "infeasible": 40,
+        "flips": {}
+      },
+      "without_tail": {
+        "cases": 3,
+        "draws": 699,
+        "feasible": 673,
+        "stable": 673,
+        "correct": 673,
+        "infeasible": 26,
+        "flips": {}
+      }
+    },
+    "late_handoff": {
+      "all": {
+        "cases": 12,
+        "draws": 3120,
+        "feasible": 2847,
+        "stable": 1387,
+        "correct": 1387,
+        "infeasible": 273,
+        "flips": {
+          "LATE_HANDOFF->UNAVOIDABLE": 359,
+          "LATE_HANDOFF->PERCEPTION_LATE": 1101
+        }
+      },
+      "without_tail": {
+        "cases": 12,
+        "draws": 2796,
+        "feasible": 2646,
+        "stable": 1387,
+        "correct": 1387,
+        "infeasible": 150,
+        "flips": {
+          "LATE_HANDOFF->UNAVOIDABLE": 359,
+          "LATE_HANDOFF->PERCEPTION_LATE": 900
+        }
+      }
+    },
+    "marginal_actuation": {
+      "all": {
+        "cases": 4,
+        "draws": 1040,
+        "feasible": 1000,
+        "stable": 107,
+        "correct": 107,
+        "infeasible": 40,
+        "flips": {
+          "BRAKE_ACTUATION_LATE->UNAVOIDABLE": 355,
+          "BRAKE_ACTUATION_LATE->PERCEPTION_LATE": 538
+        }
+      },
+      "without_tail": {
+        "cases": 4,
+        "draws": 932,
+        "feasible": 916,
+        "stable": 107,
+        "correct": 107,
+        "infeasible": 16,
+        "flips": {
+          "BRAKE_ACTUATION_LATE->UNAVOIDABLE": 355,
+          "BRAKE_ACTUATION_LATE->PERCEPTION_LATE": 454
+        }
+      }
+    },
+    "marginal_command": {
+      "all": {
+        "cases": 2,
+        "draws": 520,
+        "feasible": 500,
+        "stable": 43,
+        "correct": 43,
+        "infeasible": 20,
+        "flips": {
+          "COMMAND_LATE->UNAVOIDABLE": 185,
+          "COMMAND_LATE->PERCEPTION_LATE": 272
+        }
+      },
+      "without_tail": {
+        "cases": 2,
+        "draws": 466,
+        "feasible": 458,
+        "stable": 43,
+        "correct": 43,
+        "infeasible": 8,
+        "flips": {
+          "COMMAND_LATE->UNAVOIDABLE": 185,
+          "COMMAND_LATE->PERCEPTION_LATE": 230
+        }
+      }
+    },
+    "marginal_perception": {
+      "all": {
+        "cases": 3,
+        "draws": 780,
+        "feasible": 740,
+        "stable": 445,
+        "correct": 445,
+        "infeasible": 40,
+        "flips": {
+          "PERCEPTION_LATE->UNAVOIDABLE": 294,
+          "PERCEPTION_LATE->NO_FAULT_FOUND": 1
+        }
+      },
+      "without_tail": {
+        "cases": 3,
+        "draws": 699,
+        "feasible": 673,
+        "stable": 378,
+        "correct": 378,
+        "infeasible": 26,
+        "flips": {
+          "PERCEPTION_LATE->UNAVOIDABLE": 294,
+          "PERCEPTION_LATE->NO_FAULT_FOUND": 1
+        }
+      }
+    },
+    "perception_late": {
+      "all": {
+        "cases": 10,
+        "draws": 2600,
+        "feasible": 2429,
+        "stable": 1894,
+        "correct": 1894,
+        "infeasible": 171,
+        "flips": {
+          "PERCEPTION_LATE->UNAVOIDABLE": 522,
+          "PERCEPTION_LATE->NO_FAULT_FOUND": 13
+        }
+      },
+      "without_tail": {
+        "cases": 10,
+        "draws": 2330,
+        "feasible": 2228,
+        "stable": 1693,
+        "correct": 1693,
+        "infeasible": 102,
+        "flips": {
+          "PERCEPTION_LATE->UNAVOIDABLE": 522,
+          "PERCEPTION_LATE->NO_FAULT_FOUND": 13
+        }
+      }
+    },
+    "tight_actuation_perception": {
+      "all": {
+        "cases": 3,
+        "draws": 780,
+        "feasible": 731,
+        "stable": 87,
+        "correct": 87,
+        "infeasible": 49,
+        "flips": {
+          "BRAKE_ACTUATION_LATE->UNAVOIDABLE": 223,
+          "BRAKE_ACTUATION_LATE->PERCEPTION_LATE": 421
+        }
+      },
+      "without_tail": {
+        "cases": 3,
+        "draws": 699,
+        "feasible": 659,
+        "stable": 87,
+        "correct": 87,
+        "infeasible": 40,
+        "flips": {
+          "BRAKE_ACTUATION_LATE->UNAVOIDABLE": 223,
+          "BRAKE_ACTUATION_LATE->PERCEPTION_LATE": 349
+        }
+      }
+    },
+    "tight_command_perception": {
+      "all": {
+        "cases": 3,
+        "draws": 780,
+        "feasible": 749,
+        "stable": 228,
+        "correct": 228,
+        "infeasible": 31,
+        "flips": {
+          "COMMAND_LATE->UNAVOIDABLE": 111,
+          "COMMAND_LATE->PERCEPTION_LATE": 410
+        }
+      },
+      "without_tail": {
+        "cases": 3,
+        "draws": 699,
+        "feasible": 687,
+        "stable": 228,
+        "correct": 228,
+        "infeasible": 12,
+        "flips": {
+          "COMMAND_LATE->UNAVOIDABLE": 111,
+          "COMMAND_LATE->PERCEPTION_LATE": 348
+        }
+      }
+    },
+    "tight_handoff_perception": {
+      "all": {
+        "cases": 3,
+        "draws": 780,
+        "feasible": 669,
+        "stable": 319,
+        "correct": 319,
+        "infeasible": 111,
+        "flips": {
+          "LATE_HANDOFF->UNAVOIDABLE": 27,
+          "LATE_HANDOFF->PERCEPTION_LATE": 323
+        }
+      },
+      "without_tail": {
+        "cases": 3,
+        "draws": 699,
+        "feasible": 647,
+        "stable": 319,
+        "correct": 319,
+        "infeasible": 52,
+        "flips": {
+          "LATE_HANDOFF->UNAVOIDABLE": 27,
+          "LATE_HANDOFF->PERCEPTION_LATE": 301
+        }
+      }
+    },
+    "tight_perception_actuation": {
+      "all": {
+        "cases": 3,
+        "draws": 780,
+        "feasible": 731,
+        "stable": 458,
+        "correct": 458,
+        "infeasible": 49,
+        "flips": {
+          "PERCEPTION_LATE->UNAVOIDABLE": 213,
+          "PERCEPTION_LATE->BRAKE_ACTUATION_LATE": 60
+        }
+      },
+      "without_tail": {
+        "cases": 3,
+        "draws": 699,
+        "feasible": 659,
+        "stable": 386,
+        "correct": 386,
+        "infeasible": 40,
+        "flips": {
+          "PERCEPTION_LATE->UNAVOIDABLE": 213,
+          "PERCEPTION_LATE->BRAKE_ACTUATION_LATE": 60
+        }
+      }
+    },
+    "tight_perception_command": {
+      "all": {
+        "cases": 4,
+        "draws": 1040,
+        "feasible": 978,
+        "stable": 608,
+        "correct": 608,
+        "infeasible": 62,
+        "flips": {
+          "PERCEPTION_LATE->UNAVOIDABLE": 303,
+          "PERCEPTION_LATE->COMMAND_LATE": 67
+        }
+      },
+      "without_tail": {
+        "cases": 4,
+        "draws": 932,
+        "feasible": 888,
+        "stable": 518,
+        "correct": 518,
+        "infeasible": 44,
+        "flips": {
+          "PERCEPTION_LATE->UNAVOIDABLE": 303,
+          "PERCEPTION_LATE->COMMAND_LATE": 67
+        }
+      }
+    },
+    "unavoidable": {
+      "all": {
+        "cases": 9,
+        "draws": 2340,
+        "feasible": 2220,
+        "stable": 1040,
+        "correct": 1040,
+        "infeasible": 120,
+        "flips": {
+          "UNAVOIDABLE->PERCEPTION_LATE": 1156,
+          "UNAVOIDABLE->NO_FAULT_FOUND": 24
+        }
+      },
+      "without_tail": {
+        "cases": 9,
+        "draws": 2097,
+        "feasible": 2019,
+        "stable": 1040,
+        "correct": 1040,
+        "infeasible": 78,
+        "flips": {
+          "UNAVOIDABLE->PERCEPTION_LATE": 955,
+          "UNAVOIDABLE->NO_FAULT_FOUND": 24
+        }
+      }
+    },
+    "unavoidable_with_fault": {
+      "all": {
+        "cases": 5,
+        "draws": 1300,
+        "feasible": 1231,
+        "stable": 592,
+        "correct": 592,
+        "infeasible": 69,
+        "flips": {
+          "UNAVOIDABLE->PERCEPTION_LATE": 600,
+          "UNAVOIDABLE->BRAKE_ACTUATION_LATE": 39
+        }
+      },
+      "without_tail": {
+        "cases": 5,
+        "draws": 1165,
+        "feasible": 1117,
+        "stable": 592,
+        "correct": 592,
+        "infeasible": 48,
+        "flips": {
+          "UNAVOIDABLE->PERCEPTION_LATE": 486,
+          "UNAVOIDABLE->BRAKE_ACTUATION_LATE": 39
+        }
+      }
+    }
+  },
+  "cases": [
+    {
+      "case_id": "cand36-car-s1775",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "PERCEPTION_LATE",
+        "+0.5": "PERCEPTION_LATE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 0.85
+      },
+      "missed_onset_what_if": "NO_FAULT_FOUND",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.1319
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.6319
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.1319
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.6319
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.6399
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.372
+        }
+      }
+    },
+    {
+      "case_id": "cand36-car-s2775",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "base": "COMMAND_LATE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "COMMAND_LATE",
+        "-0.5": "COMMAND_LATE",
+        "-0.25": "COMMAND_LATE",
+        "+0.25": "COMMAND_LATE",
+        "+0.5": "COMMAND_LATE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 1.2,
+        "late": 0.85
+      },
+      "missed_onset_what_if": "COMMAND_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0479
+        },
+        "+2.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.5479
+        },
+        "+2.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 1.0479
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.5479
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.5519
+        },
+        "-1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.4519
+        }
+      }
+    },
+    {
+      "case_id": "cand36-car-s3775",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "base": "BRAKE_ACTUATION_LATE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "BRAKE_ACTUATION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.45,
+        "late": 0.25
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.2119
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.7119
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.2119
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.2119
+        },
+        "-1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.792
+        }
+      }
+    },
+    {
+      "case_id": "cand36-car-s4775",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "base": "LATE_HANDOFF",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "LATE_HANDOFF",
+        "-0.25": "LATE_HANDOFF",
+        "+0.25": "LATE_HANDOFF",
+        "+0.5": "LATE_HANDOFF",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.55,
+        "late": 0.55
+      },
+      "missed_onset_what_if": "LATE_HANDOFF",
+      "adas_skew": {
+        "+0.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+2.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.35
+        },
+        "+2.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.85
+        },
+        "+3.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.35
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 3.35
+        },
+        "-1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.6519
+        }
+      }
+    },
+    {
+      "case_id": "cand36-car-s5775",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "base": "UNAVOIDABLE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.05,
+        "late": null
+      },
+      "missed_onset_what_if": "UNAVOIDABLE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.3639
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.8639
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.3639
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.3699
+        },
+        "-1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.642
+        }
+      }
+    },
+    {
+      "case_id": "cand36-truck-s1275",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 0.1
+      },
+      "missed_onset_what_if": "NO_FAULT_FOUND",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0199
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.5199
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.0199
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.0199
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.9819
+        }
+      }
+    },
+    {
+      "case_id": "cand36-truck-s2275",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "base": "COMMAND_LATE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "COMMAND_LATE",
+        "-0.25": "COMMAND_LATE",
+        "+0.25": "COMMAND_LATE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.65,
+        "late": 0.4
+      },
+      "missed_onset_what_if": "COMMAND_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.218
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.718
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.218
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.72
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.72
+        },
+        "-1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.2819
+        }
+      }
+    },
+    {
+      "case_id": "cand36-truck-s3275",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "base": "BRAKE_ACTUATION_LATE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "BRAKE_ACTUATION_LATE",
+        "-0.5": "BRAKE_ACTUATION_LATE",
+        "-0.25": "BRAKE_ACTUATION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 1.1,
+        "late": 0.2
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.348
+        },
+        "+1.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.848
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.352
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.852
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.352
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.352
+        },
+        "-1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.348
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.6599
+        }
+      }
+    },
+    {
+      "case_id": "cand36-truck-s4275",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "base": "LATE_HANDOFF",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "LATE_HANDOFF",
+        "-0.25": "LATE_HANDOFF",
+        "+0.25": "LATE_HANDOFF",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.65,
+        "late": 0.35
+      },
+      "missed_onset_what_if": "LATE_HANDOFF",
+      "adas_skew": {
+        "+0.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.1519
+        },
+        "+2.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.6519
+        },
+        "+2.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.1519
+        },
+        "+3.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.6519
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 3.6599
+        },
+        "-1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.002
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.352
+        }
+      }
+    },
+    {
+      "case_id": "cand36-truck-s5275",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "base": "UNAVOIDABLE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.25,
+        "late": null
+      },
+      "missed_onset_what_if": "UNAVOIDABLE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.19
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.69
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.19
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.69
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.19
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.19
+        },
+        "-1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.19
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.8119
+        }
+      }
+    },
+    {
+      "case_id": "cand37-car-s1313",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 0.1
+      },
+      "missed_onset_what_if": "NO_FAULT_FOUND",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0419
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.5419
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.5499
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.458
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -4.462
+        }
+      }
+    },
+    {
+      "case_id": "cand37-car-s2313",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "base": "COMMAND_LATE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "COMMAND_LATE",
+        "-0.25": "COMMAND_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.65,
+        "late": 0.2
+      },
+      "missed_onset_what_if": "COMMAND_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.324
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.824
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.324
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.83
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.83
+        },
+        "-1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.1819
+        }
+      }
+    },
+    {
+      "case_id": "cand37-car-s3313",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "base": "BRAKE_ACTUATION_LATE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "BRAKE_ACTUATION_LATE",
+        "-0.25": "BRAKE_ACTUATION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.6,
+        "late": 0.1
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0399
+        },
+        "+3.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.5399
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.5399
+        },
+        "-1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.46
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -4.462
+        }
+      }
+    },
+    {
+      "case_id": "cand37-car-s4313",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "base": "LATE_HANDOFF",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "LATE_HANDOFF",
+        "-0.5": "LATE_HANDOFF",
+        "-0.25": "LATE_HANDOFF",
+        "+0.25": "LATE_HANDOFF",
+        "+0.5": "LATE_HANDOFF",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 1.1,
+        "late": 0.55
+      },
+      "missed_onset_what_if": "LATE_HANDOFF",
+      "adas_skew": {
+        "+0.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0519
+        },
+        "+2.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.5519
+        },
+        "+2.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.0519
+        },
+        "+3.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.5519
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 3.5599
+        },
+        "-1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.4519
+        }
+      }
+    },
+    {
+      "case_id": "cand37-car-s5313",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "base": "UNAVOIDABLE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.1,
+        "late": null
+      },
+      "missed_onset_what_if": "UNAVOIDABLE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.1199
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.6199
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.1199
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.6219
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.6219
+        },
+        "-1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.3799
+        }
+      }
+    },
+    {
+      "case_id": "cand37-truck-s1813",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 0.2
+      },
+      "missed_onset_what_if": "NO_FAULT_FOUND",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.2279
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.7279
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.7319
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.2719
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -4.2799
+        }
+      }
+    },
+    {
+      "case_id": "cand37-truck-s2813",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "base": "COMMAND_LATE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "COMMAND_LATE",
+        "-0.25": "COMMAND_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.75,
+        "late": 0.05
+      },
+      "missed_onset_what_if": "COMMAND_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0579
+        },
+        "+2.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.5579
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.0579
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.5619
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.5619
+        },
+        "-1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.45
+        }
+      }
+    },
+    {
+      "case_id": "cand37-truck-s3813",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "base": "BRAKE_ACTUATION_LATE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "BRAKE_ACTUATION_LATE",
+        "-0.5": "BRAKE_ACTUATION_LATE",
+        "-0.25": "BRAKE_ACTUATION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 1.05,
+        "late": 0.1
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0899
+        },
+        "+1.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.5899
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.0919
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.5919
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.0919
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.0919
+        },
+        "-1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0899
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.9099
+        }
+      }
+    },
+    {
+      "case_id": "cand37-truck-s4813",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "base": "LATE_HANDOFF",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "LATE_HANDOFF",
+        "-0.25": "LATE_HANDOFF",
+        "+0.25": "LATE_HANDOFF",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.95,
+        "late": 0.3
+      },
+      "missed_onset_what_if": "LATE_HANDOFF",
+      "adas_skew": {
+        "+0.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.118
+        },
+        "+2.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.618
+        },
+        "+2.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.118
+        },
+        "+3.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.622
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 3.622
+        },
+        "-1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.3899
+        }
+      }
+    },
+    {
+      "case_id": "cand37-truck-s5813",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "base": "UNAVOIDABLE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "UNAVOIDABLE",
+        "-0.5": "UNAVOIDABLE",
+        "-0.25": "UNAVOIDABLE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 1.1,
+        "late": null
+      },
+      "missed_onset_what_if": "UNAVOIDABLE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.4119
+        },
+        "+3.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.9119
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.9119
+        },
+        "-1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.088
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -4.09
+        }
+      }
+    },
+    {
+      "case_id": "cand38-car-s1744",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "PERCEPTION_LATE",
+        "+0.5": "PERCEPTION_LATE",
+        "+1.0": "PERCEPTION_LATE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 1.15
+      },
+      "missed_onset_what_if": "NO_FAULT_FOUND",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.4819
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.9819
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.9819
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.018
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -4.02
+        }
+      }
+    },
+    {
+      "case_id": "cand38-car-s2744",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "base": "COMMAND_LATE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "COMMAND_LATE",
+        "-0.25": "COMMAND_LATE",
+        "+0.25": "COMMAND_LATE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 0.7,
+        "late": 0.4
+      },
+      "missed_onset_what_if": "COMMAND_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.4379
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.9379
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.4379
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.4399
+        },
+        "-1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.562
+        }
+      }
+    },
+    {
+      "case_id": "cand38-car-s3744",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "base": "BRAKE_ACTUATION_LATE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "BRAKE_ACTUATION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 0.4,
+        "late": 0.25
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.1739
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.6739
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.6739
+        },
+        "-1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.326
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -4.332
+        }
+      }
+    },
+    {
+      "case_id": "cand38-car-s4744",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "base": "LATE_HANDOFF",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "LATE_HANDOFF",
+        "-0.25": "LATE_HANDOFF",
+        "+0.25": "LATE_HANDOFF",
+        "+0.5": "LATE_HANDOFF",
+        "+1.0": "LATE_HANDOFF",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 0.65,
+        "late": 1.45
+      },
+      "missed_onset_what_if": "LATE_HANDOFF",
+      "adas_skew": {
+        "+0.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.29
+        },
+        "+2.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.79
+        },
+        "+2.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.29
+        },
+        "+3.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.79
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 3.79
+        },
+        "-1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.2119
+        }
+      }
+    },
+    {
+      "case_id": "cand38-car-s5744",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "base": "UNAVOIDABLE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 0.05,
+        "late": null
+      },
+      "missed_onset_what_if": "UNAVOIDABLE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0019
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.2779
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.7779
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.2779
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.2819
+        },
+        "-1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.7219
+        }
+      }
+    },
+    {
+      "case_id": "cand38-truck-s1244",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "PERCEPTION_LATE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 0.45
+      },
+      "missed_onset_what_if": "NO_FAULT_FOUND",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.48
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.98
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.48
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.98
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.48
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.48
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.48
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.5219
+        }
+      }
+    },
+    {
+      "case_id": "cand38-truck-s2244",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "base": "COMMAND_LATE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "COMMAND_LATE",
+        "-0.25": "COMMAND_LATE",
+        "+0.25": "COMMAND_LATE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 0.75,
+        "late": 0.45
+      },
+      "missed_onset_what_if": "COMMAND_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.002
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.502
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.002
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.502
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.002
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.502
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.51
+        },
+        "-1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.502
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.5019
+        }
+      }
+    },
+    {
+      "case_id": "cand38-truck-s3244",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "base": "BRAKE_ACTUATION_LATE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "BRAKE_ACTUATION_LATE",
+        "-0.5": "BRAKE_ACTUATION_LATE",
+        "-0.25": "BRAKE_ACTUATION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 1.25,
+        "late": 0.05
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0359
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.5359
+        },
+        "+1.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 1.0359
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.5399
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.0399
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.5399
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.5399
+        },
+        "-1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.5359
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.4639
+        }
+      }
+    },
+    {
+      "case_id": "cand38-truck-s4244",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "base": "LATE_HANDOFF",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "LATE_HANDOFF",
+        "-0.25": "LATE_HANDOFF",
+        "+0.25": "LATE_HANDOFF",
+        "+0.5": "LATE_HANDOFF",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 0.55,
+        "late": 0.75
+      },
+      "missed_onset_what_if": "LATE_HANDOFF",
+      "adas_skew": {
+        "+0.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.056
+        },
+        "+1.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.556
+        },
+        "+2.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.056
+        },
+        "+2.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.556
+        },
+        "+3.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 2.062
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 4.062
+        },
+        "-1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.056
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.9499
+        }
+      }
+    },
+    {
+      "case_id": "cand38-truck-s5244",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "base": "UNAVOIDABLE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 0.15,
+        "late": null
+      },
+      "missed_onset_what_if": "UNAVOIDABLE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.2339
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.7339
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.2339
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.2339
+        },
+        "-1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.77
+        }
+      }
+    },
+    {
+      "case_id": "cand63-car-s4909",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "base": "LATE_HANDOFF",
+      "base_correct": true,
+      "onset_t": 2.721311475409836,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "LATE_HANDOFF",
+        "+0.25": "LATE_HANDOFF",
+        "+0.5": "LATE_HANDOFF",
+        "+1.0": "LATE_HANDOFF",
+        "+2.0": "LATE_HANDOFF"
+      },
+      "flip_margins": {
+        "early": 0.5,
+        "late": null
+      },
+      "missed_onset_what_if": "LATE_HANDOFF",
+      "adas_skew": {
+        "+0.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+2.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+2.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+3.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.4999
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 2.5019
+        },
+        "-1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "NO_FAULT_FOUND",
+          "av_offset_error_s": -0.4999
+        },
+        "+5.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": -4.4999
+        }
+      }
+    },
+    {
+      "case_id": "cand63-truck-s1409",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 2.721311475409836,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "PERCEPTION_LATE",
+        "+0.5": "PERCEPTION_LATE",
+        "+1.0": "PERCEPTION_LATE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 1.15
+      },
+      "missed_onset_what_if": "NO_FAULT_FOUND",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.2199
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.7199
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.2199
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.2219
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.782
+        }
+      }
+    },
+    {
+      "case_id": "cand63-truck-s3409",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "base": "BRAKE_ACTUATION_LATE",
+      "base_correct": true,
+      "onset_t": 2.721311475409836,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "BRAKE_ACTUATION_LATE",
+        "-0.5": "BRAKE_ACTUATION_LATE",
+        "-0.25": "BRAKE_ACTUATION_LATE",
+        "+0.25": "BRAKE_ACTUATION_LATE",
+        "+0.5": "BRAKE_ACTUATION_LATE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 1.2,
+        "late": 0.95
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.4359
+        },
+        "+1.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.9359
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.4359
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.9359
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.4359
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.4359
+        },
+        "-1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.4359
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.5639
+        }
+      }
+    },
+    {
+      "case_id": "cand63-truck-s4409",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "base": "LATE_HANDOFF",
+      "base_correct": true,
+      "onset_t": 2.721311475409836,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "LATE_HANDOFF",
+        "-0.25": "LATE_HANDOFF",
+        "+0.25": "LATE_HANDOFF",
+        "+0.5": "LATE_HANDOFF",
+        "+1.0": "LATE_HANDOFF",
+        "+2.0": "LATE_HANDOFF"
+      },
+      "flip_margins": {
+        "early": 0.6,
+        "late": null
+      },
+      "missed_onset_what_if": "LATE_HANDOFF",
+      "adas_skew": {
+        "+0.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0939
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.5939
+        },
+        "+1.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.0939
+        },
+        "+2.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.5999
+        },
+        "+2.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 2.0999
+        },
+        "+3.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 2.5999
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 4.5999
+        },
+        "-1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.5939
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "NO_FAULT_FOUND",
+          "av_offset_error_s": -2.4119
+        }
+      }
+    },
+    {
+      "case_id": "cand36-car-s5004",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "PERCEPTION_LATE",
+        "+0.5": "PERCEPTION_LATE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 0.9
+      },
+      "missed_onset_what_if": "NO_FAULT_FOUND",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.4139
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.9139
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.4139
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.4199
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.5919
+        }
+      }
+    },
+    {
+      "case_id": "cand36-car-s5005",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "base": "INCONCLUSIVE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "INCONCLUSIVE",
+        "-1.0": "INCONCLUSIVE",
+        "-0.5": "INCONCLUSIVE",
+        "-0.25": "INCONCLUSIVE",
+        "+0.25": "INCONCLUSIVE",
+        "+0.5": "INCONCLUSIVE",
+        "+1.0": "INCONCLUSIVE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": null,
+        "late": null
+      },
+      "missed_onset_what_if": "INCONCLUSIVE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": 0.0579
+        },
+        "+2.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": 0.5579
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.0579
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.5579
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.5599
+        },
+        "-1.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": -3.4419
+        }
+      }
+    },
+    {
+      "case_id": "cand36-car-s5012",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "base": "BRAKE_ACTUATION_LATE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "BRAKE_ACTUATION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.45,
+        "late": 0.15
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.1199
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.6199
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.1199
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.6199
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.6199
+        },
+        "-1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.382
+        }
+      }
+    },
+    {
+      "case_id": "cand36-car-s5016",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "base": "UNAVOIDABLE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.1,
+        "late": null
+      },
+      "missed_onset_what_if": "UNAVOIDABLE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.2379
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.7379
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.2379
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.7379
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.7399
+        },
+        "-1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.2619
+        }
+      }
+    },
+    {
+      "case_id": "cand36-car-s5017",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "base": "COMMAND_LATE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "COMMAND_LATE",
+        "-0.25": "COMMAND_LATE",
+        "+0.25": "COMMAND_LATE",
+        "+0.5": "COMMAND_LATE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.95,
+        "late": 0.55
+      },
+      "missed_onset_what_if": "COMMAND_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+2.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.452
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.952
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.452
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.452
+        },
+        "-1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": -0.0019
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.5519
+        }
+      }
+    },
+    {
+      "case_id": "cand36-car-s5020",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "base": "LATE_HANDOFF",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "LATE_HANDOFF",
+        "-0.25": "LATE_HANDOFF",
+        "+0.25": "LATE_HANDOFF",
+        "+0.5": "LATE_HANDOFF",
+        "+1.0": "LATE_HANDOFF",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.9,
+        "late": 1.3
+      },
+      "missed_onset_what_if": "LATE_HANDOFF",
+      "adas_skew": {
+        "+0.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.3799
+        },
+        "+2.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.8819
+        },
+        "+3.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.3819
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 3.3819
+        },
+        "-1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.62
+        }
+      }
+    },
+    {
+      "case_id": "cand36-car-s7016",
+      "story": "marginal_actuation",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "base": "BRAKE_ACTUATION_LATE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "BRAKE_ACTUATION_LATE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.15,
+        "late": 0.3
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0399
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.5399
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.0399
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.5399
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.0399
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.0399
+        },
+        "-1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0399
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.9619
+        }
+      }
+    },
+    {
+      "case_id": "cand36-car-s7022",
+      "story": "unavoidable_with_fault",
+      "expected": "UNAVOIDABLE",
+      "base": "UNAVOIDABLE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "BRAKE_ACTUATION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.05,
+        "late": null
+      },
+      "missed_onset_what_if": "UNAVOIDABLE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.264
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.764
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.264
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.764
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.264
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.764
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.77
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.764
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.2359
+        }
+      }
+    },
+    {
+      "case_id": "cand36-car-s7036",
+      "story": "tight_command_perception",
+      "expected": "COMMAND_LATE",
+      "base": "COMMAND_LATE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "COMMAND_LATE",
+        "+0.5": "COMMAND_LATE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.1,
+        "late": 0.6
+      },
+      "missed_onset_what_if": "COMMAND_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.2639
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.7639
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.7639
+        },
+        "-1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": -0.236
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -4.24
+        }
+      }
+    },
+    {
+      "case_id": "cand36-truck-s7005",
+      "story": "marginal_actuation",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "base": "BRAKE_ACTUATION_LATE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.15,
+        "late": 0.2
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.2818
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.2818
+        },
+        "-1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.718
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -4.72
+        }
+      }
+    },
+    {
+      "case_id": "cand36-truck-s7009",
+      "story": "tight_actuation_perception",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "base": "BRAKE_ACTUATION_LATE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.1,
+        "late": 0.2
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.2899
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.7899
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.2919
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.2919
+        },
+        "-1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.7099
+        }
+      }
+    },
+    {
+      "case_id": "cand36-truck-s7020",
+      "story": "unavoidable_with_fault",
+      "expected": "UNAVOIDABLE",
+      "base": "UNAVOIDABLE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "UNAVOIDABLE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.3,
+        "late": null
+      },
+      "missed_onset_what_if": "UNAVOIDABLE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+2.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0359
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.5359
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.0359
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.0419
+        },
+        "-1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.9699
+        }
+      }
+    },
+    {
+      "case_id": "cand36-truck-s7021",
+      "story": "tight_handoff_perception",
+      "expected": "LATE_HANDOFF",
+      "base": "LATE_HANDOFF",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "LATE_HANDOFF",
+        "+0.5": "LATE_HANDOFF",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.05,
+        "late": 0.95
+      },
+      "missed_onset_what_if": "LATE_HANDOFF",
+      "adas_skew": {
+        "+0.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.1379
+        },
+        "+3.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.6379
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 2.6419
+        },
+        "-1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.362
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -4.362
+        }
+      }
+    },
+    {
+      "case_id": "cand36-truck-s7031",
+      "story": "marginal_perception",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 0.1
+      },
+      "missed_onset_what_if": "NO_FAULT_FOUND",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.018
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.518
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.018
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.518
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.522
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.4819
+        }
+      }
+    },
+    {
+      "case_id": "cand36-truck-s7037",
+      "story": "marginal_command",
+      "expected": "COMMAND_LATE",
+      "base": "COMMAND_LATE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.1,
+        "late": 0.1
+      },
+      "missed_onset_what_if": "COMMAND_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.104
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.604
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.104
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.604
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.104
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.604
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.612
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.604
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.3998
+        }
+      }
+    },
+    {
+      "case_id": "cand36-truck-s7038",
+      "story": "tight_perception_actuation",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 6.133333333333334,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "BRAKE_ACTUATION_LATE",
+        "+0.5": "BRAKE_ACTUATION_LATE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 0.1
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.2719
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.7719
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.2719
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.7719
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.2719
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.2719
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.2719
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.7299
+        }
+      }
+    },
+    {
+      "case_id": "cand37-car-s5000",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "base": "UNAVOIDABLE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.15,
+        "late": null
+      },
+      "missed_onset_what_if": "UNAVOIDABLE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.3339
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.8339
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.3339
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.8339
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.8339
+        },
+        "-1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.1699
+        }
+      }
+    },
+    {
+      "case_id": "cand37-car-s5007",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "base": "LATE_HANDOFF",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "LATE_HANDOFF",
+        "-0.5": "LATE_HANDOFF",
+        "-0.25": "LATE_HANDOFF",
+        "+0.25": "LATE_HANDOFF",
+        "+0.5": "LATE_HANDOFF",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 1.1,
+        "late": 0.65
+      },
+      "missed_onset_what_if": "LATE_HANDOFF",
+      "adas_skew": {
+        "+0.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.2679
+        },
+        "+2.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.7699
+        },
+        "+2.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.2699
+        },
+        "+3.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.7699
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 3.7699
+        },
+        "-1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.2319
+        }
+      }
+    },
+    {
+      "case_id": "cand37-car-s5008",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "base": "BRAKE_ACTUATION_LATE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "BRAKE_ACTUATION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.5,
+        "late": 0.25
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.25
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.75
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.252
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.752
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.252
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.252
+        },
+        "-1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.25
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.7499
+        }
+      }
+    },
+    {
+      "case_id": "cand37-car-s5013",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "base": "COMMAND_LATE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "COMMAND_LATE",
+        "-0.5": "COMMAND_LATE",
+        "-0.25": "COMMAND_LATE",
+        "+0.25": "COMMAND_LATE",
+        "+0.5": "COMMAND_LATE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 1.05,
+        "late": 0.6
+      },
+      "missed_onset_what_if": "COMMAND_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.344
+        },
+        "+1.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.844
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.344
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.85
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.35
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.35
+        },
+        "-1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.344
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.6618
+        }
+      }
+    },
+    {
+      "case_id": "cand37-car-s5019",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "base": "INCONCLUSIVE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "INCONCLUSIVE",
+        "-1.0": "INCONCLUSIVE",
+        "-0.5": "INCONCLUSIVE",
+        "-0.25": "INCONCLUSIVE",
+        "+0.25": "INCONCLUSIVE",
+        "+0.5": "INCONCLUSIVE",
+        "+1.0": "INCONCLUSIVE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": null,
+        "late": null
+      },
+      "missed_onset_what_if": "INCONCLUSIVE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": 0.304
+        },
+        "+1.5": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": 0.804
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.304
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.804
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.304
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.31
+        },
+        "-1.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": 0.304
+        },
+        "+1.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": -2.7019
+        }
+      }
+    },
+    {
+      "case_id": "cand37-car-s5023",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 0.2
+      },
+      "missed_onset_what_if": "NO_FAULT_FOUND",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.01
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.51
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.01
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.512
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.512
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.4899
+        }
+      }
+    },
+    {
+      "case_id": "cand37-car-s7002",
+      "story": "tight_perception_command",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 0.1
+      },
+      "missed_onset_what_if": "COMMAND_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.4179
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.9199
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.9199
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": -0.0819
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -4.0819
+        }
+      }
+    },
+    {
+      "case_id": "cand37-car-s7011",
+      "story": "unavoidable_with_fault",
+      "expected": "UNAVOIDABLE",
+      "base": "UNAVOIDABLE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "BRAKE_ACTUATION_LATE",
+        "-0.25": "BRAKE_ACTUATION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.1,
+        "late": null
+      },
+      "missed_onset_what_if": "UNAVOIDABLE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.2419
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.7419
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.2419
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.2419
+        },
+        "-1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.7599
+        }
+      }
+    },
+    {
+      "case_id": "cand37-car-s7026",
+      "story": "tight_perception_actuation",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 0.05
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.1358
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.6358
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.6398
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.364
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -4.364
+        }
+      }
+    },
+    {
+      "case_id": "cand37-car-s7034",
+      "story": "tight_actuation_perception",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "base": "BRAKE_ACTUATION_LATE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "BRAKE_ACTUATION_LATE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.1,
+        "late": 0.3
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.3679
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.8679
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.3679
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.8719
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.8719
+        },
+        "-1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.14
+        }
+      }
+    },
+    {
+      "case_id": "cand37-truck-s7003",
+      "story": "marginal_perception",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 0.05
+      },
+      "missed_onset_what_if": "NO_FAULT_FOUND",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.488
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.988
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.49
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.99
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.99
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.0119
+        }
+      }
+    },
+    {
+      "case_id": "cand37-truck-s7014",
+      "story": "tight_perception_command",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 0.05
+      },
+      "missed_onset_what_if": "COMMAND_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0119
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.5119
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.0119
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.5119
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.0199
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.0199
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0119
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.9919
+        }
+      }
+    },
+    {
+      "case_id": "cand37-truck-s7015",
+      "story": "unavoidable_with_fault",
+      "expected": "UNAVOIDABLE",
+      "base": "UNAVOIDABLE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "UNAVOIDABLE",
+        "-0.25": "UNAVOIDABLE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.95,
+        "late": null
+      },
+      "missed_onset_what_if": "UNAVOIDABLE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+2.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.474
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.974
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.474
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.482
+        },
+        "-1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.5299
+        }
+      }
+    },
+    {
+      "case_id": "cand37-truck-s7023",
+      "story": "tight_perception_actuation",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 0.1
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0019
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.5019
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.5099
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.498
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -4.502
+        }
+      }
+    },
+    {
+      "case_id": "cand37-truck-s7035",
+      "story": "tight_actuation_perception",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "base": "BRAKE_ACTUATION_LATE",
+      "base_correct": true,
+      "onset_t": 6.830065359477124,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": null
+      },
+      "flip_margins": {
+        "early": 0.05,
+        "late": 0.2
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+2.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.2539
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.2619
+        },
+        "-1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.746
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -4.752
+        }
+      }
+    },
+    {
+      "case_id": "cand38-car-s5001",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "base": "LATE_HANDOFF",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "LATE_HANDOFF",
+        "-0.25": "LATE_HANDOFF",
+        "+0.25": "LATE_HANDOFF",
+        "+0.5": "LATE_HANDOFF",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 0.7,
+        "late": 0.9
+      },
+      "missed_onset_what_if": "LATE_HANDOFF",
+      "adas_skew": {
+        "+0.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.4139
+        },
+        "+3.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.9139
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 2.9199
+        },
+        "-1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.086
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -4.092
+        }
+      }
+    },
+    {
+      "case_id": "cand38-car-s5003",
+      "story": "command_late",
+      "expected": "COMMAND_LATE",
+      "base": "COMMAND_LATE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "COMMAND_LATE",
+        "-0.25": "COMMAND_LATE",
+        "+0.25": "COMMAND_LATE",
+        "+0.5": "COMMAND_LATE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 0.95,
+        "late": 0.75
+      },
+      "missed_onset_what_if": "COMMAND_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.3239
+        },
+        "+2.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.8239
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.3239
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.3319
+        },
+        "-1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.6799
+        }
+      }
+    },
+    {
+      "case_id": "cand38-car-s5009",
+      "story": "perception_late",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "PERCEPTION_LATE",
+        "+0.5": "PERCEPTION_LATE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 0.8
+      },
+      "missed_onset_what_if": "NO_FAULT_FOUND",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0799
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.5799
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.0799
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.0799
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0019
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.9219
+        }
+      }
+    },
+    {
+      "case_id": "cand38-car-s5011",
+      "story": "unavoidable",
+      "expected": "UNAVOIDABLE",
+      "base": "UNAVOIDABLE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 0.15,
+        "late": null
+      },
+      "missed_onset_what_if": "UNAVOIDABLE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+2.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.4079
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.4079
+        },
+        "-1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.5919
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -4.5919
+        }
+      }
+    },
+    {
+      "case_id": "cand38-car-s5018",
+      "story": "brake_slow",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "base": "BRAKE_ACTUATION_LATE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "BRAKE_ACTUATION_LATE",
+        "+0.25": "BRAKE_ACTUATION_LATE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 0.4,
+        "late": 0.3
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.1059
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.6059
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.1059
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.6059
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.6099
+        },
+        "-1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.3939
+        }
+      }
+    },
+    {
+      "case_id": "cand38-car-s5021",
+      "story": "dropout",
+      "expected": "INCONCLUSIVE",
+      "base": "INCONCLUSIVE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "INCONCLUSIVE",
+        "-1.0": "INCONCLUSIVE",
+        "-0.5": "INCONCLUSIVE",
+        "-0.25": "INCONCLUSIVE",
+        "+0.25": "INCONCLUSIVE",
+        "+0.5": "INCONCLUSIVE",
+        "+1.0": "INCONCLUSIVE",
+        "+2.0": "INCONCLUSIVE"
+      },
+      "flip_margins": {
+        "early": null,
+        "late": null
+      },
+      "missed_onset_what_if": "INCONCLUSIVE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": 0.2699
+        },
+        "+2.5": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": 0.7699
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.2699
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.2699
+        },
+        "-1.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": -3.732
+        }
+      }
+    },
+    {
+      "case_id": "cand38-car-s7012",
+      "story": "marginal_command",
+      "expected": "COMMAND_LATE",
+      "base": "COMMAND_LATE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 0.1,
+        "late": 0.2
+      },
+      "missed_onset_what_if": "COMMAND_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0019
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.5019
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.5019
+        },
+        "-1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.498
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -4.502
+        }
+      }
+    },
+    {
+      "case_id": "cand38-car-s7013",
+      "story": "tight_perception_command",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "COMMAND_LATE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 0.05
+      },
+      "missed_onset_what_if": "COMMAND_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.12
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.62
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.12
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.62
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.12
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.62
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.62
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.62
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.3819
+        }
+      }
+    },
+    {
+      "case_id": "cand38-car-s7027",
+      "story": "marginal_actuation",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "base": "BRAKE_ACTUATION_LATE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "BRAKE_ACTUATION_LATE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 0.1,
+        "late": 0.3
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.176
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.676
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.176
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.676
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.682
+        },
+        "-1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.3299
+        }
+      }
+    },
+    {
+      "case_id": "cand38-car-s7028",
+      "story": "tight_command_perception",
+      "expected": "COMMAND_LATE",
+      "base": "COMMAND_LATE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "COMMAND_LATE",
+        "+0.5": "COMMAND_LATE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 0.05,
+        "late": 0.95
+      },
+      "missed_onset_what_if": "COMMAND_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.282
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.782
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.282
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.782
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.282
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.282
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.282
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.7199
+        }
+      }
+    },
+    {
+      "case_id": "cand38-truck-s7008",
+      "story": "tight_command_perception",
+      "expected": "COMMAND_LATE",
+      "base": "COMMAND_LATE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "COMMAND_LATE",
+        "+0.5": "COMMAND_LATE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 0.1,
+        "late": 0.9
+      },
+      "missed_onset_what_if": "COMMAND_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.054
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.554
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.054
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.554
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.06
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.56
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.56
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.554
+        },
+        "+1.0": {
+          "label": "COMMAND_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.4519
+        }
+      }
+    },
+    {
+      "case_id": "cand38-truck-s7017",
+      "story": "tight_perception_command",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "COMMAND_LATE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 0.1
+      },
+      "missed_onset_what_if": "COMMAND_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.198
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.698
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.198
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.2
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0019
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.8019
+        }
+      }
+    },
+    {
+      "case_id": "cand38-truck-s7032",
+      "story": "marginal_actuation",
+      "expected": "BRAKE_ACTUATION_LATE",
+      "base": "BRAKE_ACTUATION_LATE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 0.1,
+        "late": 0.05
+      },
+      "missed_onset_what_if": "BRAKE_ACTUATION_LATE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.46
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.96
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.46
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.962
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 2.462
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 4.462
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.46
+        },
+        "+1.0": {
+          "label": "BRAKE_ACTUATION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -2.5399
+        }
+      }
+    },
+    {
+      "case_id": "cand38-truck-s7033",
+      "story": "marginal_perception",
+      "expected": "PERCEPTION_LATE",
+      "base": "PERCEPTION_LATE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": null,
+        "late": 0.05
+      },
+      "missed_onset_what_if": "NO_FAULT_FOUND",
+      "adas_skew": {
+        "+0.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.1059
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.6059
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.1059
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.1099
+        },
+        "-1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.8939
+        }
+      }
+    },
+    {
+      "case_id": "cand38-truck-s7039",
+      "story": "unavoidable_with_fault",
+      "expected": "UNAVOIDABLE",
+      "base": "UNAVOIDABLE",
+      "base_correct": true,
+      "onset_t": 5.9,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "UNAVOIDABLE",
+        "+0.5": "UNAVOIDABLE",
+        "+1.0": "UNAVOIDABLE",
+        "+2.0": "UNAVOIDABLE"
+      },
+      "flip_margins": {
+        "early": 0.05,
+        "late": null
+      },
+      "missed_onset_what_if": "UNAVOIDABLE",
+      "adas_skew": {
+        "+0.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.4379
+        },
+        "+2.5": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 0.9379
+        },
+        "+3.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 1.4399
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "PERCEPTION_LATE",
+          "av_offset_error_s": 3.4399
+        },
+        "-1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "UNAVOIDABLE",
+          "av_offset_error_s": -3.5619
+        }
+      }
+    },
+    {
+      "case_id": "cand63-car-s5015",
+      "story": "late_handoff",
+      "expected": "LATE_HANDOFF",
+      "base": "LATE_HANDOFF",
+      "base_correct": true,
+      "onset_t": 2.721311475409836,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "LATE_HANDOFF",
+        "-0.25": "LATE_HANDOFF",
+        "+0.25": "LATE_HANDOFF",
+        "+0.5": "LATE_HANDOFF",
+        "+1.0": "LATE_HANDOFF",
+        "+2.0": "LATE_HANDOFF"
+      },
+      "flip_margins": {
+        "early": 0.95,
+        "late": null
+      },
+      "missed_onset_what_if": "LATE_HANDOFF",
+      "adas_skew": {
+        "+0.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0679
+        },
+        "+2.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.5679
+        },
+        "+3.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.0679
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 3.0719
+        },
+        "-1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+5.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": -3.94
+        }
+      }
+    },
+    {
+      "case_id": "cand63-car-s7004",
+      "story": "tight_handoff_perception",
+      "expected": "LATE_HANDOFF",
+      "base": "LATE_HANDOFF",
+      "base_correct": true,
+      "onset_t": 2.721311475409836,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "LATE_HANDOFF",
+        "+0.5": "LATE_HANDOFF",
+        "+1.0": "LATE_HANDOFF",
+        "+2.0": "LATE_HANDOFF"
+      },
+      "flip_margins": {
+        "early": 0.05,
+        "late": null
+      },
+      "missed_onset_what_if": "LATE_HANDOFF",
+      "adas_skew": {
+        "+0.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+2.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0002
+        },
+        "+3.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.2458
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 2.2498
+        },
+        "-1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": -0.0001
+        },
+        "+1.0": {
+          "label": "NO_FAULT_FOUND",
+          "av_offset_error_s": -0.754
+        },
+        "+5.0": {
+          "label": "INCONCLUSIVE",
+          "av_offset_error_s": -4.762
+        }
+      }
+    },
+    {
+      "case_id": "cand63-truck-s7006",
+      "story": "tight_handoff_perception",
+      "expected": "LATE_HANDOFF",
+      "base": "LATE_HANDOFF",
+      "base_correct": true,
+      "onset_t": 2.721311475409836,
+      "impact_t": 8.0,
+      "shifts": {
+        "-2.0": "PERCEPTION_LATE",
+        "-1.0": "PERCEPTION_LATE",
+        "-0.5": "PERCEPTION_LATE",
+        "-0.25": "PERCEPTION_LATE",
+        "+0.25": "LATE_HANDOFF",
+        "+0.5": "LATE_HANDOFF",
+        "+1.0": "LATE_HANDOFF",
+        "+2.0": "LATE_HANDOFF"
+      },
+      "flip_margins": {
+        "early": 0.1,
+        "late": null
+      },
+      "missed_onset_what_if": "LATE_HANDOFF",
+      "adas_skew": {
+        "+0.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+0.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.39
+        },
+        "+2.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.89
+        },
+        "+2.5": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.392
+        },
+        "+3.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 1.892
+        }
+      },
+      "can_skew": {
+        "-5.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 3.892
+        },
+        "-1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0
+        },
+        "+1.0": {
+          "label": "LATE_HANDOFF",
+          "av_offset_error_s": 0.0001
+        },
+        "+5.0": {
+          "label": "NO_FAULT_FOUND",
+          "av_offset_error_s": -3.1099
+        }
+      }
+    }
+  ]
+}
