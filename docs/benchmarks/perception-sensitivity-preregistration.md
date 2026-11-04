@@ -58,3 +58,15 @@ All are reported overall and by story. Two hypotheses are stated in advance:
 
 - The study changes no code in `telltale/physics`, `telltale/evidence`, `telltale/verify` or `telltale/video`.
 - Any design improvement it suggests is described, not implemented.
+
+## Amendment: the case set grew before any result was computed
+
+Recorded before the study's first complete run. The truck and hard cases reached `main` while the study was being
+built, so, as provided above, they are included:
+
+- **34 demo cases** (16 car, 18 truck) in `data/cases`, the red-team case excluded;
+- **49 agent-benchmark cases** (31 car, 18 truck) in `data/agent_bench/cases`: the original 19 plus the 30 hard
+  cases of the hard-case benchmark, whose clocks are deliberately skewed further (CAN by up to ±8 s).
+
+**83 cases in all.** Results are reported overall, by story, by profile and by set. An earlier run on the 35-case
+set crashed at the clock-skew step before writing any result; it was fixed (`fix(pipeline)`) and is superseded.
