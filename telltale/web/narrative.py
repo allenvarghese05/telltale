@@ -283,9 +283,14 @@ LIMITS = (
 
 
 def incident_report(bundle: dict) -> list[Section]:
-    """The six sections of the plain-English report, in reading order, leaving out any that have nothing to say."""
+    """The plain-English report's sections, in reading order, leaving out any that have nothing to say.
+
+    A red-team case opens with its label, so an altered run can never be read as a natural agent output.
+    """
     facts = {f["id"]: f["value"] for f in bundle.get("facts", [])}
+    red_team = bundle.get("red_team")
     sections = [
+        ("This is a red-team case", [Sentence(red_team, ())] if red_team else []),
         ("What the camera saw", _camera(facts, bundle.get("scene") or {})),
         ("What the vehicle's systems did", _systems(facts)),
         ("Where the chain broke", _chain(facts)),

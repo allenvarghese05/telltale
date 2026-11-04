@@ -47,6 +47,7 @@ class CaseEvidence:
     video: VideoFacts
     store: EvidenceStore
     scene: SceneSummary
+    red_team: str | None
 
 
 def build_case_store(case_dir: Path) -> CaseEvidence:
@@ -60,7 +61,8 @@ def build_case_store(case_dir: Path) -> CaseEvidence:
     witness = json.loads(witness_path.read_text()) if witness_path.exists() else None
     scene = summarize_scene(tracks, clip, witness["answers"] if witness else None)
     extra = scene_facts(scene) + (witness_facts(witness["answers"], witness["model"]) if witness else [])
-    return CaseEvidence(clip, profile, tracks, video, build_store(case_dir, video, profile, extra), scene)
+    store = build_store(case_dir, video, profile, extra)
+    return CaseEvidence(clip, profile, tracks, video, store, scene, case.get("red_team"))
 
 
 def counterfactual_fn(store: EvidenceStore, profile: VehicleProfile) -> Callable[[float, float, float], dict]:
@@ -148,7 +150,9 @@ def analyze(case_id: str, live: bool = False) -> dict:
     """Investigate and verify one case, write `cache/bundles/<case_id>.json`, and return the bundle."""
     case = build_case_store(CASES / case_id)
     clip, video, store = case.clip, case.video, case.store
-    run = agent_run(case_id, clip["clip_id"], store, case.profile, live)
+    # A red-team case replays its hand-altered run even when `live` is asked for: re-running the agent would
+    # quietly replace the alteration with a natural run still filed under the red-team label.
+    run = agent_run(case_id, clip["clip_id"], store, case.profile, live and case.red_team is None)
     full, claims, counts, verdict = check_run(run, store)
     facts = {f.id: f.value for f in full.facts()}
     events = [
@@ -166,6 +170,7 @@ def analyze(case_id: str, live: bool = False) -> dict:
     }
     bundle = {
         "case_id": case_id,
+        "red_team": case.red_team,
         "clip_id": clip["clip_id"],
         "profile": case.profile.name,
         "video_url": f"media/{clip['file']}",

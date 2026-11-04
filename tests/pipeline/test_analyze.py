@@ -84,3 +84,27 @@ def test_analyze_rejects_a_wrong_agent_verdict(case):
     verdict = an.analyze(case_id)["verdict"]
     assert verdict["status"] == "REJECTED"
     assert verdict["independent_label"] == "BRAKE_ACTUATION_LATE"
+
+
+def test_a_natural_case_carries_no_red_team_label(case):
+    case_id, cache = case
+    _cache_agent_run(cache, case_id, "BRAKE_ACTUATION_LATE")
+    assert an.analyze(case_id)["red_team"] is None
+
+
+def test_a_red_team_case_is_labelled_and_never_rerun_live(case, monkeypatch):
+    """A live re-run would replace the hand-altered run with a natural one still filed as red-team."""
+    from telltale.pipeline.red_team import RED_TEAM_NOTE
+
+    case_id, cache = case
+    case_file = an.CASES / case_id / "case.json"
+    case_file.write_text(json.dumps({**json.loads(case_file.read_text()), "red_team": RED_TEAM_NOTE}))
+    _cache_agent_run(cache, case_id, "PERCEPTION_LATE")
+
+    def _no_live_agent(*_args, **_kwargs):
+        raise AssertionError("a red-team case must replay its altered run, not call the agent")
+
+    monkeypatch.setattr(an, "client", _no_live_agent)
+    bundle = an.analyze(case_id, live=True)
+    assert bundle["red_team"] == RED_TEAM_NOTE
+    assert bundle["verdict"]["status"] == "REJECTED"

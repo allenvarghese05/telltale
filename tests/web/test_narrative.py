@@ -210,3 +210,15 @@ def test_label_maps_name_the_driver_assist_not_a_system():
 
     labels = [*CONCLUSION.values(), *LABEL_TEXT.values(), *(label for _, label in EVENT_LABELS)]
     assert not [label for label in labels if re.search(r"\bsystem\b", label, re.IGNORECASE)]
+
+
+def test_a_red_team_case_says_so_before_anything_else():
+    """An altered run must never read as a natural agent output, in the page or the printable report."""
+    note = "Red-team: one claim's number and the investigator's verdict were altered by hand."
+    report = incident_report(bundle(red_team=note))
+    assert report[0].title == "This is a red-team case"
+    assert [line.text for line in report[0].sentences] == [note]
+
+
+def test_a_natural_case_has_no_red_team_section():
+    assert all(s.title != "This is a red-team case" for s in incident_report(bundle(red_team=None)))
