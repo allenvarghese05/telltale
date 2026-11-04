@@ -318,6 +318,63 @@ $T = t_{\text{imp}} - t_0$. The generator ([`telltale/logs/generate.py`](telltal
 Faults are only ever injected into what a dashcam cannot see: when the driver-assist noticed, when it commanded and
 how fast pressure built.
 
+### 10. What the v1 model assumes, and where the footage disagrees
+
+Everything above is the **v1 model**: one dimension, an ego vehicle braking with a first-order lag, and a lead
+vehicle at **constant speed**. Its assumptions, stated plainly:
+
+| Assumption | Consequence |
+|---|---|
+| Motion along the lane only | Cross-path crashes (`cand60`) get the video-only report, no attribution |
+| Lead vehicle keeps a constant speed | Contact can never come sooner than the constant-speed time to collision |
+| Fixed $a_{\max}$ and $\tau$ per profile | No road grade, load or surface friction effects |
+| Synthetic logs anchored to two video times (onset, impact) | The video's own time-to-collision estimate is not used by the generator |
+
+The second assumption can be tested against the footage. Under v1, ego braking can only delay contact, so the time
+from onset to impact must be at least the time to collision measured at onset:
+
+```math
+T = t_{\text{imp}} - t_0 \;\ge\; \mathrm{TTC}_0 \qquad \text{(v1, constant-speed lead)}
+```
+
+On the three rear-end demo clips:
+
+| Clip | $\mathrm{TTC}_0$ measured from the video | $T$, onset to impact | Consistent with v1? |
+|---|---|---|---|
+| `cand38` | 2.00 s | 2.10 s | yes |
+| `cand36` | 1.94 s | 1.87 s | no, by 0.07 s |
+| `cand37` | 1.92 s | 1.17 s | no, by 0.75 s |
+
+On `cand37` the impact came 0.75 s sooner than constant speeds allow, so either the lead vehicle was braking hard or
+the TTC estimate at onset is off. That is why the generator does not yet use $\mathrm{TTC}_0$: forcing it into v1
+would make `cand37` impossible to generate.
+
+**The v2 formulation** adds a decelerating lead vehicle, so relative speed changes over time:
+
+```math
+v_L(t) = \max\left(v_{L,0} - a_L\, t,\ 0\right), \qquad
+\Delta v(t) = v_e(t) - v_L(t), \qquad
+g(t) = d_0 - \int_0^t \Delta v(s)\, ds
+```
+
+The logs are then anchored to three measurements from the video instead of two:
+
+```math
+d_0 = \Delta v_0 \cdot \mathrm{TTC}_0, \qquad g(T) = 0
+```
+
+With the ego trajectory fixed by the injected latencies and $\Delta v_0$ drawn at random as in v1, the lead
+deceleration $a_L \ge 0$ is solved by bisection so that contact lands on the filmed impact. When $T \ge \mathrm{TTC}_0$
+the solution is $a_L = 0$ and v2 reduces to v1. Ignoring ego braking, the required deceleration is roughly
+
+```math
+a_L \approx \frac{2\,\Delta v_0\,(\mathrm{TTC}_0 - T)}{T^2}
+```
+
+which for `cand37` is about 4.4 m/s² at $\Delta v_0 = 4$ m/s: a firm stop by the lead car, physically plausible.
+Because $\mathrm{TTC}_0$ is itself an estimate, v2 should carry it as an interval rather than a point. v2 is not
+built yet: changing the generator regenerates every case, and the committed live runs were made on v1.
+
 ---
 
 ## The checker
@@ -585,6 +642,8 @@ tolerance and gives a person a verified timeline to sign off.
 
 Next steps, each based on something measured during the build:
 
+- **The v2 kinematic model** (section 10): a decelerating lead vehicle, with synthetic logs anchored to the video's
+  measured time to collision as well as its onset and impact times.
 - **2-D physics** for cross-path geometry, so crashes like `cand60` can be attributed.
 - **A speed-aware hazard threshold** to remove the early bias from urban car-following.
 - **Motion-based track re-association** (ByteTrack or OC-SORT style) for long or heavily occluded footage. The demo
