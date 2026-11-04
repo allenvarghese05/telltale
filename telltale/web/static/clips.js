@@ -5,13 +5,18 @@
 
 const $ = (id) => document.getElementById(id);
 
+/* The export stamps a content build id on the page; every data and video URL carries it, so a new deploy is never
+   served from a stale cache. */
+const BUILD = (document.querySelector('meta[name="build"]') || {}).content || '';
+const bust = (url) => (BUILD ? `${url}${url.includes('?') ? '&' : '?'}v=${BUILD}` : url);
+
 const esc = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
 const num = (v, d = 2) => (Number.isFinite(Number(v)) ? Number(v).toFixed(d) : '-');
 
 async function getJSON(url) {
-  const r = await fetch(url);
+  const r = await fetch(bust(url));
   if (!r.ok) throw new Error(`${url}: ${r.status}`);
   return r.json();
 }
@@ -31,7 +36,9 @@ async function init() {
       'No video-only clips have been exported. Run telltale investigate-clip, then telltale export-site.';
     return;
   }
-  $('clip').innerHTML = index.map((c) => `<option value="${esc(c.clip_id)}">${esc(c.clip_id)}</option>`).join('');
+  $('clip').innerHTML = index
+    .map((c) => `<option value="${esc(c.clip_id)}">${esc(c.title || c.clip_id)}</option>`)
+    .join('');
   $('clip').onchange = () => load($('clip').value);
   $('play').onclick = start;
   $('replay').onclick = start;
@@ -51,7 +58,7 @@ async function init() {
 async function load(id) {
   clip = await getJSON(`video/${encodeURIComponent(id)}.json`);
   const video = $('video');
-  if (video.getAttribute('src') !== clip.video_url) video.src = clip.video_url;
+  if (video.getAttribute('src') !== bust(clip.video_url)) video.src = bust(clip.video_url);
   $('scrim').hidden = false;
   $('replay').hidden = true;
   $('clock').textContent = '0.00 s';
@@ -197,13 +204,23 @@ function drawOverlay(now) {
   const r = clip.report || {};
   const struck = r.struck_vehicle;
   const hazard = r.hazard_onset && now >= r.hazard_onset.t;
+  /* Other vehicles turn amber when they became hazards, at the times the report gives. */
+  const otherOnsets = Object.fromEntries((r.other_hazards || []).map((h) => [String(h.object_id), h.t]));
   for (const [oid, dets] of Object.entries(clip.tracks || {})) {
     const d = nearest(dets, f);
     if (!d) continue;
     const [, l, t, rr, b] = d;
     const isStruck = oid === struck;
     ctx.lineWidth = isStruck ? 2 : 1;
-    ctx.strokeStyle = isStruck ? (hazard ? '#ff453a' : 'rgba(255,255,255,0.95)') : 'rgba(255,255,255,0.4)';
+    const otherHazard = !isStruck && oid in otherOnsets && now >= otherOnsets[oid];
+    if (otherHazard) ctx.lineWidth = 1.5;
+    ctx.strokeStyle = isStruck
+      ? hazard
+        ? '#ff453a'
+        : 'rgba(255,255,255,0.95)'
+      : otherHazard
+        ? '#ffb340'
+        : 'rgba(255,255,255,0.4)';
     ctx.strokeRect(l * sx, t * sy, (rr - l) * sx, (b - t) * sy);
     if (isStruck) {
       ctx.fillStyle = ctx.strokeStyle;

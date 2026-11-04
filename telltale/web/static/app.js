@@ -6,6 +6,11 @@
 
 const $ = (id) => document.getElementById(id);
 
+/* The export stamps a content build id on the page; every data and video URL carries it, so a new deploy is never
+   served from a stale cache. */
+const BUILD = (document.querySelector('meta[name="build"]') || {}).content || '';
+const bust = (url) => (BUILD ? `${url}${url.includes('?') ? '&' : '?'}v=${BUILD}` : url);
+
 const HEADLINE = {
   PERCEPTION_LATE: "The car's driver-assist noticed the hazard too late.",
   COMMAND_LATE: "The car's driver-assist noticed the hazard in time but commanded braking too late.",
@@ -50,7 +55,7 @@ const esc = (s) =>
 const num = (v, d = 2) => (Number.isFinite(Number(v)) ? Number(v).toFixed(d) : '-');
 
 async function getJSON(url) {
-  const r = await fetch(url);
+  const r = await fetch(bust(url));
   if (!r.ok) throw new Error(`${url}: ${r.status}`);
   return r.json();
 }
@@ -63,6 +68,8 @@ let failedKey = null;
 let revealed = 0;
 let landed = false;
 let playing = false;
+let tracks = null;
+let tracksClip = null;
 
 /* ---------- boot ---------- */
 
@@ -77,74 +84,59 @@ async function init() {
     $('run-note').textContent = 'No cases have been exported. Run telltale analyze-all, then telltale export-site.';
     return;
   }
-  const clips = [...new Set(cases.map((c) => c.clip_id))];
-  $('clip').innerHTML = clips.map((c) => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
-  $('clip').onchange = selectClip;
+  renderChooser();
+  $('case').onchange = async () => {
+    await load($('case').value);
+    start();
+  };
+  $('watch').onclick = () => {
+    document.querySelector('.chooser').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    start();
+  };
   $('run').onclick = start;
   $('replay').onclick = start;
   $('skip').onclick = skipToVerdict;
   $('sources').onclick = toggleSources;
+  $('full-investigation').addEventListener('toggle', () => {
+    if ($('full-investigation').open) ['timeline', 'cf-map'].forEach((id) => window.Plotly && Plotly.Plots.resize(id));
+  });
   $('video').addEventListener('ended', land);
   requestAnimationFrame(frame);
-  await selectClip();
+  await load($('case').value);
 }
 
-async function selectClip() {
-  const list = cases.filter((c) => c.clip_id === $('clip').value);
-  await load(list[0].case_id);
-  await renderVariants(list);
-}
-
-/* Every log variant's verdict for this clip, side by side: one video, several possible causes. */
-async function renderVariants(list) {
-  $('variants-panel').hidden = list.length < 2;
-  if (list.length < 2) return;
-  const loaded = await Promise.all(
-    list.map(async (c) => {
-      try {
-        const full = await getJSON(`cases/${encodeURIComponent(c.case_id)}.json`);
-        return { ...c, verdict: full.verdict, redTeam: full.red_team };
-      } catch {
-        return { ...c, verdict: null, redTeam: null };
-      }
-    }),
-  );
-  let letter = 0;
-  $('variants').innerHTML = loaded
-    .map((c) => {
-      const v = c.verdict;
-      const ok = v && v.status === 'VERIFIED';
-      const label = v ? SHORT[v.agent_label] || v.agent_label : 'Unavailable';
-      const state = v ? (ok ? 'Verified by recomputation' : 'Withheld. The checker disagrees.') : '';
-      const name = c.redTeam ? 'Red-team, altered by hand' : `Log ${String.fromCharCode(65 + letter++)}`;
-      return `<button class="variant${c.redTeam ? ' red-team' : ''}" data-id="${esc(c.case_id)}">
-        <span class="variant-k">${esc(name)}, ${esc(c.profile)}</span>
-        <span class="variant-v">${esc(label)}</span>
-        <span class="variant-s ${ok ? 'ok' : 'no'}">${esc(state)}</span></button>`;
-    })
+/* One chooser, in plain words: each crash is a group, each set of car logs an investigation titled by what the
+   checker found. The titles are written by Python at export; the red-team case is grouped on its own. */
+function renderChooser() {
+  const groups = [];
+  for (const c of cases) {
+    const name = c.title.startsWith('Someone edits') ? 'Test the checker' : c.crash;
+    let g = groups.find((x) => x.name === name);
+    if (!g) groups.push((g = { name, items: [] }));
+    g.items.push(c);
+  }
+  groups.sort((x, y) => (x.name === 'Test the checker') - (y.name === 'Test the checker'));
+  $('case').innerHTML = groups
+    .map(
+      (g) => `<optgroup label="${esc(g.name)}">${g.items
+        .map((c) => `<option value="${esc(c.case_id)}"${c.default ? ' selected' : ''}>${esc(c.title)}</option>`)
+        .join('')}</optgroup>`,
+    )
     .join('');
-  $('variants')
-    .querySelectorAll('.variant')
-    .forEach((b) => {
-      b.onclick = async () => {
-        await load(b.dataset.id);
-        markActive();
-        start();
-      };
-    });
-  markActive();
-}
-
-function markActive() {
-  $('variants')
-    .querySelectorAll('.variant')
-    .forEach((b) => b.classList.toggle('active', b.dataset.id === bundle.case_id));
 }
 
 /* ---------- one case ---------- */
 
 async function load(id) {
   bundle = await getJSON(`cases/${encodeURIComponent(id)}.json`);
+  if (bundle.clip_id !== tracksClip) {
+    tracksClip = bundle.clip_id;
+    try {
+      tracks = await getJSON(`tracks/${encodeURIComponent(bundle.clip_id)}.json`);
+    } catch {
+      tracks = null;
+    }
+  }
   try {
     grid = await getJSON(`cf/${encodeURIComponent(id)}.json`);
   } catch {
@@ -153,7 +145,7 @@ async function load(id) {
   events = [...(bundle.events || [])].sort((a, b) => a.t - b.t);
   failedKey = bundle.verdict && bundle.verdict.status === 'VERIFIED' ? FAILED_LINK[bundle.verdict.agent_label] : null;
   const video = $('video');
-  if (video.getAttribute('src') !== bundle.video_url) video.src = bundle.video_url;
+  if (video.getAttribute('src') !== bust(bundle.video_url)) video.src = bust(bundle.video_url);
   reset();
   renderChain();
   renderClaims();
@@ -164,6 +156,7 @@ async function load(id) {
   $('report-link').href = `reports/${encodeURIComponent(id)}.html`;
   $('digest').textContent = bundle.digest || '-';
   renderSceneCaption();
+  renderKeyFacts();
   renderRunProvenance();
 }
 
@@ -174,6 +167,7 @@ function reset() {
   $('verdict').innerHTML = '<p class="verdict-wait">The verdict appears when the replay ends.</p>';
   $('evidence').innerHTML = '<li class="caption ledger-empty">Evidence appears here as the replay reaches it.</li>';
   $('ledger-count').textContent = '';
+  if (bundle) renderNarrative();
   $('scrim').hidden = false;
   $('replay').hidden = true;
   $('skip').hidden = true;
@@ -291,6 +285,25 @@ function appendRemainingEvidence() {
   (bundle.facts || []).filter((f) => !shown.has(f.id)).forEach(appendFact);
 }
 
+function renderKeyFacts() {
+  const s = bundle.scene || {};
+  const c = s.conditions || {};
+  const row = (k, v, sub = '') => `<dt>${esc(k)}</dt><dd>${v}${sub ? `<span class="sub">${esc(sub)}</span>` : ''}</dd>`;
+  const rows = [row('Vehicle', esc(bundle.profile === 'truck' ? 'Loaded truck' : 'Car'))];
+  if (s.tracked_vehicles) rows.push(row('Vehicles tracked', esc(s.tracked_vehicles)));
+  if (s.target_object_id !== undefined && s.target_object_id !== null) {
+    rows.push(row("Telltale's pick", `vehicle ${esc(s.target_object_id)}`, 'the vehicle that was struck'));
+  }
+  if (s.danger_onset_t !== undefined && s.danger_onset_t !== null) {
+    rows.push(row('Became a hazard', `${esc(num(s.danger_onset_t))} s`, ONSET_HOW[s.danger_onset_reason] || ''));
+  }
+  const impact = factValue('VID:impact_t');
+  if (impact !== undefined) rows.push(row('Impact', `${esc(num(impact))} s`));
+  const seen = [c.lighting, c.weather, c.road_surface && `${c.road_surface} road`].filter((x) => x && x !== 'unclear');
+  if (seen.length) rows.push(row('Witness saw', esc(seen.join(', '))));
+  $('key-facts').innerHTML = rows.join('');
+}
+
 function renderSceneCaption() {
   const s = bundle.scene || {};
   const bits = [];
@@ -319,6 +332,7 @@ function frame() {
     const now = video.currentTime;
     $('clock').textContent = `${num(now)} s`;
     while (revealed < events.length && now >= events[revealed].t) revealMoment(revealed);
+    revealNarrative(now);
     tickGap(now);
   }
   drawOverlay();
@@ -348,21 +362,41 @@ function drawOverlay() {
     ctx.lineWidth = 1.5;
     ctx.stroke();
   }
+  const now = video.currentTime;
+  const scene = bundle.scene || {};
+  const struck = scene.target_object_id;
+  const onsets = Object.fromEntries((scene.hazards || []).map((h) => [String(h.object_id), h.onset_t]));
+  ctx.font = '600 12px -apple-system, BlinkMacSystemFont, Helvetica Neue, sans-serif';
+  const box = ([l, t, r, b], sx, sy, color, width, label) => {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.strokeRect(l * sx, t * sy, (r - l) * sx, (b - t) * sy);
+    if (label) {
+      ctx.fillStyle = color;
+      ctx.fillText(label, l * sx, Math.max(t * sy - 7, 13));
+    }
+  };
+  /* Every tracked vehicle faintly; each turns amber when it became a hazard; the struck one is labelled. */
+  if (tracks && tracks.width) {
+    const f = Math.round(now * tracks.fps);
+    const sx = canvas.width / tracks.width;
+    const sy = canvas.height / tracks.height;
+    for (const [oid, dets] of Object.entries(tracks.objects || {})) {
+      let near = null;
+      for (const d of dets) if (!near || Math.abs(d[0] - f) < Math.abs(near[0] - f)) near = d;
+      if (!near || Math.abs(near[0] - f) > 3) continue;
+      const hazard = oid in onsets && now >= onsets[oid];
+      if (oid === String(struck)) box(near.slice(1), sx, sy, hazard ? '#ff453a' : 'rgba(255,255,255,0.95)', 2, 'Struck vehicle');
+      else box(near.slice(1), sx, sy, hazard ? '#ffb340' : 'rgba(255,255,255,0.35)', hazard ? 1.5 : 1, null);
+    }
+    return;
+  }
   const boxes = bundle.target_boxes || [];
   if (!boxes.length || !bundle.fps || !bundle.width) return;
-  const f = Math.round(video.currentTime * bundle.fps);
+  const f = Math.round(now * bundle.fps);
   const nearest = boxes.reduce((a, b) => (Math.abs(b.frame - f) < Math.abs(a.frame - f) ? b : a));
   if (Math.abs(nearest.frame - f) > 2) return;
-  const sx = canvas.width / bundle.width;
-  const sy = canvas.height / bundle.height;
-  const [l, t, r, b] = nearest.box;
-  const hazard = revealed > 0;
-  ctx.strokeStyle = hazard ? '#ff453a' : 'rgba(255,255,255,0.9)';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(l * sx, t * sy, (r - l) * sx, (b - t) * sy);
-  ctx.fillStyle = ctx.strokeStyle;
-  ctx.font = '600 12px -apple-system, BlinkMacSystemFont, Helvetica Neue, sans-serif';
-  ctx.fillText(hazard ? 'Hazard' : 'Tracked vehicle', l * sx, Math.max(t * sy - 7, 13));
+  box(nearest.box, canvas.width / bundle.width, canvas.height / bundle.height, revealed > 0 ? '#ff453a' : 'rgba(255,255,255,0.9)', 2, 'Struck vehicle');
 }
 
 /* ---------- verdict ---------- */
@@ -463,6 +497,7 @@ function land() {
   playing = false;
   $('skip').hidden = true;
   appendRemainingEvidence();
+  revealNarrative(Infinity);
   const v = bundle.verdict || {};
   const ok = v.status === 'VERIFIED';
   const others = (v.noncausal_faults || []).length
@@ -639,22 +674,53 @@ function renderTrace() {
 }
 
 /* The report is text Python wrote. Each sentence keeps its sources, shown on request. */
+/* The incident report writes itself during the replay. Each sentence appears when the playhead reaches the time
+   of the event it cites (its own sources say which); sentences about the whole case appear with the verdict. The
+   text is Python's; JS only decides when to show it. */
+const TIMED = /^(VID|AV|CAN):[a-z_]+_t$/;
+
+function revealTime(line, sectionIndex) {
+  const times = (line.sources || []).filter((id) => TIMED.test(id)).map(factValue).filter((t) => Number.isFinite(Number(t)));
+  if (times.length) return Math.max(...times.map(Number));
+  return sectionIndex < 2 ? 0 : Infinity;
+}
+
 function renderNarrative() {
   const sections = bundle.narrative || [];
+  $('report-wait').hidden = !sections.length;
   $('narrative').innerHTML = sections.length
     ? sections
         .map(
-          (s) => `<h3>${esc(s.title)}</h3><p>${(s.sentences || [])
+          (s, i) => `<section class="pending"><h3>${esc(s.title)}</h3><p>${(s.sentences || [])
             .map((line) => {
               const src = (line.sources || []).join(', ');
-              return `<span class="sentence"${src ? ` title="${esc(src)}"` : ''}>${esc(line.text)}</span>${
-                src ? `<span class="src">[${esc(src)}]</span>` : ''
-              }`;
+              const at = revealTime(line, i);
+              return `<span class="sentence pending" data-at="${Number.isFinite(at) ? at : 'end'}"${
+                src ? ` title="${esc(src)}"` : ''
+              }>${esc(line.text)}${src ? `<span class="src"> [${esc(src)}]</span>` : ''}</span>`;
             })
-            .join(' ')}</p>`,
+            .join(' ')}</p></section>`,
         )
         .join('')
     : '<p class="caption">This case has no incident report. Re-export the site to generate one.</p>';
+}
+
+function revealNarrative(now) {
+  let shown = false;
+  $('narrative')
+    .querySelectorAll('.sentence.pending')
+    .forEach((el) => {
+      const at = el.dataset.at;
+      if (at === 'end' ? now !== Infinity : Number(at) > now) return;
+      el.classList.remove('pending');
+      el.closest('section').classList.remove('pending');
+      shown = true;
+    });
+  if (shown) {
+    $('report-wait').hidden = true;
+    const box = $('narrative');
+    box.scrollTop = box.scrollHeight;
+  }
 }
 
 function toggleSources() {
