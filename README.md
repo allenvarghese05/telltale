@@ -429,6 +429,7 @@ with unit conversions for milliseconds, km/h and mph. The rules in
 | R3. Every number is licensed | Every number in the text matches the cited facts or the assertion. |
 | R4. No legal or driver-state claims | No fault, blame or liability language, and no claims about the driver without a driver-facing camera. |
 | R5. Two sources for what was seen | A visual observation needs an independent second source, or it is labelled single-source. |
+| R6. Intervals mean what their threshold judges | An interval compared with a threshold must be the interval that threshold measures; the command threshold never applies after a handoff. Added after the robustness benchmark (below). |
 | Verdict | The checker recomputes the primary cause itself. If it disagrees with the agent, the verdict is withheld. |
 
 **A natural catch.** In the agent benchmark, Muse Wonder wrote "Witness lighting daylight agrees on independent
@@ -439,12 +440,23 @@ the checker cannot reproduce does not reach the report.
 **A natural wrong verdict, withheld.** In the robustness benchmark, on a late-handoff case, Muse Wonder measured
 the "command" interval from the brake request the *human driver* made after the system handed back control, and
 concluded COMMAND_LATE instead of LATE_HANDOFF. The checker's independent verdict disagreed and the report was
-withheld for human review. It is the only wrong verdict in 131 live investigations (the four agent benchmarks
-below plus the 34 demo cases), and it was caught.
+withheld for human review. A second wrong verdict came from the confusable-timeline benchmark (a timely handoff
+to a slow driver, called LATE_HANDOFF instead of NO_FAULT_FOUND), and it was withheld too. Those are the only two
+wrong verdicts in 151 live investigations, and none was verified.
 
 **What that case exposed.** The claim behind it ("Command took 2.39 s ... well above the 0.1 s command threshold")
 was VERIFIED: its subtraction was right, but the interval did not mean what the threshold measures. Rules R1 to R5
-prove numbers and citations, not what an interval means. The verdict check is what stopped the wrong conclusion.
+proved numbers and citations, not what an interval means. The verdict check is what stopped the wrong conclusion.
+
+**The fix, R6, and what it found.** R6 requires an interval compared with a threshold to be the interval that
+threshold judges. Re-checked offline over all 132 earlier committed runs (1,158 claims), it blocks 6 claims that
+used to pass, all the same human-brake-as-system-command error, and changes no verdict. On 20 new confusable-timeline
+cases built around this failure, hand review found 8 wrong-interval claims: R6 blocked all 8, and the old checker
+would have verified all 8. R6 also blocked 1 true claim (a false alarm). Its first version blocked 12 true claims
+and was loosened before the live run; [`confusable-results.md`](docs/benchmarks/confusable-results.md) records both.
+One misleading claim still passed: an argument ("the driver response consumed the handoff margin") with true
+numbers and no threshold comparison. The checker proves numbers, citations and interval meaning, not an argument's
+conclusion, which is why the independent verdict check stays the last line.
 
 **A staged catch.** The replay includes one labelled red-team case, `cand36-redteam`. It is a copy of a real
 perception-late run with one claim and the verdict edited by hand. The measured 1.10 s perception time became
@@ -465,6 +477,8 @@ The red-team case always replays its edited run, even with `--live`.
 | Robustness (30 manipulated cases, run live) | Missing evidence: fooled 0 of 10, no invented values. Lying witness: fooled 0 of 10. Injected instruction: obeyed 0 of 10. One natural wrong verdict (1 of 30), **withheld by the checker**. One misframed claim verified (a checker miss, see above). |
 | Repeatability (6 cases, 3 fresh live runs each) | 18 of 18 runs agreed and were correct. Claim counts varied by at most one. |
 | Demo cases on the replay site (34 cases: 16 car, 18 truck, 4 real clips, run live) | 34 of 34 verdicts correct and verified. Of 307 claims, 304 verified, 3 blocked, 0 single-source. |
+| Confusable timelines (20 blind cases built around the agent's one mistake, run live) | 1 of 20 wrong verdicts, **withheld**. 8 wrong-interval claims: R6 blocked 8 of 8; the old checker would have verified all 8. |
+| Perception sensitivity (83 cases, deterministic, no API calls) | Right on 83 of 83 given the true onset. With SAM's measured real-world timing error applied, the verdict is unchanged **46%** of the time (50% on the 53 cases not built to sit on a threshold). Typical flip at 0.30 to 0.45 s of onset error. |
 | Synthetic attribution consistency (6 failure stories, car and truck) | 162 of 162 correct. Every dropout case returned INCONCLUSIVE and no other case did. |
 
 **How to read these.**
@@ -489,12 +503,18 @@ The red-team case always replays its edited run, even with `--live`.
   the tool (commit `2a23728`). The checker did not change between runs. Of the 3 blocks on the demo site, one is
   the same unprovable-window pattern as the natural catch (`cand36-car-s3775`). The other two (`cand37-car-s1313`)
   state correct facts but apply a numeric check to a yes/no fact.
-- **One wrong verdict in 131 live investigations, and the checker withheld it.** The 19 benchmark cases, 30 hard
-  cases, 30 robustness cases, 18 repeat runs and 34 demo cases produced exactly one wrong verdict, and the checker
-  caught it.
-  The same case exposed a checker miss: a misframed but arithmetically true claim. Details:
-  [`robustness-results.md`](docs/benchmarks/robustness-results.md),
+- **Two wrong verdicts in 151 live investigations, both withheld.** The 19 benchmark cases, 30 hard cases, 30
+  robustness cases, 18 repeat runs, 20 confusable cases and 34 demo cases produced two wrong verdicts. The checker
+  withheld both and verified none. The first also exposed a checker miss, a misframed but arithmetically true claim,
+  which R6 now blocks. Details: [`robustness-results.md`](docs/benchmarks/robustness-results.md),
+  [`confusable-results.md`](docs/benchmarks/confusable-results.md),
   [`hard-cases-results.md`](docs/benchmarks/hard-cases-results.md).
+- **The checker guarantees the reasoning, not the evidence.** The perception-sensitivity study shifts the video's
+  hazard onset by SAM's measured error and re-runs the deterministic attribution: about half of verdicts change. The
+  flips are systematic, not random. An onset too early inflates perception latency and blames perception; one too
+  late shortens the runway and makes a crash look unavoidable. Since SAM tends to fire early, the practical risk is
+  over-blaming perception. Every verdict is correct given its evidence, and the evidence timing is the weak point.
+  Details: [`perception-sensitivity-results.md`](docs/benchmarks/perception-sensitivity-results.md).
 - **The hard and robustness cases are small and synthetic.** 10 runs per condition can show a failure is not
   common, not that it never happens. Their expected labels come from the deterministic attribution, so the
   "independent accuracy" there is consistency by construction.
@@ -531,8 +551,15 @@ Measured on the real clips while building, and each one changed the code:
 - **Coverage is limited by the hazard tests, not by SAM.** On 121 of the 126 new clips with no onset, vehicles were
   tracked and resolvable; the struck vehicle just never met a hazard test. Coverage is lower on highways (51%) than
   in cities (69%).
-- **The agent's one mistake was a meaning error, not an arithmetic one.** It never miscomputed a number, because
-  every number comes from a tool. It once used the right numbers for the wrong interval.
+- **The agent's mistakes are meaning errors, not arithmetic ones.** It never miscomputed a number, because every
+  number comes from a tool. It sometimes used the right numbers for the wrong interval: the human's brake request
+  as the system's command, or a command delay where no system command existed.
+- **Refusing to build a case is a safety feature.** When SAM misses the onset, the pipeline builds no case. In a
+  what-if with perception unknown, 13 perception-late cases would have become NO_FAULT_FOUND, clearing the car
+  exactly where it failed.
+- **Clock alignment can fail silently.** The ADAS clock is searched within ±1.5 s of the CAN anchor, so a CAN clock
+  skewed by 5 s left the ADAS offset unrecoverable in 83 of 83 cases, with no error raised. Not fixed before the
+  freeze, because a fix adds a fact and changes every evidence digest.
 
 ---
 
@@ -726,8 +753,10 @@ Next steps, each based on something measured during the build:
 - **A "seen safe first" rule for hazard onset**: require the struck vehicle to be observed as not yet a hazard
   before an onset can fire, which targets the start-of-clip tail. It needs its own pre-registration and a fresh
   draw of clips.
-- **A meaning check on interval claims**, so a claim compared with a step's threshold must use endpoints that
-  measure that step. This is the checker miss the robustness benchmark found.
+- **A timing-robustness gate**: re-attribute every case across SAM's measured onset error and label each verdict
+  robust or timing-sensitive, publishing timing-sensitive verdicts with the alternative and routing them to human
+  review. It costs about 1 to 2 s per case on the existing deterministic path.
+- **Flag clock alignment at the edge of its search window**, so a skewed log fails loudly instead of silently.
 - **Motion-based track re-association** (ByteTrack or OC-SORT style) for long or heavily occluded footage. The demo
   clips did not need it.
 - **A real-log adapter** for a fleet's own DBC files and log exports.
