@@ -24,6 +24,15 @@ ID_TOKEN = re.compile(r"\b[A-Z0-9]+:[\w.@-]+")
 NAMES = re.compile(r"\b(?:SAM|Muse Spark|Spark|Muse Wonder|Wonder|Class|J)\s*\d+(?:\.\d+)?", re.I)
 NUMBER = re.compile(r"(?<![\w.])-?\d+(?:\.\d+)?")
 WITNESS_SOURCES = {"WIT", "WIT2"}
+# R6, interval meaning (added after the robustness benchmark): each threshold judges one specific interval.
+# A claim comparing a different interval with it can be arithmetically true and still misleading, e.g. the human's
+# brake request after a handoff measured against the system's command threshold.
+THRESHOLD_INTERVALS = {
+    "PROFILE:perception_threshold_s": ("AV:first_seen_t", "VID:hazard_onset_t"),
+    "PROFILE:command_threshold_s": ("AV:brake_request_t", "AV:first_seen_t"),
+    "PROFILE:actuation_threshold_s": ("CAN:pressure_reached_t", "CAN:brake_request_t"),
+    "PROFILE:human_prt_s": ("VID:impact_t", "AV:handoff_t"),
+}
 
 
 def _close(x: float, y: float) -> bool:
@@ -92,8 +101,29 @@ def _eval(assertion: dict, store: EvidenceStore) -> tuple[bool, set[float], list
     return False, set(), [], f"unknown assertion op {op!r}"
 
 
+def _interval_meaning_problem(claim: Claim, store: EvidenceStore) -> str | None:
+    """Why a diff assertion cannot be judged against a cited threshold, or None when it measures what it should."""
+    assertion = claim.assertion or {}
+    if assertion.get("op") != "diff":
+        return None
+    measured = (assertion.get("a"), assertion.get("b"))
+    for threshold in sorted(set(claim.evidence) & set(THRESHOLD_INTERVALS)):
+        expected = THRESHOLD_INTERVALS[threshold]
+        if threshold == "PROFILE:command_threshold_s" and store.has("AV:handoff_t"):
+            return (
+                f"interval meaning: {threshold} judges the system's own brake command, and this case has a handoff "
+                f"(AV:handoff_t), so there is no system command interval; {measured[0]} - {measured[1]} is not it"
+            )
+        if measured != expected:
+            return (
+                f"interval meaning: {threshold} judges {expected[0]} - {expected[1]}, "
+                f"but the assertion measures {measured[0]} - {measured[1]}"
+            )
+    return None
+
+
 def check_claim(claim: Claim, store: EvidenceStore) -> CheckResult:
-    """Apply the five claim rules in order and return VERIFIED, UNCORROBORATED or BLOCKED."""
+    """Apply the claim rules in order and return VERIFIED, UNCORROBORATED or BLOCKED."""
 
     def blocked(why: str) -> CheckResult:
         return CheckResult(claim, "BLOCKED", [why])
@@ -124,6 +154,11 @@ def check_claim(claim: Claim, store: EvidenceStore) -> CheckResult:
             return blocked(f"assertion failed on recomputation: {detail}")
         allowed |= numbers
         corroborated = claim.assertion.get("op") in ("agree", "same") and len({i.split(":")[0] for i in ids}) == 2
+    # R6 (added after the robustness benchmark): an interval compared with a threshold must be the interval that
+    # threshold judges.
+    problem = _interval_meaning_problem(claim, store)
+    if problem:
+        return blocked(problem)
     for evidence_id in claim.evidence:  # cited numeric facts may also be quoted directly
         with contextlib.suppress(TypeError):  # non-numeric facts license no numbers
             allowed.add(_num(store, evidence_id))
