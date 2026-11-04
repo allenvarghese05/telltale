@@ -1,0 +1,241 @@
+{
+  "model": "muse-wonder-1.0",
+  "digest": "afb30818808ea7f4056452d2d8f8831ba098449c074a8e7eaacc184cdd216832",
+  "verdict": "INCONCLUSIVE",
+  "claims": [
+    {
+      "text": "The system took 1.04 s to notice the vehicle, above the 0.30 s it is allowed.",
+      "type": "timing",
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 1.0446
+      }
+    },
+    {
+      "text": "The command interval was 0.08 s, not above the 0.10 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "AV:brake_request_t",
+        "AV:first_seen_t",
+        "PROFILE:command_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t",
+        "equals": 0.0766
+      }
+    },
+    {
+      "text": "The hazard onset reason was closing.",
+      "type": "observation",
+      "evidence": [
+        "VID:hazard_onset_reason"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "VID:hazard_onset_reason",
+        "equals": "closing"
+      }
+    },
+    {
+      "text": "Time-to-collision at hazard onset was 1.92 s.",
+      "type": "physics",
+      "evidence": [
+        "VID:ttc_at_onset_s"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "VID:ttc_at_onset_s",
+        "equals": 1.9217
+      }
+    },
+    {
+      "text": "Impact occurred 1.17 s after hazard onset.",
+      "type": "timing",
+      "evidence": [
+        "VID:impact_t",
+        "VID:hazard_onset_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 1.1699
+      }
+    },
+    {
+      "text": "Independent recheck agreed that lighting was night.",
+      "type": "observation",
+      "evidence": [
+        "WIT:lighting",
+        "WIT2:lighting"
+      ],
+      "assertion": {
+        "op": "same",
+        "a": "WIT:lighting",
+        "b": "WIT2:lighting"
+      }
+    },
+    {
+      "text": "With nominal perception 0.20 s, nominal command 0.05 s and nominal tau 0.15 s, the counterfactual avoided contact.",
+      "type": "physics",
+      "evidence": [
+        "CF:run1_contact",
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": false
+      }
+    },
+    {
+      "text": "The counterfactual minimum gap was 1.53 m.",
+      "type": "physics",
+      "evidence": [
+        "CF:run1_min_gap_m"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "CF:run1_min_gap_m",
+        "equals": 1.5344
+      }
+    },
+    {
+      "text": "The brake log was incomplete, so brake actuation could not be verified.",
+      "type": "attribution",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": false
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "AV:brake_request_t"
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.2,
+        "command_s": 0.05,
+        "tau_s": 0.15
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Are the other vehicle's brake lights on?",
+        "slug": "other_vehicle_brake_lights",
+        "t0": 6.8,
+        "t1": 8.0
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Is it night?",
+        "slug": "lighting",
+        "t0": 6.8,
+        "t1": 8.0
+      }
+    },
+    {
+      "name": "submit_findings",
+      "args": {
+        "verdict": "INCONCLUSIVE",
+        "n_claims": 9
+      }
+    }
+  ],
+  "agent_facts": [
+    {
+      "id": "CF:run1_contact",
+      "value": false,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_impact_speed_mps",
+      "value": 0.0,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_min_gap_m",
+      "value": 1.5344,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.15)",
+      "kind": "derived"
+    },
+    {
+      "id": "WIT2:other_vehicle_brake_lights",
+      "value": "unclear",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 second look at 6.80-8.00s, asked without the first answer: Are the other vehicle's brake lights on?",
+      "kind": "observation"
+    },
+    {
+      "id": "WIT2:lighting",
+      "value": "night",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 second look at 6.80-8.00s, asked without the first answer: Is it night?",
+      "kind": "observation"
+    }
+  ],
+  "usage": {
+    "calls": 5,
+    "prompt_tokens": 18384,
+    "completion_tokens": 5859
+  }
+}

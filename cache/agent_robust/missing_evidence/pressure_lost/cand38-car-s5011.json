@@ -1,0 +1,158 @@
+{
+  "model": "muse-wonder-1.0",
+  "digest": "28b9393325387c24596cba08620adb819a61bb8bfa00e1328564ffd17c28e014",
+  "verdict": "INCONCLUSIVE",
+  "claims": [
+    {
+      "text": "Hazard onset was at 5.9 s.",
+      "type": "timing",
+      "evidence": [
+        "VID:hazard_onset_t"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "VID:hazard_onset_t",
+        "equals": 5.9
+      }
+    },
+    {
+      "text": "The hazard onset reason was closing.",
+      "type": "observation",
+      "evidence": [
+        "VID:hazard_onset_reason"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "VID:hazard_onset_reason",
+        "equals": "closing"
+      }
+    },
+    {
+      "text": "Perception took 0.1182 s, compared with the 0.3 s perception threshold.",
+      "type": "timing",
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 0.1182
+      }
+    },
+    {
+      "text": "Command took 0.0313 s, compared with the 0.1 s command threshold.",
+      "type": "timing",
+      "evidence": [
+        "AV:brake_request_t",
+        "AV:first_seen_t",
+        "PROFILE:command_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t",
+        "equals": 0.0313
+      }
+    },
+    {
+      "text": "Impact was at 8.0 s, 2.1 s after hazard onset.",
+      "type": "timing",
+      "evidence": [
+        "VID:impact_t",
+        "VID:hazard_onset_t"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 2.1
+      }
+    },
+    {
+      "text": "Time-to-collision at hazard onset was 1.9971 s.",
+      "type": "timing",
+      "evidence": [
+        "VID:ttc_at_onset_s"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "VID:ttc_at_onset_s",
+        "equals": 1.9971
+      }
+    },
+    {
+      "text": "The actuation threshold is 0.25 s.",
+      "type": "timing",
+      "evidence": [
+        "PROFILE:actuation_threshold_s"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "PROFILE:actuation_threshold_s",
+        "equals": 0.25
+      }
+    },
+    {
+      "text": "Brake log complete is false, so brake actuation timing cannot be verified from a complete brake log.",
+      "type": "other",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": false
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:brake_request_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "AV:brake_request_t"
+      }
+    },
+    {
+      "name": "submit_findings",
+      "args": {
+        "verdict": "INCONCLUSIVE",
+        "n_claims": 8
+      }
+    }
+  ],
+  "agent_facts": [],
+  "usage": {
+    "calls": 3,
+    "prompt_tokens": 9431,
+    "completion_tokens": 5316
+  }
+}
