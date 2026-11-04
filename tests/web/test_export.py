@@ -155,3 +155,45 @@ def test_csp_lets_the_hosted_space_play_its_videos():
     csp = re.search(r'Content-Security-Policy"\s+content="([^"]+)"', index).group(1)
     media = next(d for d in csp.split(";") if d.strip().startswith("media-src")).split()
     assert media[1:] == ["'self'", "https://*.hf.co"]
+
+
+def test_export_writes_every_tracked_vehicle_once_per_clip_downsampled(tmp_path):
+    bundles, clips, sam = tmp_path / "bundles", tmp_path / "clips", tmp_path / "sam"
+    for d in (bundles, clips, sam):
+        d.mkdir()
+    (bundles / "nx01-car-s0101.json").write_text(json.dumps(BUNDLE))
+    (bundles / "nx01-car-s0102.json").write_text(json.dumps({**BUNDLE, "case_id": "nx01-car-s0102"}))
+    (clips / "nx01.mp4").write_bytes(b"\x00")
+    objects = {
+        "1": [{"frame": f, "box": [10.4, 20.6, 30.2, 40.9]} for f in range(5)],
+        "2": [{"frame": 3, "box": [1.0, 2.0, 3.0, 4.0]}],
+    }
+    (sam / "nx01.json").write_text(json.dumps({"fps": 30.0, "width": 1280, "height": 720, "objects": objects}))
+    site = export_site(
+        bundles, tmp_path / "site", clips_dir=clips, thumbs_dir=clips, video_bundles_dir=tmp_path / "v", sam_dir=sam
+    )
+    tracks = json.loads((site / "tracks" / "nx01.json").read_text())
+    assert tracks == {
+        "fps": 30.0,
+        "width": 1280,
+        "height": 720,
+        "objects": {"1": [[0, 10, 21, 30, 41], [2, 10, 21, 30, 41], [4, 10, 21, 30, 41]], "2": [[3, 1, 2, 3, 4]]},
+    }
+    assert sorted(p.name for p in (site / "tracks").iterdir()) == ["nx01.json"]
+
+
+def test_a_clip_without_cached_tracks_simply_has_no_tracks_file(tmp_path):
+    bundles, clips = tmp_path / "bundles", tmp_path / "clips"
+    bundles.mkdir()
+    clips.mkdir()
+    (bundles / "nx01-car-s0101.json").write_text(json.dumps(BUNDLE))
+    (clips / "nx01.mp4").write_bytes(b"\x00")
+    site = export_site(
+        bundles,
+        tmp_path / "site",
+        clips_dir=clips,
+        thumbs_dir=clips,
+        video_bundles_dir=tmp_path / "v",
+        sam_dir=tmp_path,
+    )
+    assert not (site / "tracks" / "nx01.json").exists()
