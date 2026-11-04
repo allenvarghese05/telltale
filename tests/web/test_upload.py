@@ -29,7 +29,7 @@ def server(tmp_path):
     site = tmp_path / "site"
     site.mkdir()
     (site / "index.html").write_text("<!doctype html><title>site</title>")
-    calls = {"investigate": [], "publish": [], "outcome": None}
+    calls = {"investigate": [], "publish": [], "outcome": None, "suggest": [], "suggestion": 7.4}
 
     def investigate(path, clip_id, event_time, progress):
         calls["investigate"].append((path, clip_id, event_time))
@@ -50,6 +50,7 @@ def server(tmp_path):
         publish=publish,
         existing_clip_ids=lambda: {"cand36"},
         max_bytes=64,
+        suggest=lambda path: calls["suggest"].append(path.name) or calls["suggestion"],
     )
     thread = threading.Thread(target=srv.serve_forever, daemon=True)
     thread.start()
@@ -201,3 +202,38 @@ def test_exported_static_site_has_no_upload_page_or_route(tmp_path):
     for path in site.rglob("*"):
         if path.is_file() and path.suffix in {".html", ".js", ".json"}:
             assert "/api/upload" not in path.read_text(), path.name
+
+
+def suggest(base, name="dash.mp4", ctype="video/mp4", body=b"\x00" * 16):
+    req = urllib.request.Request(  # noqa: S310 - fixed http://127.0.0.1 URL built by these tests
+        f"{base}/api/suggest", data=body, method="POST", headers={"Content-Type": ctype, "X-Filename": name}
+    )
+    try:
+        with fetch(req) as r:
+            return r.status, json.loads(r.read())
+    except urllib.error.HTTPError as e:
+        return e.code, json.loads(e.read())
+
+
+def test_suggest_returns_a_prefill_and_keeps_no_copy(server):
+    assert suggest(server["base"]) == (200, {"suggested_t": 7.4})
+    (name,) = server["calls"]["suggest"]
+    assert re.fullmatch(r"[0-9a-f]{32}\.mp4", name)
+    assert not any((server["tmp"] / "uploads").iterdir())
+    assert server["calls"]["investigate"] == []
+
+
+def test_suggest_says_so_when_there_is_no_signal(server):
+    server["calls"]["suggestion"] = None
+    assert suggest(server["base"]) == (200, {"suggested_t": None})
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "code"),
+    [({"name": "dash.avi", "ctype": "video/x-msvideo"}, 415), ({"body": b"\x00" * 65}, 413)],
+)
+def test_suggest_applies_the_same_file_checks(server, kwargs, code):
+    got, body = suggest(server["base"], **kwargs)
+    assert got == code
+    assert body["error"]
+    assert server["calls"]["suggest"] == []

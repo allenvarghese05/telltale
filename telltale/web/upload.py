@@ -28,6 +28,7 @@ from telltale.pipeline.investigate_clip import (
     investigate_clip,
     taken_clip_ids,
 )
+from telltale.video.impact import suggest_impact_time
 from telltale.web.export import SITE, publish_video_case
 
 logger = logging.getLogger(__name__)
@@ -101,6 +102,11 @@ def check_upload(
         impact_t = math.nan
     if not math.isfinite(impact_t):
         raise UploadRejected(400, "Impact time must be a number of seconds from the start of the clip, e.g. 7.4.")
+    return clip_id, impact_t, check_file(filename, content_type, length, max_bytes)
+
+
+def check_file(filename: str, content_type: str, length: int, max_bytes: int) -> str:
+    """The checks every video body passes before it is read. Returns the file suffix."""
     suffix = Path(filename).suffix.lower()
     if content_type.split(";")[0].strip().lower() not in VIDEO_TYPES.get(suffix, set()):
         raise UploadRejected(415, "Upload an .mp4 or .mov file.")
@@ -110,7 +116,7 @@ def check_upload(
         raise UploadRejected(
             413, f"That file is {length / 1e6:.0f} MB; the limit is {max_bytes / 1e6:.0f} MB. Trim the clip first."
         )
-    return clip_id, impact_t, suffix
+    return suffix
 
 
 def upload_path(uploads: Path, suffix: str) -> Path:
@@ -135,6 +141,7 @@ def make_server(
     publish: Callable[[dict, Path], None] = lambda bundle, site: publish_video_case(bundle, site, UPLOADS / "clips"),
     existing_clip_ids: Callable[[], set[str]] = taken_clip_ids,
     max_bytes: int = MAX_BYTES,
+    suggest: Callable[[Path], float | None] = lambda path: suggest_impact_time(video_path=path),
 ) -> ThreadingHTTPServer:
     """The local upload server, bound to 127.0.0.1. Serves the upload page, its two endpoints, and the site."""
     jobs: dict[str, Job] = {}
@@ -197,8 +204,42 @@ def make_server(
                 return self._json(200, view)
             return super().do_GET()
 
+        def _save_body(self, path: Path, length: int) -> None:
+            with path.open("wb") as out:
+                remaining = length
+                while remaining:
+                    chunk = self.rfile.read(min(remaining, 1 << 20))
+                    if not chunk:
+                        break
+                    out.write(chunk)
+                    remaining -= len(chunk)
+
+        def _suggest(self) -> None:
+            """A suggested impact time from the camera jolt. The file is kept only while it is measured."""
+            try:
+                length = int(self.headers.get("Content-Length") or 0)
+                suffix = check_file(
+                    self.headers.get("X-Filename", ""), self.headers.get("Content-Type", ""), length, max_bytes
+                )
+                uploads.mkdir(parents=True, exist_ok=True)
+                path = upload_path(uploads, suffix)
+            except UploadRejected as exc:
+                self.close_connection = True
+                return self._json(exc.status, {"error": str(exc)})
+            self._save_body(path, length)
+            try:
+                value = suggest(path)
+            except Exception:  # boundary: no suggestion is not an error; the person types the time instead
+                logger.exception("could not suggest an impact time")
+                value = None
+            finally:
+                path.unlink(missing_ok=True)
+            return self._json(200, {"suggested_t": None if value is None else round(float(value), 2)})
+
         def do_POST(self) -> None:
             url = urlparse(self.path)
+            if url.path == "/api/suggest":
+                return self._suggest()
             if url.path != "/api/upload":
                 return self._json(404, {"error": "Not found."})
             try:
@@ -220,14 +261,7 @@ def make_server(
             except UploadRejected as exc:
                 self.close_connection = True
                 return self._json(exc.status, {"error": str(exc)})
-            with path.open("wb") as out:
-                remaining = length
-                while remaining:
-                    chunk = self.rfile.read(min(remaining, 1 << 20))
-                    if not chunk:
-                        break
-                    out.write(chunk)
-                    remaining -= len(chunk)
+            self._save_body(path, length)
             threading.Thread(target=run, args=(job, path, impact_t), daemon=True).start()
             return self._json(202, {"clip_id": clip_id, "state": "running"})
 

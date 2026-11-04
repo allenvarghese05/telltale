@@ -78,6 +78,30 @@ async function poll(clipId) {
   showResult(clipId, s.link);
 }
 
+/* A suggested impact time from the camera jolt, for the person to check. Close to the human label on about two
+   clips in three, so it is shown as a pre-filled, editable value, never used without them seeing it. */
+$('file').onchange = async () => {
+  const file = $('file').files[0];
+  const ext = file ? file.name.split('.').pop().toLowerCase() : '';
+  if (!file || !TYPES[ext] || file.size > MAX_BYTES) return;
+  $('impact-help').textContent = 'Finding a suggested impact time from the camera jolt...';
+  const r = await fetch('/api/suggest', {
+    method: 'POST',
+    headers: { 'Content-Type': TYPES[ext], 'X-Filename': `clip.${ext}` },
+    body: file,
+  });
+  const body = await r.json();
+  if (r.ok && Number.isFinite(body.suggested_t)) {
+    $('impact').value = body.suggested_t.toFixed(2);
+    $('impact-help').textContent =
+      `Suggested from the camera jolt: ${body.suggested_t.toFixed(2)} s. Please check it in your player and correct ` +
+      'it if needed; about a third of clips are off by more than a second.';
+  } else {
+    $('impact-help').textContent =
+      'No suggestion for this clip. Type the time of impact, in seconds from the start of the video.';
+  }
+};
+
 $('form').onsubmit = async (event) => {
   event.preventDefault();
   $('alert').textContent = '';
