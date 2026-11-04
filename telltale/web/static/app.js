@@ -7,11 +7,11 @@
 const $ = (id) => document.getElementById(id);
 
 const HEADLINE = {
-  PERCEPTION_LATE: 'The system noticed the hazard too late.',
-  COMMAND_LATE: 'The hazard was noticed in time. Braking was commanded too late.',
+  PERCEPTION_LATE: "The car's driver-assist noticed the hazard too late.",
+  COMMAND_LATE: "The car's driver-assist noticed the hazard in time but commanded braking too late.",
   BRAKE_ACTUATION_LATE: 'The brakes built pressure too slowly.',
-  LATE_HANDOFF: 'Control was handed back too late for a person to react.',
-  UNAVOIDABLE: 'Physically unavoidable. A system performing to spec would still have collided.',
+  LATE_HANDOFF: "The car's driver-assist handed control back too late for a person to react.",
+  UNAVOIDABLE: 'Physically unavoidable. A driver-assist performing to spec would still have collided.',
   NO_FAULT_FOUND: 'Avoidable, but no step exceeded its limit.',
   INCONCLUSIVE: 'Inconclusive. The evidence is incomplete.',
 };
