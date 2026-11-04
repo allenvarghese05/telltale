@@ -564,3 +564,41 @@ a.wordmark { color: var(--ink); text-decoration: none; }
 body.embed .bar, body.embed .intro, body.embed .foot { display: none; }
 body.embed .replay { padding-top: 8px; }
 body.embed .report { margin-top: 48px; }
+
+/* ---------- judge-friendly layer: live report, scenarios, progressive disclosure ---------- */
+
+.ledger.live { max-height: none; }
+.live-narrative { max-height: 420px; overflow-y: auto; margin-top: 4px; padding-right: 4px; }
+.live-narrative h3 { font-size: 12px; font-weight: 600; color: var(--mute); margin-top: 16px; }
+.live-narrative section:first-child h3 { margin-top: 10px; }
+.live-narrative p { font-family: var(--serif); font-size: 16px; line-height: 1.55; margin-top: 4px; color: var(--ink); }
+.live-narrative .pending { display: none; }
+.live-narrative .sentence { animation: arrive 0.6s var(--ease) both; }
+.report-wait { margin-top: 10px; }
+.report-wait[hidden] { display: none; }
+.live-note { margin-top: 12px; }
+.live-note a { color: var(--ink); }
+
+details.raw { margin-top: 14px; border-top: 1px solid var(--line-2); padding-top: 10px; }
+details.raw summary { cursor: pointer; font-size: 13px; font-weight: 500; color: var(--ink); }
+details.raw ol { max-height: 300px; }
+
+.scenario-bar { margin-top: 18px; }
+.segmented { display: inline-flex; background: var(--bg-soft); border-radius: 8px; padding: 3px; gap: 2px; }
+.segmented button {
+  background: none; border: 0; border-radius: 6px; padding: 6px 16px; font-size: 13px; font-weight: 500;
+  color: var(--mute); cursor: pointer;
+}
+.segmented button.on { background: var(--bg); color: var(--ink); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08); }
+.variants .variant-row { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-top: 16px; }
+.red-team-slot { margin-top: 24px; }
+.red-team-slot .variant { width: 100%; max-width: 520px; }
+.red-team-slot .variant-v { color: var(--blocked); }
+.red-team-slot .variant-s { color: var(--mute); font-size: 12.5px; }
+
+details.fold > summary { cursor: pointer; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary .section-title::after { content: "  +"; color: var(--mute); }
+details.fold[open] > summary .section-title::after { content: "  \2212"; }
+.fold-hint { font-size: 14px; color: var(--mute); }
+.investigation { padding-top: 72px; }

@@ -6,6 +6,11 @@
 
 const $ = (id) => document.getElementById(id);
 
+/* The export stamps a content build id on the page; every data and video URL carries it, so a new deploy is never
+   served from a stale cache. */
+const BUILD = (document.querySelector('meta[name="build"]') || {}).content || '';
+const bust = (url) => (BUILD ? `${url}${url.includes('?') ? '&' : '?'}v=${BUILD}` : url);
+
 const HEADLINE = {
   PERCEPTION_LATE: "The car's driver-assist noticed the hazard too late.",
   COMMAND_LATE: "The car's driver-assist noticed the hazard in time but commanded braking too late.",
@@ -14,6 +19,14 @@ const HEADLINE = {
   UNAVOIDABLE: 'Physically unavoidable. A driver-assist performing to spec would still have collided.',
   NO_FAULT_FOUND: 'Avoidable, but no step exceeded its limit.',
   INCONCLUSIVE: 'Inconclusive. The evidence is incomplete.',
+};
+
+const PLAIN = {
+  PERCEPTION_LATE: 'Noticed too late',
+  COMMAND_LATE: 'Braked too late',
+  BRAKE_ACTUATION_LATE: 'Slow brakes',
+  LATE_HANDOFF: 'Late handoff',
+  UNAVOIDABLE: 'Unavoidable',
 };
 
 const SHORT = {
@@ -50,7 +63,7 @@ const esc = (s) =>
 const num = (v, d = 2) => (Number.isFinite(Number(v)) ? Number(v).toFixed(d) : '-');
 
 async function getJSON(url) {
-  const r = await fetch(url);
+  const r = await fetch(bust(url));
   if (!r.ok) throw new Error(`${url}: ${r.status}`);
   return r.json();
 }
@@ -84,6 +97,9 @@ async function init() {
   $('replay').onclick = start;
   $('skip').onclick = skipToVerdict;
   $('sources').onclick = toggleSources;
+  $('full-investigation').addEventListener('toggle', () => {
+    if ($('full-investigation').open) ['timeline', 'cf-map'].forEach((id) => window.Plotly && Plotly.Plots.resize(id));
+  });
   $('video').addEventListener('ended', land);
   requestAnimationFrame(frame);
   await selectClip();
@@ -96,10 +112,15 @@ async function selectClip() {
 }
 
 /* Every log variant's verdict for this clip, side by side: one video, several possible causes. */
+let scenarios = [];
+let profileShown = 'car';
+
+/* "Try another scenario": one clip, several sets of car logs. A Car / Truck toggle, one plain choice per case
+   (named by what the checker found), and the red-team case on its own, marked as altered by hand. */
 async function renderVariants(list) {
   $('variants-panel').hidden = list.length < 2;
   if (list.length < 2) return;
-  const loaded = await Promise.all(
+  scenarios = await Promise.all(
     list.map(async (c) => {
       try {
         const full = await getJSON(`cases/${encodeURIComponent(c.case_id)}.json`);
@@ -109,21 +130,31 @@ async function renderVariants(list) {
       }
     }),
   );
-  let letter = 0;
-  $('variants').innerHTML = loaded
-    .map((c) => {
-      const v = c.verdict;
-      const ok = v && v.status === 'VERIFIED';
-      const label = v ? SHORT[v.agent_label] || v.agent_label : 'Unavailable';
-      const state = v ? (ok ? 'Verified by recomputation' : 'Withheld. The checker disagrees.') : '';
-      const name = c.redTeam ? 'Red-team, altered by hand' : `Log ${String.fromCharCode(65 + letter++)}`;
-      return `<button class="variant${c.redTeam ? ' red-team' : ''}" data-id="${esc(c.case_id)}">
-        <span class="variant-k">${esc(name)}, ${esc(c.profile)}</span>
-        <span class="variant-v">${esc(label)}</span>
-        <span class="variant-s ${ok ? 'ok' : 'no'}">${esc(state)}</span></button>`;
-    })
+  const profiles = [...new Set(scenarios.filter((c) => !c.redTeam).map((c) => c.profile))];
+  if (!profiles.includes(profileShown)) profileShown = profiles[0];
+  $('profile-toggle').innerHTML = profiles
+    .map((p) => `<button data-profile="${esc(p)}" class="${p === profileShown ? 'on' : ''}">${esc(p[0].toUpperCase() + p.slice(1))}</button>`)
     .join('');
-  $('variants')
+  $('profile-toggle')
+    .querySelectorAll('button')
+    .forEach((b) => {
+      b.onclick = () => {
+        profileShown = b.dataset.profile;
+        renderVariants(list);
+      };
+    });
+  const choice = (c) => {
+    const v = c.verdict;
+    const label = v ? PLAIN[v.independent_label] || SHORT[v.independent_label] || v.independent_label : 'Unavailable';
+    return `<button class="variant" data-id="${esc(c.case_id)}"><span class="variant-v">${esc(label)}</span></button>`;
+  };
+  $('variants').innerHTML = scenarios.filter((c) => !c.redTeam && c.profile === profileShown).map(choice).join('');
+  const red = scenarios.find((c) => c.redTeam);
+  $('red-team-slot').innerHTML = red
+    ? `<button class="variant red-team" data-id="${esc(red.case_id)}"><span class="variant-v">Try to fool the checker</span>
+        <span class="variant-s">Altered by hand: the investigator's verdict and one claim were changed to test the checker.</span></button>`
+    : '';
+  $('variants-panel')
     .querySelectorAll('.variant')
     .forEach((b) => {
       b.onclick = async () => {
@@ -136,7 +167,7 @@ async function renderVariants(list) {
 }
 
 function markActive() {
-  $('variants')
+  $('variants-panel')
     .querySelectorAll('.variant')
     .forEach((b) => b.classList.toggle('active', b.dataset.id === bundle.case_id));
 }
@@ -153,7 +184,7 @@ async function load(id) {
   events = [...(bundle.events || [])].sort((a, b) => a.t - b.t);
   failedKey = bundle.verdict && bundle.verdict.status === 'VERIFIED' ? FAILED_LINK[bundle.verdict.agent_label] : null;
   const video = $('video');
-  if (video.getAttribute('src') !== bundle.video_url) video.src = bundle.video_url;
+  if (video.getAttribute('src') !== bust(bundle.video_url)) video.src = bust(bundle.video_url);
   reset();
   renderChain();
   renderClaims();
@@ -174,6 +205,7 @@ function reset() {
   $('verdict').innerHTML = '<p class="verdict-wait">The verdict appears when the replay ends.</p>';
   $('evidence').innerHTML = '<li class="caption ledger-empty">Evidence appears here as the replay reaches it.</li>';
   $('ledger-count').textContent = '';
+  if (bundle) renderNarrative();
   $('scrim').hidden = false;
   $('replay').hidden = true;
   $('skip').hidden = true;
@@ -319,6 +351,7 @@ function frame() {
     const now = video.currentTime;
     $('clock').textContent = `${num(now)} s`;
     while (revealed < events.length && now >= events[revealed].t) revealMoment(revealed);
+    revealNarrative(now);
     tickGap(now);
   }
   drawOverlay();
@@ -463,6 +496,7 @@ function land() {
   playing = false;
   $('skip').hidden = true;
   appendRemainingEvidence();
+  revealNarrative(Infinity);
   const v = bundle.verdict || {};
   const ok = v.status === 'VERIFIED';
   const others = (v.noncausal_faults || []).length
@@ -639,22 +673,53 @@ function renderTrace() {
 }
 
 /* The report is text Python wrote. Each sentence keeps its sources, shown on request. */
+/* The incident report writes itself during the replay. Each sentence appears when the playhead reaches the time
+   of the event it cites (its own sources say which); sentences about the whole case appear with the verdict. The
+   text is Python's; JS only decides when to show it. */
+const TIMED = /^(VID|AV|CAN):[a-z_]+_t$/;
+
+function revealTime(line, sectionIndex) {
+  const times = (line.sources || []).filter((id) => TIMED.test(id)).map(factValue).filter((t) => Number.isFinite(Number(t)));
+  if (times.length) return Math.max(...times.map(Number));
+  return sectionIndex < 2 ? 0 : Infinity;
+}
+
 function renderNarrative() {
   const sections = bundle.narrative || [];
+  $('report-wait').hidden = !sections.length;
   $('narrative').innerHTML = sections.length
     ? sections
         .map(
-          (s) => `<h3>${esc(s.title)}</h3><p>${(s.sentences || [])
+          (s, i) => `<section class="pending"><h3>${esc(s.title)}</h3><p>${(s.sentences || [])
             .map((line) => {
               const src = (line.sources || []).join(', ');
-              return `<span class="sentence"${src ? ` title="${esc(src)}"` : ''}>${esc(line.text)}</span>${
-                src ? `<span class="src">[${esc(src)}]</span>` : ''
-              }`;
+              const at = revealTime(line, i);
+              return `<span class="sentence pending" data-at="${Number.isFinite(at) ? at : 'end'}"${
+                src ? ` title="${esc(src)}"` : ''
+              }>${esc(line.text)}${src ? `<span class="src"> [${esc(src)}]</span>` : ''}</span>`;
             })
-            .join(' ')}</p>`,
+            .join(' ')}</p></section>`,
         )
         .join('')
     : '<p class="caption">This case has no incident report. Re-export the site to generate one.</p>';
+}
+
+function revealNarrative(now) {
+  let shown = false;
+  $('narrative')
+    .querySelectorAll('.sentence.pending')
+    .forEach((el) => {
+      const at = el.dataset.at;
+      if (at === 'end' ? now !== Infinity : Number(at) > now) return;
+      el.classList.remove('pending');
+      el.closest('section').classList.remove('pending');
+      shown = true;
+    });
+  if (shown) {
+    $('report-wait').hidden = true;
+    const box = $('narrative');
+    box.scrollTop = box.scrollHeight;
+  }
 }
 
 function toggleSources() {

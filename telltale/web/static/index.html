@@ -65,13 +65,20 @@
     </div>
   </div>
 
-  <aside class="ledger" aria-label="Evidence, in the order the replay reaches it">
+  <aside class="ledger live" aria-label="Incident report, written as the replay plays">
     <div class="ledger-head">
-      <h2>Evidence</h2>
-      <span id="ledger-count" class="meta"></span>
+      <h2>Incident report</h2>
+      <button id="sources" class="text-button" aria-pressed="false">Show sources</button>
     </div>
-    <ol id="evidence"></ol>
-    <p id="scene-caption" class="caption"></p>
+    <p id="report-wait" class="caption report-wait">The report writes itself as the replay reaches each moment.</p>
+    <div id="narrative" class="narrative live-narrative" aria-live="polite"></div>
+    <p class="caption live-note">Written by deterministic code from the evidence, never by a model.
+      <a id="report-link" target="_blank" rel="noopener">Printable report</a></p>
+    <details class="raw">
+      <summary>Show raw evidence <span id="ledger-count" class="meta"></span></summary>
+      <ol id="evidence"></ol>
+      <p id="scene-caption" class="caption"></p>
+    </details>
   </aside>
 
   <div class="chain-wrap">
@@ -85,14 +92,19 @@
 </section>
 
 <section id="variants-panel" class="variants" hidden>
-  <h2>Same footage, different vehicle logs</h2>
-  <p class="lede">The video alone cannot say what caused a crash. These cases share one clip and differ only in what
-     the vehicle recorded.</p>
+  <h2>Try another scenario</h2>
+  <p class="lede">Same crash video, different car logs. Pick a story and watch Telltale find a different cause.</p>
+  <div class="scenario-bar">
+    <div id="profile-toggle" class="segmented" role="group" aria-label="Vehicle"></div>
+  </div>
   <div id="variants" class="variant-row"></div>
+  <div id="red-team-slot" class="red-team-slot"></div>
 </section>
 
 <section class="investigation">
-  <h2 class="section-title">The investigation</h2>
+  <details id="full-investigation" class="fold">
+  <summary><span class="section-title">See the full investigation</span>
+    <span class="fold-hint">Tool calls, every claim and its status, the but-for map, speed and brake pressure</span></summary>
 
   <div class="split">
     <div>
@@ -123,6 +135,7 @@
     <h3>Speed and brake pressure</h3>
     <div id="timeline"></div>
   </div>
+  </details>
 </section>
 
 <section class="measured">
@@ -156,18 +169,6 @@
   </div>
 </section>
 
-<section class="report" aria-labelledby="report-title">
-  <div class="report-inner">
-    <div class="report-head">
-      <h2 id="report-title">Incident report</h2>
-      <button id="sources" class="text-button" aria-pressed="false">Show sources</button>
-    </div>
-    <p class="report-lede">Written by deterministic code from the evidence above, never by a model. Every number
-       is a recorded value, and every sentence can show where it came from.</p>
-    <div id="narrative" class="narrative"></div>
-    <a id="report-link" class="report-link" target="_blank" rel="noopener">Open printable report</a>
-  </div>
-</section>
 
 <footer class="foot">
   <dl>
