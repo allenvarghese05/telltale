@@ -1,0 +1,16 @@
+{
+  "story": "late_handoff",
+  "profile": "car",
+  "v_ego0": 27.313002351269926,
+  "v_other": 17.336124166401945,
+  "d0": 52.657963059673236,
+  "first_seen": 0.24027899229168614,
+  "brake_request": 5.399252000529314,
+  "handoff": 4.181994365468411,
+  "tau": 0.14472725871499878,
+  "contact_t": 5.2780000000000005,
+  "can_skew": 0.3666608729383133,
+  "av_skew": -0.6346438656802604,
+  "label": "LATE_HANDOFF",
+  "expected_label": "LATE_HANDOFF"
+}
