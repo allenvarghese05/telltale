@@ -14,9 +14,15 @@ import json
 from telltale.config import CACHE
 from telltale.core.manifest import get_clip
 from telltale.core.schema import HAZARD_REASONS
+from telltale.video.lane import TARGET_MIN_LANE_OVERLAP, TARGET_WINDOW_S, lane_polygon_px, mean_lane_overlap
 from telltale.video.scene import summarize_scene
 
 CONDITION_LABELS = (("lighting", "lighting"), ("weather", "weather"), ("road_surface", "road"))
+CROSSING = (
+    "The struck vehicle was not ahead of us in our lane during the last second before impact: it came from the side "
+    "or across our path. The lane and time-to-collision tests assume a vehicle ahead moving the same way, so the "
+    "hazard onset is less certain for this geometry, and the 1-D crash physics of a full investigation cannot model it."
+)
 ATTRIBUTION = (
     "Not determined from video alone. Whether the vehicle's systems noticed, decided and braked in time needs "
     "its CAN and ADAS logs; run `telltale analyze` on a case that includes them."
@@ -48,20 +54,34 @@ def build_video_report(tracks: dict, clip: dict, witness_answers: dict | None) -
         {"t": c["start_t"], "event": f"struck vehicle starts moving {c['direction']} across the lane"} for c in changes
     ]
     timeline.append({"t": impact_t, "event": "impact"})
+    geometry = _geometry(tracks, clip, target)
     timeline.sort(key=lambda e: e["t"])
     return {
         "clip_id": clip["clip_id"],
         "impact_t": impact_t,
         "tracked_vehicles": scene.tracked_vehicles,
         "struck_vehicle": target,
+        "struck_vehicle_geometry": geometry,
         "hazard_onset": onset,
         "struck_vehicle_lane_changes": changes,
         "other_hazards": others,
         "conditions": scene.conditions,
         "timeline": timeline,
-        "summary": _summary(scene.tracked_vehicles, target, onset, changes, others, scene.conditions, impact_t),
+        "summary": _summary(scene.tracked_vehicles, target, onset, changes, others, scene.conditions, impact_t)
+        + ([CROSSING] if geometry == "side_or_crossing" else []),
         "attribution": ATTRIBUTION,
     }
+
+
+def _geometry(tracks: dict, clip: dict, target: str | None) -> str | None:
+    """Whether the struck vehicle was ahead in our lane before impact, or came from the side or across our path."""
+    if target is None:
+        return None
+    impact_frame = round(clip["time_of_event"] * tracks["fps"])
+    dets = sorted(tracks["objects"][target], key=lambda d: d["frame"])
+    first = impact_frame - round(TARGET_WINDOW_S * tracks["fps"])
+    overlap = mean_lane_overlap(dets, lane_polygon_px(tracks, clip), first, impact_frame)
+    return "ahead_in_lane" if overlap >= TARGET_MIN_LANE_OVERLAP else "side_or_crossing"
 
 
 def _summary(

@@ -53,13 +53,15 @@ def test_raises_when_nothing_is_visible_near_impact():
     ("clip_id", "struck"),
     [
         ("cand56", "3"),  # the silver lead car, not the overtaking pickup (object 4)
+        ("cand14", "4"),  # the taxi hitting our right side, not the small car ahead (object 13)
+        ("cand60", "2"),  # the oncoming car turning across our path, not the small car ahead (object 6)
         ("cand36", "1"),
         ("cand37", "3"),
         ("cand38", "3"),
         ("cand63", "0"),
     ],
 )
-def test_real_clips_pick_the_vehicle_in_our_path(clip_id, struck):
+def test_real_clips_pick_the_struck_vehicle(clip_id, struck):
     tracks = json.loads((CACHE / "sam" / f"{clip_id}.json").read_text())
     clip = {"clip_id": clip_id, "time_of_event": 8.0, "ego_lane_polygon": DEFAULT_POLYGON}
     assert select_target(tracks, clip) == struck

@@ -28,9 +28,19 @@ def ttc_series(
     fps: float,
     median_frames: int = MEDIAN_FRAMES,
     fit_frames: int = FIT_FRAMES,
+    dimension: str = "width",
 ) -> tuple[np.ndarray, np.ndarray]:
+    """Time to collision from the growth of one box dimension.
+
+    Height is the right choice for a vehicle beside or crossing the ego car: a box clipped at the frame edge stops
+    widening while the vehicle is still closing, and a turning vehicle's width changes with its yaw, but its
+    height changes only with distance.
+    """
+    if dimension not in ("width", "height"):
+        raise ValueError(f"dimension must be 'width' or 'height', got {dimension!r}")
+    lo_i, hi_i = (0, 2) if dimension == "width" else (1, 3)
     frames = np.array([d["frame"] for d in dets], dtype=float)
-    width = np.array([d["box"][2] - d["box"][0] for d in dets], dtype=float)
+    width = np.array([d["box"][hi_i] - d["box"][lo_i] for d in dets], dtype=float)
     ttc = np.full(len(width), np.inf)
     if len(width) < fit_frames + 2:
         return frames, ttc

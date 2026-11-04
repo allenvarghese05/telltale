@@ -179,3 +179,67 @@ On a near-miss there is no struck vehicle, but the code still picks one: the veh
 near `time_of_event`, or the largest box if none was. Nexar marks collisions and near-misses alike as positives
 with no flag separating them, so the sample necessarily contains both, and on near-misses the "target" is a
 stand-in for what the driver was reacting to.
+
+## Addendum: scoring C, the collision-course test (added after the results above)
+
+Scoring C is a third code change, made after this benchmark was run, and **it was motivated by demo-clip failures,
+not by benchmark results**, as `bee03f6` was. On cand14 a taxi strikes our right side, and on cand60 an oncoming car
+turns across our path; scoring A picked some small car ahead as the struck vehicle on both. Neither clip is in the
+benchmark pool. The change adds a lane-agnostic test, `collision_course`: a vehicle whose time to collision from the
+growth of its box *height* stays under 2 s for 9 frames while it touches the ego lane. Height, because an
+edge-clipped or turning vehicle's width stops tracking its distance: on cand14 the taxi's box is clipped at the
+right edge from 6.98 s and its width stops growing, while its height keeps growing until impact. An overtaking
+vehicle alongside (cand56's pickup) is the opposite case: its width grows as more of it slides into view, while its
+height stays flat. The classic constant-bearing rule (a vehicle whose bearing holds steady while it grows is on a
+collision course) was tried and rejected. It assumes a point-sized ego vehicle; on a wide car a side impact does
+not hold a constant bearing, and the taxi's bearing drifted outward all the way to impact. The test is used twice:
+
+- **Struck vehicle:** a vehicle also qualifies if it was on a collision course at any point in the 2 s before
+  impact, beside the "last second mostly in our lane" rule of `bee03f6`. cand56 still picks the car ahead (3);
+  cand14 now picks the taxi (4); cand60 the turning car (2).
+- **Hazard onset:** `collision_course` is a fallback reason, used only for a vehicle that no lane test
+  (entering, predicted, closing) flags. Making it an equal reason, earliest wins, was tried and rejected: it moved
+  the onset *earlier* on three of the four demo clips (cand36, 37, 38), which would have invalidated their
+  committed live runs, and earlier onsets would also worsen the detector's existing early bias against the human
+  labels (see [The early bias, re-examined](#the-early-bias-re-examined)). On the four demo
+  clips the struck vehicle, onset time and reason are unchanged, and a test pins that.
+
+**The headline stays scoring A.** C is reported as a new row; nothing above was re-scored or rewritten.
+
+| subset | scoring | coverage | median abs | IQR abs | signed mean / median | signed stdev | within 1 s / 2 s | bucket |
+|---|---|---|---|---|---|---|---|---|
+| new clips | **A** | 234/360 (65%) | 0.88 s | 0.40–2.02 s | −0.99 / −0.27 s | 2.09 s | 52% / 75% | Weak |
+| new clips | B | 250/360 (69%) | 0.78 s | 0.33–1.69 s | −0.81 / −0.16 s | 2.01 s | 56% / 78% | Weak |
+| new clips | C | 250/360 (69%) | 0.89 s | 0.36–1.84 s | −0.93 / −0.26 s | 2.01 s | 53% / 76% | Weak |
+| all 400 | **A** | 260/400 (65%) | 0.91 s | 0.42–2.04 s | −1.00 / −0.29 s | 2.11 s | 52% / 74% | Weak |
+| all 400 | B | 280/400 (70%) | 0.83 s | 0.34–1.69 s | −0.81 / −0.18 s | 2.0001 s | 56% / 78% | Weak, on the line |
+| all 400 | C | 280/400 (70%) | 0.91 s | 0.37–1.85 s | −0.94 / −0.30 s | 2.01 s | 52% / 76% | Weak |
+| original 40 | **A** | 26/40 (65%) | 1.03 s | 0.65–2.62 s | −1.09 / −0.45 s | 2.27 s | 46% / 69% | Weak |
+| original 40 | C | 30/40 (75%) | 0.97 s | 0.55–1.80 s | −1.01 / −0.61 s | 2.03 s | 50% / 77% | Weak |
+
+C wins back B's coverage (70% of all 400) while keeping the cand56 fix, and its spread is slightly tighter than A's.
+Its median error is no better than A's; the bucket is still Weak. 47 clips score differently from A, 13 of them
+through a `collision_course` onset. A target-selection-only variant (no new hazard reason) reaches 66.7% coverage
+over all 400, so most of the gain comes from the fallback onset.
+
+## Addendum: suggesting the impact time for an uploaded clip
+
+An uploaded clip has no labelled event time. `telltale.video.impact.suggest_impact_time(video_path=None,
+tracks=None)` returns a deterministic suggestion in seconds, for the person uploading to confirm or correct: the
+frame of the largest camera jolt (mean grey-level change between consecutive frames) when a video is given,
+otherwise the frame where any tracked vehicle's box is tallest.
+
+Every trimmed benchmark clip has its event at exactly 8.0 s, so scoring on whole clips would reward any method
+that leans late. Each clip was therefore cut to a random window containing the event (start uniform in 0–6 s, end
+uniform in 8.3–9.5 s, seed 7), and the suggestion scored against Nexar's `time_of_event` inside that window.
+
+| method (400 clips) | within 0.5 s | within 1 s | median abs error |
+|---|---|---|---|
+| camera jolt (used for a video) | 54.5% | 67.2% | 0.43 s |
+| tallest box (used for tracks only) | 49.2% | 65.5% | 0.53 s |
+| fastest height growth | 33.5% | 54.0% | — |
+| jolt nearest the tallest box | 49.5% | 65.5% | — |
+| window midpoint (no information) | 1.2% | 16.2% | 2.17 s |
+
+The jolt was chosen from these four on the same 400 clips, so its figures are mildly optimistic; there was no
+held-out set. About a third of clips miss by more than 1 s, which is why the value is only ever a prefilled suggestion.
