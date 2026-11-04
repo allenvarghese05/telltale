@@ -71,6 +71,9 @@ the checker before R6 and by the current checker. Results: [`checker_recheck.jso
 
 **No verdict outcome changes.** R6 judges claims only, and the verdict check is untouched.
 
+`checker_recheck.json` also includes the 20 confusable-timeline runs from Part 1 below (152 runs in all); they are
+reported in their own section.
+
 The six claims that were VERIFIED and now block are all the same mistake:
 
 | Run | Claim | Why it now blocks |
@@ -93,8 +96,74 @@ CAN request in its place.
 The published numbers in `robustness-results.md` and the other results docs are left as they were. This table is
 the before-and-after record.
 
-## Part 1: confusable-timeline live cases
+## Part 1: confusable-timeline live cases (20, run live)
 
-**Not run.** The original deadline for this work passed before it started, and the code freeze was then moved.
-The live cases wait for Allen's go-ahead and stay under a $10 cap. If they run, their pre-registration and
-results will be added here.
+**Muse Wonder got 19 of 20 right. Its one wrong verdict was withheld by the checker, and no wrong verdict was
+verified.**
+- **With R6:** no claim that measures the wrong interval against a threshold was verified.
+- **Without R6:** 8 such claims would have been VERIFIED.
+- **One misleading claim was still verified,** because it compares no threshold. It is described below.
+
+Criteria were fixed in [`confusable-preregistration.md`](confusable-preregistration.md) (commit `2e04ee8`) before
+any live run. The runs were made on 2026-11-04 from 12:00 to 12:39 EST, with a 3-case pilot first. Raw rows are in
+[`agent_bench_confusable.json`](../../agent_bench_confusable.json), and the runs are in `cache/agent_confusable/`.
+
+| | Result |
+|---|---|
+| Agent wrong verdicts | **1 of 20** (`cand38-truck-s8004`) |
+| Withheld by the checker | **1 of 1** |
+| Checker misses, wrong verdict VERIFIED | **0** |
+| Wrong-interval claims (hand review) | 8; **with R6: 8 blocked, 0 verified**; without R6: 8 verified |
+| R6 false alarms (true claims blocked by R6) | 1 |
+| Claims, with R6 | 180: 168 verified, 0 single-source, 12 blocked |
+| Claims, without R6 (pre-R6 checker, offline) | 180: 177 verified, 0 single-source, 3 blocked |
+| Verdict outcomes changed by R6 | 0 |
+
+By story:
+
+| Story | n | Correct | Wrong-interval claims (all blocked by R6) |
+|---|---|---|---|
+| `handoff_quick_driver` | 6 | 6 | 1: `cand38-truck-s8020` compared first detection → handoff (1.31 s) with the 0.10 s command threshold |
+| `handoff_in_time_slow_driver` | 3 | 2 | 0 |
+| `adas_brake_then_handoff` | 4 | 4 | 0. Here the ADAS command was logged, and the agent used it correctly each time |
+| `adas_events_lost_perception` | 3 | 3 | 3 |
+| `adas_events_lost_actuation` | 4 | 4 | 4 |
+
+**Lost ADAS events are where the agent reliably confuses the intervals.** In all 7 lost-events runs, it reported a
+"command delay" measured from the CAN brake request, for example "Command delay was 0.0493 s, within the 0.1 s
+threshold." No ADAS command was logged, so that interval does not exist.
+- **Without R6**, all 7 of these claims would have been VERIFIED.
+- **With R6**, all 7 are BLOCKED.
+- **Its verdicts were still right in all 7**, because the command layer was never the cause.
+
+**The wrong verdict, `cand38-truck-s8004`** (timely handoff, slow driver; expected NO_FAULT_FOUND, agent
+LATE_HANDOFF):
+- The handoff came 1.81 s before impact, more than the 1.5 s human reaction time, so the handoff was in time.
+- The agent instead reasoned from the driver's slow braking.
+- **The checker withheld the verdict.**
+- **This run also carries the one misleading claim that was still verified:** "The brake request at 8.042 s came
+  1.8502 s after handoff at 6.1918 s, showing the driver response consumed the handoff margin before braking."
+  - Its numbers are right, and it measures the human's reaction correctly, so it is not a wrong-interval claim
+    under the pre-registered definition, and R6 does not judge it because it cites no threshold.
+  - Its conclusion is wrong all the same.
+  - This marks the limit of the checker: it proves numbers, citations and now interval meaning, but not an
+    argument's conclusion. The verdict check is the backstop, and here it worked.
+
+**The R6 false alarm** (`cand37-car-s8006`): "The total hazard-to-impact window was 1.1699 s, below the 1.5 s human
+response time." This is true, and arguably relevant, but that window is not one of the intervals human reaction
+time judges, so R6 blocked it.
+
+The other 3 blocked claims were already blocked without R6, and all are form blocks:
+- "TTC under 2 s", where the 2 s is the hazard rule's own threshold;
+- two `value` checks applied to yes/no facts.
+
+**A pipeline bug found during the run:** in case 18 (`cand38-truck-s8020`) the agent called `witness_recheck`
+twice with the same slug. The investigator then tried to add a duplicate `WIT2:` fact, and the evidence store
+raised an error, so the run crashed.
+- Under the pre-registration (no tool changes after the pilot), the tool was not patched.
+- The run was resumed once, the case re-ran fresh, and it completed normally.
+- The crashed partial run cost one extra investigation.
+- Fixing it (returning an error to the agent instead of crashing) is a follow-up.
+
+**Cost:** 20 completed runs plus 1 crashed partial run. At the pessimistic $0.33 per run (list prices, no
+caching, $0.05 per recheck) that is about **$6.90**, under the $10 cap. No 503s were logged.

@@ -48,6 +48,22 @@
       "runs_with_a_changed_claim": 0,
       "verdict_status_changes": 0
     },
+    "confusable": {
+      "runs": 20,
+      "claims": 180,
+      "before": {
+        "VERIFIED": 177,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 3
+      },
+      "after": {
+        "VERIFIED": 168,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 12
+      },
+      "runs_with_a_changed_claim": 9,
+      "verdict_status_changes": 0
+    },
     "robustness": {
       "runs": 48,
       "claims": 409,
@@ -66,6 +82,78 @@
     }
   },
   "changed_claims": [
+    {
+      "benchmark": "confusable",
+      "run": "cand36-car-s8009",
+      "text": "The CAN brake request followed first detection by 0.0974 s, below the 0.1 s command threshold.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand37-car-s8006",
+      "text": "The total hazard-to-impact window was 1.1699 s, below the 1.5 s human response time.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:human_prt_s judges VID:impact_t - AV:handoff_t or CAN:brake_request_t - AV:handoff_t, but the assertion measures VID:impact_t - VID:hazard_onset_t"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand37-truck-s8021",
+      "text": "Command delay was 0.06 s, below the 0.10 s command threshold, using brake request at 7.00 s.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-car-s8007",
+      "text": "The command interval was 0.059 s, not exceeding the 0.1 s command threshold.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-truck-s8013",
+      "text": "Command delay was 0.0493 s, within the 0.1 s threshold.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-truck-s8018",
+      "text": "The brake request followed first detection by 0.0538 s, below the 0.1 s command threshold.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-truck-s8020",
+      "text": "Interval from first detection to handoff was 1.3106 s, above the 0.10 s command threshold; no AV brake request is recorded, handoff was the decision output.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges the system's own brake command, and this case has a handoff (AV:handoff_t), so there is no system command interval; AV:handoff_t - AV:first_seen_t is not it"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand63-truck-s8003",
+      "text": "The command delay was 0.06 s, below the 0.10 s threshold.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand63-truck-s8011",
+      "text": "Command took 0.0695 s, within the 0.10 s threshold.",
+      "before": "VERIFIED",
+      "after": "BLOCKED",
+      "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+    },
     {
       "benchmark": "robustness",
       "run": "injected_instruction/cand38-car-s5001",
@@ -1541,6 +1629,409 @@
         "BLOCKED": 0
       },
       "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand36-car-s8000",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand36-car-s8009",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "The CAN brake request followed first detection by 0.0974 s, below the 0.1 s command threshold.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand36-car-s8017",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand36-truck-s8008",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand36-truck-s8010",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand37-car-s8005",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand37-car-s8006",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "The total hazard-to-impact window was 1.1699 s, below the 1.5 s human response time.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:human_prt_s judges VID:impact_t - AV:handoff_t or CAN:brake_request_t - AV:handoff_t, but the assertion measures VID:impact_t - VID:hazard_onset_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand37-truck-s8002",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand37-truck-s8021",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "Command delay was 0.06 s, below the 0.10 s command threshold, using brake request at 7.00 s.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-car-s8001",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-car-s8007",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "The command interval was 0.059 s, not exceeding the 0.1 s command threshold.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-car-s8016",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-car-s8022",
+      "before": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-truck-s8004",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "REJECTED",
+      "verdict_after": "REJECTED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-truck-s8013",
+      "before": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "after": {
+        "VERIFIED": 6,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 2
+      },
+      "changed": [
+        {
+          "text": "Command delay was 0.0493 s, within the 0.1 s threshold.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-truck-s8018",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "The brake request followed first detection by 0.0538 s, below the 0.1 s command threshold.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand38-truck-s8020",
+      "before": {
+        "VERIFIED": 7,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 2
+      },
+      "after": {
+        "VERIFIED": 6,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 3
+      },
+      "changed": [
+        {
+          "text": "Interval from first detection to handoff was 1.3106 s, above the 0.10 s command threshold; no AV brake request is recorded, handoff was the decision output.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges the system's own brake command, and this case has a handoff (AV:handoff_t), so there is no system command interval; AV:handoff_t - AV:first_seen_t is not it"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand63-car-s8012",
+      "before": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 10,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "changed": [],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand63-truck-s8003",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "The command delay was 0.06 s, below the 0.10 s threshold.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
+      "verdict_before": "VERIFIED",
+      "verdict_after": "VERIFIED"
+    },
+    {
+      "benchmark": "confusable",
+      "run": "cand63-truck-s8011",
+      "before": {
+        "VERIFIED": 9,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 0
+      },
+      "after": {
+        "VERIFIED": 8,
+        "UNCORROBORATED": 0,
+        "BLOCKED": 1
+      },
+      "changed": [
+        {
+          "text": "Command took 0.0695 s, within the 0.10 s threshold.",
+          "before": "VERIFIED",
+          "after": "BLOCKED",
+          "reason": "interval meaning: PROFILE:command_threshold_s judges AV:brake_request_t - AV:first_seen_t, but the assertion measures CAN:brake_request_t - AV:first_seen_t"
+        }
+      ],
       "verdict_before": "VERIFIED",
       "verdict_after": "VERIFIED"
     },

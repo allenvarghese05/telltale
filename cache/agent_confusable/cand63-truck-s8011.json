@@ -1,0 +1,226 @@
+{
+  "model": "muse-wonder-1.0",
+  "digest": "a288b3c0dc36a1a4ca0692d60ec452a948c6cfa0afc9e3bf5fb1e481d102bb1a",
+  "verdict": "PERCEPTION_LATE",
+  "claims": [
+    {
+      "text": "At 2.72 s the struck vehicle entered the ego lane, marking hazard onset.",
+      "type": "observation",
+      "evidence": [
+        "VID:hazard_onset_t",
+        "VID:hazard_onset_reason"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "VID:hazard_onset_reason",
+        "equals": "entering"
+      }
+    },
+    {
+      "text": "Impact occurred at 8.00 s.",
+      "type": "timing",
+      "evidence": [
+        "VID:impact_t"
+      ],
+      "assertion": {
+        "op": "value",
+        "fact": "VID:impact_t",
+        "equals": 8.0
+      }
+    },
+    {
+      "text": "Perception took 1.5709 s, above the 0.30 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 1.5709
+      }
+    },
+    {
+      "text": "Command took 0.0695 s, within the 0.10 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "CAN:brake_request_t",
+        "AV:first_seen_t",
+        "PROFILE:command_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:brake_request_t",
+        "b": "AV:first_seen_t",
+        "equals": 0.0695
+      }
+    },
+    {
+      "text": "Brake actuation took 0.32 s, within the 0.45 s threshold.",
+      "type": "timing",
+      "evidence": [
+        "CAN:pressure_reached_t",
+        "CAN:brake_request_t",
+        "PROFILE:actuation_threshold_s"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t",
+        "equals": 0.32
+      }
+    },
+    {
+      "text": "The brake log is complete, so the brake timing chain is conclusive.",
+      "type": "other",
+      "evidence": [
+        "DATA:brake_log_complete"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "DATA:brake_log_complete",
+        "equals": true
+      }
+    },
+    {
+      "text": "Independent recheck agreed that the other vehicle's brake lights were illuminated.",
+      "type": "observation",
+      "evidence": [
+        "WIT:other_vehicle_brake_lights",
+        "WIT2:other_vehicle_brake_lights"
+      ],
+      "assertion": {
+        "op": "same",
+        "a": "WIT:other_vehicle_brake_lights",
+        "b": "WIT2:other_vehicle_brake_lights"
+      }
+    },
+    {
+      "text": "With nominal perception 0.20 s, command 0.05 s, and brake tau 0.35 s, the replay avoided contact with a 20.95 m minimum gap.",
+      "type": "physics",
+      "evidence": [
+        "PROFILE:nominal_perception_s",
+        "PROFILE:nominal_command_s",
+        "PROFILE:nominal_tau_s",
+        "CF:run1_contact",
+        "CF:run1_min_gap_m"
+      ],
+      "assertion": {
+        "op": "is",
+        "fact": "CF:run1_contact",
+        "equals": false
+      }
+    },
+    {
+      "text": "Late perception is the primary contributing factor: it was the timing interval above its threshold, and nominal timing avoided contact.",
+      "type": "attribution",
+      "evidence": [
+        "AV:first_seen_t",
+        "VID:hazard_onset_t",
+        "PROFILE:perception_threshold_s",
+        "CF:run1_contact"
+      ],
+      "assertion": {
+        "op": "diff",
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t",
+        "equals": 1.5709
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "list_evidence",
+      "args": {}
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "AV:first_seen_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:brake_request_t",
+        "b": "AV:first_seen_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "CAN:pressure_reached_t",
+        "b": "CAN:brake_request_t"
+      }
+    },
+    {
+      "name": "measure",
+      "args": {
+        "a": "VID:impact_t",
+        "b": "VID:hazard_onset_t"
+      }
+    },
+    {
+      "name": "run_counterfactual",
+      "args": {
+        "perception_s": 0.2,
+        "command_s": 0.05,
+        "tau_s": 0.35
+      }
+    },
+    {
+      "name": "witness_recheck",
+      "args": {
+        "question": "Are the other vehicle's brake lights illuminated?",
+        "slug": "other_vehicle_brake_lights",
+        "t0": 5.0,
+        "t1": 7.0
+      }
+    },
+    {
+      "name": "submit_findings",
+      "args": {
+        "verdict": "PERCEPTION_LATE",
+        "n_claims": 9
+      }
+    }
+  ],
+  "agent_facts": [
+    {
+      "id": "CF:run1_contact",
+      "value": false,
+      "unit": "",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_impact_speed_mps",
+      "value": 0.0,
+      "unit": "m/s",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "CF:run1_min_gap_m",
+      "value": 20.951,
+      "unit": "m",
+      "source": "CF",
+      "derivation": "simulate(perception=0.2, command=0.05, tau=0.35)",
+      "kind": "derived"
+    },
+    {
+      "id": "WIT2:other_vehicle_brake_lights",
+      "value": "yes",
+      "unit": "",
+      "source": "WIT2",
+      "derivation": "muse-spark-1.3 second look at 5.00-7.00s, asked without the first answer: Are the other vehicle's brake lights illuminated?",
+      "kind": "observation"
+    }
+  ]
+}
